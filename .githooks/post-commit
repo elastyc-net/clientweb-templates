@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Posle commit-a: sync {Folder}.{html,js,css,-scripts,-styles} → tenant DB.
+# Skip: ELASTYC_SYNC_SKIP=1
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [[ -z "$ROOT" ]]; then
+  exit 0
+fi
+cd "$ROOT"
+
+if [[ "${ELASTYC_SYNC_SKIP:-}" == "1" ]]; then
+  exit 0
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "[webtemplate-sync] node nije u PATH — preskacem sync" >&2
+  exit 0
+fi
+
+CHANGED="$(git diff-tree --no-commit-id --name-only -r HEAD || true)"
+HIT=""
+while IFS= read -r f; do
+  [[ -z "$f" ]] && continue
+  if [[ "$f" =~ ^([^/]+)/\1\.(html|js|css)$ ]] || [[ "$f" =~ ^([^/]+)/\1-(scripts|styles)\.html$ ]] \
+    || [[ "$f" =~ ^([^/]+)/([^/]+)/\2\.(html|js|css)$ ]] || [[ "$f" =~ ^([^/]+)/([^/]+)/\2-(scripts|styles)\.html$ ]]; then
+    HIT=1
+    break
+  fi
+done <<< "$CHANGED"
+
+if [[ -z "$HIT" ]]; then
+  exit 0
+fi
+
+echo "[webtemplate-sync] sync code na tenant(e)"
+set +e
+node tools/sync-webtemplate-code.mjs --last-commit
+SYNC_RC=$?
+set -e
+if [[ $SYNC_RC -ne 0 ]]; then
+  echo "[webtemplate-sync] sync nije uspeo (exit $SYNC_RC) — commit je ostao lokalno; pokreni ručno: node tools/sync-webtemplate-code.mjs --last-commit" >&2
+  exit 0
+fi
+
+exit 0

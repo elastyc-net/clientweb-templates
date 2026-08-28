@@ -1,0 +1,77 @@
+---
+description: Resolve client web template packs via INDEX.md; canon vs {instance} fork; export/import apply
+globs:
+  - "**/*.json"
+  - "**/*.html"
+  - "**/*.js"
+  - "**/*.css"
+  - "tools/apply-webtemplate.mjs"
+  - "tools/sync-webtemplate-code.mjs"
+alwaysApply: false
+---
+
+# Client web templates index lookup
+
+When the task is about a front web site template by **name** (`naziv`):
+
+1. Open `INDEX.md` first.
+2. Match by `Naziv` or `Folder` (slug).
+3. Work under `{Folder}/` (gallery) or `{websyncinstance}/{Folder}/` (client fork).
+4. Do **not** scan all JSON files when the index exists and has a match.
+
+## Two trees
+
+- `{Folder}/` — canonical pack (templategallery export/import).
+- `{websyncinstance}/{Folder}/` — tenant fork. Client **export** always writes here and never overwrites the canon root. Client **import** uses the fork if `{Folder}.json` exists, otherwise the canonical pack.
+
+## Pack files (read first)
+
+1. `COMPONENTS.md` — recordsets (prefer over listing from JSON).
+2. `{Folder}.html` / `{Folder}.js` / `{Folder}.css` / `{Folder}-scripts.html` / `{Folder}-styles.html` — shell code. Repo files override JSON blobs on apply.
+3. `endpoints/{pageid}.sql` (+ `{pageid}.html`) — `_templatecomponents.query` / `html`. JSON has manifest `"endpoints"` plus recordset metadata, not SQL bodies.
+4. `{Folder}.json` — machine source: `_templates` metadata (not code bodies) + full `_templatecomponents` dump except query/html.
+
+MD files are documentation only. Import ignores them. Assets and `_sitestruct` pages are out of scope. `_templatesback` is Elastyc forms, not this pack.
+
+## Identity
+
+- Lock `naziv` (display name). `templateid` is instance-local; apply binds by `naziv` and keeps the existing id.
+- `Folder` is a slug of `naziv` (`[A-Za-z0-9_-]`, spaces → `-`).
+
+## Export — DB → disk / git
+
+PHP: `incKomponente/webtemplates/buildjsonwebtemplate.php?template={Folder}`  
+Optional `&git=1` → commit + push on `clientweb-templates`.
+
+- Gallery (`websyncinstance=templategallery`) → `{Folder}/` (+ regenerates `INDEX.md`).
+- Client → `{instance}/{Folder}/`.
+
+UI: Web Site Templates — **Export u git**.
+
+## Import — pack → tenant DB
+
+PHP: `incKomponente/webtemplates/applyjsonwebtemplate.php?template={Folder}`  
+List: `incKomponente/webtemplates/listjsonwebtemplate.php`
+
+Overwrites `_templates` / `_styles` / `_templatecomponents` for that `naziv` (keeps `templateid` if the name exists). Does **not** touch `_sitestruct` or Assets.
+
+UI: same form — **Import iz gita** (confirm overwrite).
+
+## Cursor — apply whole pack (explicit only)
+
+```
+node tools/apply-webtemplate.mjs {Folder}
+node tools/apply-webtemplate.mjs {Folder} --instance {websyncinstance}
+```
+
+**Never** run apply on every commit. Code-only sync remains `node tools/sync-webtemplate-code.mjs` (post-commit hook).
+
+## Apply code only — pack → tenant DB
+
+After editing `{Folder}.html` / `.js` / `.css` / `-scripts.html` / `-styles.html`:
+
+```
+node tools/sync-webtemplate-code.mjs --last-commit
+```
+
+Canon packs go to template-gallery; `{instance}/{Folder}/` goes to `https://{instance}.elastyc.net`.

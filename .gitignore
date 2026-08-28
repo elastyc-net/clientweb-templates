@@ -1,0 +1,9 @@
+.DS_Store
+*.log
+.env
+.env.*
+node_modules/
+
+# IIS IUSR queues git commit/push (flushed as Windows git account)
+tools/git-queue/*.json
+!tools/git-queue/.gitkeep
