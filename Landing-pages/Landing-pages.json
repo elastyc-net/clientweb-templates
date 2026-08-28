@@ -1,0 +1,45 @@
+{
+    "templateid": 10,
+    "path": "",
+    "naziv": "Landing pages",
+    "sort": "",
+    "compno": 1,
+    "style": "Landing pages",
+    "fromgallery": "",
+    "galtemplate": "",
+    "htmlbuild": "",
+    "libraries": "",
+    "content1": "",
+    "content2": "",
+    "cssversion": 389,
+    "jsversion": 341,
+    "wrapptemp": "Wrapper",
+    "defaultcss": "",
+    "folder": "Landing-pages",
+    "recordsets": [
+        {
+            "templateid": 10,
+            "item": 4,
+            "componentid": 81,
+            "sort": 1,
+            "description": "pagecontent",
+            "style": "",
+            "segment": "",
+            "previewwidth": "",
+            "pageid": "pagecontent",
+            "includescript": "",
+            "javascript": "",
+            "classname": "",
+            "content_edit": "",
+            "content_edit_type": "",
+            "content_pre_built": "",
+            "ajax": " ",
+            "elastic_search_columns": "",
+            "elastic_search_query": "",
+            "elastic_search_casetype": ""
+        }
+    ],
+    "endpoints": [
+        "pagecontent"
+    ]
+}
