@@ -5,3 +5,4 @@ Auto-generated from pack folders. Do not edit by hand — regenerated on gallery
 | Naziv | Folder | Folder |
 |-------|--------|--------|
 | Landing pages | Landing-pages | Landing-pages |
+| Wrapper | Wrapper | Wrapper |
