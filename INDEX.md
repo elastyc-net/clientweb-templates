@@ -1,6 +1,6 @@
 # Web templates index
 
-Auto-generated from pack folders. Do not edit by hand — regenerated on gallery export.
+Auto-generated from gallery packs (`templategallery/{Folder}`). Tenant forks: `{instance}/{Folder}`.
 
 | Naziv | Folder | Folder |
 |-------|--------|--------|

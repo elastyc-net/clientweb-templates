@@ -6,15 +6,15 @@ Git packovi za Elastyc **front Web Site Templates** (analog `common/Elastyc/Proc
 
 | Instanca | Export | Import |
 |----------|--------|--------|
-| `templategallery` | `{Folder}/` | isti folder |
-| klijent | `{instance}/{Folder}/` | fork ako postoji `{Folder}.json`, inače kanon |
+| `templategallery` | `templategallery/{Folder}/` | isti folder |
+| klijent | `{instance}/{Folder}/` | fork ako postoji `{Folder}.json`, inače `templategallery/{Folder}` |
 
 `Folder` = slug od `_templates.naziv`. Identitet je **naziv**, ne `templateid`.
 
 ## Pack
 
 ```
-{Folder}/
+{instance}/{Folder}/
   {Folder}.json
   {Folder}.html
   {Folder}.js

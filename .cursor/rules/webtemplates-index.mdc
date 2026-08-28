@@ -16,13 +16,13 @@ When the task is about a front web site template by **name** (`naziv`):
 
 1. Open `INDEX.md` first.
 2. Match by `Naziv` or `Folder` (slug).
-3. Work under `{Folder}/` (gallery) or `{websyncinstance}/{Folder}/` (client fork).
+3. Work under `templategallery/{Folder}/` (gallery) or `{websyncinstance}/{Folder}/` (client fork).
 4. Do **not** scan all JSON files when the index exists and has a match.
 
 ## Two trees
 
-- `{Folder}/` — canonical pack (templategallery export/import).
-- `{websyncinstance}/{Folder}/` — tenant fork. Client **export** always writes here and never overwrites the canon root. Client **import** uses the fork if `{Folder}.json` exists, otherwise the canonical pack.
+- `templategallery/{Folder}/` — canonical pack (gallery export/import).
+- `{websyncinstance}/{Folder}/` — tenant fork. Client **export** always writes here and never overwrites `templategallery/`. Client **import** uses the fork if `{Folder}.json` exists, otherwise the canonical pack.
 
 ## Pack files (read first)
 
@@ -43,7 +43,7 @@ MD files are documentation only. Import ignores them. Assets and `_sitestruct` p
 PHP: `incKomponente/webtemplates/buildjsonwebtemplate.php?template={Folder}`  
 Optional `&git=1` → commit + push on `clientweb-templates`.
 
-- Gallery (`websyncinstance=templategallery`) → `{Folder}/` (+ regenerates `INDEX.md`).
+- Gallery (`websyncinstance=templategallery`) → `templategallery/{Folder}/` (+ regenerates root `INDEX.md`).
 - Client → `{instance}/{Folder}/`.
 
 UI: Web Site Templates — **Export u git**.

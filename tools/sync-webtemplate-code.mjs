@@ -53,16 +53,7 @@ function packsFromPaths(paths) {
   for (const f of paths) {
     const rel = String(f).trim().replace(/\\/g, '/');
     if (!rel) continue;
-    let m = rel.match(/^([^/]+)\/\1(?:\.(html|js|css)|-(scripts|styles)\.html)$/);
-    if (m && !skipTop.has(m[1])) {
-      const key = `templategallery:${m[1]}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        out.push({ folder: m[1], instance: 'templategallery' });
-      }
-      continue;
-    }
-    m = rel.match(/^([^/]+)\/([^/]+)\/\2(?:\.(html|js|css)|-(scripts|styles)\.html)$/);
+    let m = rel.match(/^([^/]+)\/([^/]+)\/\2(?:\.(html|js|css)|-(scripts|styles)\.html)$/);
     if (m && !skipTop.has(m[1])) {
       const key = `${m[1]}:${m[2]}`;
       if (!seen.has(key)) {
@@ -100,10 +91,8 @@ function ensureTrailingNewline(s) {
 }
 
 function packDir(folder, instance) {
-  if (instance && instance !== 'templategallery') {
-    return path.join(repoRoot, instance, folder);
-  }
-  return path.join(repoRoot, folder);
+  const inst = instance && instance !== '' ? instance : 'templategallery';
+  return path.join(repoRoot, inst, folder);
 }
 
 function nazivFromJson(dir, folder) {

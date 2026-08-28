@@ -39,15 +39,20 @@ function safeFolder(name) {
 
 function packExistsLocally(folder, instance) {
   const jsonName = `${folder}.json`;
-  if (instance && instance !== 'templategallery') {
-    const client = path.join(repoRoot, instance, folder, jsonName);
-    if (fs.existsSync(client)) {
-      return { ok: true, source: 'client', path: client };
+  const inst = instance || 'templategallery';
+  const tenant = path.join(repoRoot, inst, folder, jsonName);
+  if (fs.existsSync(tenant)) {
+    return { ok: true, source: inst === 'templategallery' ? 'canon' : 'client', path: tenant };
+  }
+  if (inst !== 'templategallery') {
+    const canon = path.join(repoRoot, 'templategallery', folder, jsonName);
+    if (fs.existsSync(canon)) {
+      return { ok: true, source: 'canon', path: canon };
     }
   }
-  const canon = path.join(repoRoot, folder, jsonName);
-  if (fs.existsSync(canon)) {
-    return { ok: true, source: 'canon', path: canon };
+  const legacy = path.join(repoRoot, folder, jsonName);
+  if (fs.existsSync(legacy)) {
+    return { ok: true, source: 'canon', path: legacy };
   }
   return { ok: false };
 }
