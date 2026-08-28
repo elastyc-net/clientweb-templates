@@ -97,8 +97,25 @@ try {
                 if ($line.Trim()) { $dirty = $true; break }
             }
             if (-not $dirty) {
-                Write-Result $resultPath @{ ok = $true; commit = $null; push = $true; message = 'Nema promena za commit.' }
-                Remove-Item -LiteralPath $job.FullName -Force -ErrorAction SilentlyContinue
+                # Already committed (or no file change) — still push if origin is behind.
+                $push = Invoke-Git -GitArgs @('push', 'origin', 'main')
+                $hash = Invoke-Git -GitArgs @('rev-parse', '--short', 'HEAD')
+                $short = ($hash.Text -split "`n")[0].Trim()
+                $ok = ($push.Code -eq 0)
+                Write-Result $resultPath @{
+                    ok = $ok
+                    commit = $short
+                    push = $ok
+                    message = 'Nema novih promena za commit.'
+                    error = $(if ($ok) { $null } else { 'git push failed' })
+                    stdout = $push.Text
+                }
+                if ($ok) {
+                    Remove-Item -LiteralPath $job.FullName -Force -ErrorAction SilentlyContinue
+                    Write-Log ("OK push-only {0}" -f $short)
+                } else {
+                    Write-Log ("push failed: {0}" -f $push.Text)
+                }
                 continue
             }
 
