@@ -1,0 +1,34 @@
+---
+description: Create a git commit and push after every completed code change
+alwaysApply: true
+---
+
+# Auto-commit and push after changes
+
+After completing any code change in this repository (implementation, fix, refactor, or config update):
+
+1. Run `git status` and `git diff` to review what changed.
+2. Stage only relevant files (never `.env`, credentials, or secrets).
+3. Create a git commit with a concise message focused on **why** the change was made.
+4. Use a HEREDOC for the commit message.
+5. Push to the remote with `git push` (use `-u origin HEAD` if the branch has no upstream).
+6. Run `git status` after the push to confirm the branch is up to date.
+7. After a successful push to `main`, immediately sync the IIS copy via SSH:
+
+```bash
+ssh my-remote-server "powershell -NoProfile -ExecutionPolicy Bypass -File W:\\wwwroot\\ElastycNet\\clientweb-templates\\tools\\server-sync-clientweb-templates.ps1"
+```
+
+Report commit hash, push result, and whether server sync succeeded.
+
+## Do not commit or push when
+
+- The user explicitly says not to commit or push.
+- There are no file changes to commit.
+- A pre-commit hook failed (fix the issue and create a **new** commit; do not amend unless allowed by git safety rules).
+- Push would require force push to `main`/`master` — stop and warn the user instead.
+
+## Push safety
+
+- Never force push to `main` or `master` unless the user explicitly requests it.
+- Do not push files that likely contain secrets.

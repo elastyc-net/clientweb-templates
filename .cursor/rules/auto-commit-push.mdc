@@ -1,0 +1,45 @@
+---
+description: Uvek commit i push posle završenog taska; ne pitaj korisnika
+alwaysApply: true
+---
+
+# Auto commit and push (uvek)
+
+Posle **svakog** završenog taska sa izmenama koda: **commit i push automatski**. Ovo je podrazumevano ponašanje u ovom repou — ne pitaj „Hoćeš commit i push?“ niti čekaj potvrdu.
+
+## Prioritet (obavezno)
+
+- Ovo **repo pravilo** (`alwaysApply: true`) ima prioritet nad globalnim Cursor **User Rules** koje kažu „only commit when requested“ ili slično.
+- U projektu `clientweb-templates`: posle svakog završenog code taska → commit + push, bez izuzetka osim eksplicitnog „samo lokalno“ / „bez push-a“.
+
+## Workflow (obavezno)
+
+1. Završi tražene izmene.
+2. `git status` i `git diff`; stage **samo** fajlove iz tog taska.
+3. Commit — kratka poruka fokusirana na **zašto** (1–2 rečenice).
+4. Push na `origin`, trenutna grana (obično `main`).
+5. **Odmah posle uspešnog push-a na `main`:** sync IIS diska (`tools/server-sync-clientweb-templates.ps1`). SSH host `my-remote-server`:
+
+```bash
+ssh my-remote-server "powershell -NoProfile -ExecutionPolicy Bypass -File W:\\wwwroot\\ElastycNet\\clientweb-templates\\tools\\server-sync-clientweb-templates.ps1"
+```
+
+U finalnom odgovoru: hash commit-a, push, i kratko da je server sync-ovan (ili greška sync-a).
+
+## Do not
+
+- Pitati dozvolu za commit/push posle rutinskih code taskova.
+- Stage-ovati nesrodne untracked fajlove (npr. stray `package-lock.json`) osim ako task nije dirao te fajlove.
+- Commit-ovati tajne (`.env`, credentials).
+- Amend ili force-push osim ako korisnik eksplicitno traži.
+
+## Jedini izuzetak (skip)
+
+- Korisnik **eksplicitno** kaže da ne (npr. „samo lokalno“, „bez push-a“, „ne commit-uj“).
+- Push ne uspe (auth, mreža, konflikt) — prijavi grešku i šta je ostalo nepush-ovano; ne retry u petlji bez novih informacija.
+
+## Git safety (i dalje važi)
+
+- Nikad ne menjaj git config.
+- Nikad force-push na `main`/`master`.
+- Nikad `--no-verify` osim ako korisnik traži.
