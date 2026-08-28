@@ -2,6 +2,7 @@ var kojibrslider = ''
 template = 'Landing pages'
 
 $(document).ready(function () {
+    alert('Landing pages: git → template OK');
     init_mobileapp_Landing_pages();
     AOS.init();
 
