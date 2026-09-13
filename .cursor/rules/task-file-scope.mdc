@@ -1,0 +1,18 @@
+---
+description: Svaki plan i task mora jasno navesti koje fajlove menja
+alwaysApply: true
+---
+
+# Scope fajlova
+
+Pre izmene koda (plan ili prva implementaciona poruka) navedi:
+
+## Scope fajlova
+
+- Repo + putanje koje se **kreiraju / menjaju / brišu**.
+
+## Van scope
+
+- Putanje koje se **ne** diraju (npr. kanonski `templategallery/` pri klijentskom forku).
+
+Ako export ili codegen doda fajlove van te liste, navedi ih **pre** commit-a. Ne širi scope bez potrebe.
