@@ -1,0 +1,43 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "starter-contact",
+  "label": "Kontakt",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Kontakt",
+    "description": "Kontakt podaci i jasan poziv na razgovor."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "uvod",
+        "componentKey": "starter-hero",
+        "settings": {
+          "title": "Razgovarajmo o vašoj sledećoj ideji.",
+          "lead": "Dodajte svoj telefon ili email i olakšajte prvi korak do saradnje.",
+          "eyebrow": "Kontakt",
+          "label": "Kontakt podaci",
+          "url": "#main-content"
+        }
+      },
+      {
+        "instanceKey": "detalji",
+        "componentKey": "starter-text",
+        "settings": {
+          "title": "Kako do nas",
+          "body": "Email: unesite svoj email\nTelefon: unesite broj telefona\nAdresa: unesite adresu\nRadno vreme: unesite radno vreme",
+          "eyebrow": "Tu smo za vas"
+        }
+      }
+    ]
+  }
+}

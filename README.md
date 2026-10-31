@@ -44,3 +44,17 @@ Dvosmerno preko GitHub `main`. Lokalni klon: `Documents/GitHub/clientweb-templat
 - Ceo pack: `node tools/apply-webtemplate.mjs {Folder} [--instance {websyncinstance}]` — **ne** auto na commit
 
 Van obima: Web Site Assets, Pages (`_sitestruct`), `_templatesback` (Elastyc forme).
+
+## Webfront v2 library packages
+
+`packages/catalog.json` is the immutable design library source, independent of
+the legacy `templategallery/{Folder}` packs above. `starter-site@1.0.0` includes
+four page templates, five static components, a layout and two shared sections.
+It contains no pages, providers, tracking code, external assets or tenant secrets.
+
+Verify content checksums with `node tools/library-catalog.mjs`. Export the pinned
+new-instance snapshot with `node tools/library-catalog.mjs --export ../instance-template/webfront/Package/Library`, then run the engine's library,
+render and deployment tests. Versioned files must never be edited after release;
+changes require a new semantic version and new checksums. Git sync does not
+install a package into a tenant Draft. Tenant installation and upgrade use the
+reviewed Library panel. The legacy post-commit hook does not match this tree.

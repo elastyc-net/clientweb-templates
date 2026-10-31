@@ -1,0 +1,11 @@
+{
+  "formatVersion": 1,
+  "packages": [
+    {
+      "packageKey": "starter-site",
+      "version": "1.0.0",
+      "manifest": "starter-site/1.0.0/manifest.json",
+      "sha256": "088c33d7c841c0ac14684fb53bd030d606074d446a593c3fb7337c7392a25dd1"
+    }
+  ]
+}

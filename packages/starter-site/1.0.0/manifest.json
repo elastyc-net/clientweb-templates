@@ -1,0 +1,84 @@
+{
+  "formatVersion": 1,
+  "packageKey": "starter-site",
+  "version": "1.0.0",
+  "label": "Poslovni sajt",
+  "description": "Četiri gotova izgleda: početna, o nama, usluge i kontakt. Zajedničko zaglavlje i podnožje, sve spremno za vaš sadržaj.",
+  "distribution": "base",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "starter-header",
+      "path": "components/starter-header.json",
+      "sha256": "892f1a651cfd1294485c8f8d1e37b4394dbb4d7decaf8e251bfbf5913ae155a4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-footer",
+      "path": "components/starter-footer.json",
+      "sha256": "887af13a58c3dadc33e74ee8f6fba17161be2fc3133835803936f91a1039c0e3"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-hero",
+      "path": "components/starter-hero.json",
+      "sha256": "6b9cc97097c89ad088c161523634fd09a863f23bec03b912a3046f79be6599f8"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-cards",
+      "path": "components/starter-cards.json",
+      "sha256": "e8a2c719fb55a5de1dcd05fa23b683ef6f4be0532b667a8e442bed3f4d99cfb4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-text",
+      "path": "components/starter-text.json",
+      "sha256": "f0630206ceef6ce1691681020f1edf685c1bf9e194c0594e0f7ba33575c40d66"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "starter-site-header",
+      "path": "global-sections/starter-site-header.json",
+      "sha256": "5442127759672aa7dfd3a0178dbbaf69182265d0df7cddbbccce8a486b2eebcc"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "starter-site-footer",
+      "path": "global-sections/starter-site-footer.json",
+      "sha256": "48b3eb4f13cce793cdd15d4139694c9de477b66049264fe076f522a49a7e7982"
+    },
+    {
+      "itemType": "layout",
+      "itemKey": "starter-layout",
+      "path": "layouts/starter-layout.json",
+      "sha256": "4dcedfd6ad9f881983b670fee52e6aa6c5a693cc638f16f1aff6bfef855b4a28"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-home",
+      "path": "page-templates/starter-home.json",
+      "sha256": "72287d88660c66d27a57062a8383e53c1b596929eb591bccae274af45b429a11"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-about",
+      "path": "page-templates/starter-about.json",
+      "sha256": "8e5e1373b479faafce225cb07990c5eb020bff4685582a2cb53d3e9a6a0f98fc"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-services",
+      "path": "page-templates/starter-services.json",
+      "sha256": "e82219f600098cf7386b3ff9d5e1cb100b508d8544d8508fc8fb0de16e77b7f9"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-contact",
+      "path": "page-templates/starter-contact.json",
+      "sha256": "d3e33e44446433809fbeeafc92e8168816fb6304187b19c92c73213199699cb2"
+    }
+  ]
+}

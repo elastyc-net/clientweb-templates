@@ -1,0 +1,15 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "globalSectionKey": "starter-site-footer",
+  "label": "Podnožje sajta",
+  "instance": {
+    "instanceKey": "starter-site-footer",
+    "componentKey": "starter-footer",
+    "settings": {
+      "brand": "Vaš brend",
+      "note": "Sadržaj i kontakte prilagodite u editoru."
+    }
+  },
+  "role": "footer"
+}
