@@ -1,0 +1,78 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "providerKey": "catalog-product",
+  "label": "Detalj proizvoda",
+  "kind": "query",
+  "dataScope": "tenant",
+  "handler": "catalog.products.detail",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {
+      "id": {"type": "string", "minLength": 1, "maxLength": 80}
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["found"],
+    "properties": {
+      "found": {"type": "boolean"},
+      "id": {"type": "string", "minLength": 1, "maxLength": 80},
+      "name": {"type": "string", "minLength": 1, "maxLength": 200},
+      "price": {"type": "number", "minimum": 0},
+      "currency": {"type": "string", "maxLength": 20},
+      "brand": {"type": "string", "maxLength": 160},
+      "category": {"type": "string", "maxLength": 160},
+      "description": {"type": "string", "maxLength": 8000},
+      "stock": {"type": "number", "minimum": 0},
+      "stock-known": {"type": "boolean"},
+      "gallery": {
+        "type": "array",
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["url"],
+          "properties": {
+            "url": {"type": "string", "maxLength": 2048, "format": "safe-url"}
+          }
+        }
+      },
+      "characteristics": {
+        "type": "array",
+        "maxItems": 40,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "value"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1, "maxLength": 160},
+            "value": {"type": "string", "maxLength": 500}
+          }
+        }
+      },
+      "related": {
+        "type": "array",
+        "maxItems": 8,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "name", "price", "currency", "brand", "image-url"],
+          "properties": {
+            "id": {"type": "string", "minLength": 1, "maxLength": 80},
+            "name": {"type": "string", "minLength": 1, "maxLength": 200},
+            "price": {"type": "number", "minimum": 0},
+            "currency": {"type": "string", "maxLength": 20},
+            "brand": {"type": "string", "maxLength": 160},
+            "image-url": {"type": "string", "maxLength": 2048, "format": "safe-url"}
+          }
+        }
+      }
+    }
+  },
+  "timeoutMs": 4000,
+  "endpoint": {"exposure": "browser", "method": "GET", "authentication": "optional", "csrf": false}
+}

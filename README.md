@@ -95,6 +95,10 @@ when the browser cannot remember the URL; normal pages retain their URL state.
 Only the list script changes. Existing detail customizations remain local.
 The unapproved `1.0.3` staging attempt retained the old declared list payload;
 its manifest remains immutable and must not be approved as the History fix.
+Patch `product-catalog@1.0.5` additionally sends search through a plain button
+and Enter handler. The isolated CMS blocks native form submission; its sandbox
+permissions stay unchanged. Both search and facet changes use the existing
+parent JSON provider. `1.0.3` and `1.0.4` remain unapproved staging history.
 
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
