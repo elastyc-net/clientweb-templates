@@ -12,6 +12,12 @@
       "version": "1.0.0",
       "manifest": "faq-sections/1.0.0/manifest.json",
       "sha256": "4650edcc3b502efffb156c749c84a552300e5172209521ac4ad455466929a17c"
+    },
+    {
+      "packageKey": "faq-sections",
+      "version": "1.0.1",
+      "manifest": "faq-sections/1.0.1/manifest.json",
+      "sha256": "8d5942be9c42f476bacda5061cd720839c327ec82eba11fe6284531f9d571bc9"
     }
   ]
 }

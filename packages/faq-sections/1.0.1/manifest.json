@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "packageKey": "faq-sections",
+  "version": "1.0.1",
+  "label": "Česta pitanja",
+  "description": "FAQ sekcije sa boljim prelamanjem dugih pitanja i dopunjenim početnim sadržajem.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "library-faq",
+      "path": "library-faq.json",
+      "sha256": "3c36aa7bccaa8da94c1c5434f4b284f734b03caf61a9bc9055dce5828f95b5c1"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "library-faq-page",
+      "path": "library-faq-page.json",
+      "sha256": "42cfc410fddb7177acc386c53e3f2597713e4bb274cf44a42ce5063c964ac8b6"
+    }
+  ]
+}

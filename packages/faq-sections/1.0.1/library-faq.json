@@ -1,0 +1,82 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "library-faq",
+  "label": "Česta pitanja",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wfl-faq\" data-wf-design-root data-wf-design-surface><h2>{{setting:title}}</h2>{{each:questions}}<details><summary>{{item:question}}</summary><p>{{item:answer}}</p></details>{{/each:questions}}</section>",
+  "styles": [
+    {
+      "name": "library-faq.css",
+      "content": ".wfl-faq{max-width:960px;margin:auto;padding:64px 24px;color:var(--wf-color-text,#172c25);font-family:var(--wf-font-body,system-ui,sans-serif)}.wfl-faq h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.03em;margin:0 0 32px}.wfl-faq details{border-bottom:1px solid var(--wf-color-border,#dce3e1);padding:20px 0}.wfl-faq summary{font-size:18px;font-weight:650;cursor:pointer;line-height:1.5}.wfl-faq summary:focus-visible{outline:2px solid currentColor;outline-offset:5px}.wfl-faq p{line-height:1.8;color:var(--wf-color-muted,#52625d);white-space:pre-line} .wfl-faq summary,.wfl-faq p{overflow-wrap:anywhere}.wfl-faq details[open] summary{text-decoration:underline;text-underline-offset:.2em}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "questions"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "questions": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 30,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "question",
+            "answer"
+          ],
+          "properties": {
+            "question": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "answer": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "padding",
+    "background",
+    "radius"
+  ]
+}

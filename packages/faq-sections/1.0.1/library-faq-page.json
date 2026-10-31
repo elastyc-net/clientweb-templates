@@ -1,0 +1,55 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "library-faq-page",
+  "label": "Česta pitanja",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Česta pitanja",
+    "description": "Korisne informacije o saradnji, ponudi i podršci, na jednom mestu."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "faq-intro",
+        "componentKey": "starter-hero",
+        "settings": {
+          "eyebrow": "Kako vam možemo pomoći",
+          "title": "Odgovori na vaša pitanja.",
+          "lead": "Pronađite korisne informacije o saradnji. Za dodatna pitanja obratite se našem timu.",
+          "label": "Pogledajte odgovore",
+          "url": "#main-content"
+        }
+      },
+      {
+        "instanceKey": "faq-questions",
+        "componentKey": "library-faq",
+        "settings": {
+          "title": "Korisne informacije",
+          "questions": [
+            {
+              "question": "Kako započinjemo saradnju?",
+              "answer": "Opišite prvi korak i informacije koje su vam potrebne."
+            },
+            {
+              "question": "Kako mogu da zatražim ponudu?",
+              "answer": "Navedite način kontakta i šta klijent treba da pošalje."
+            },
+            {
+              "question": "Da li pružate podršku nakon realizacije?",
+              "answer": "Predstavite obim podrške i način na koji klijenti mogu da vam se obrate."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

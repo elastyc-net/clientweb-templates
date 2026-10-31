@@ -64,6 +64,11 @@ The central staging transport is generated with
 verification command also rejects a stale generated bundle. `--export-starter`
 exports only the pinned base package; optional packages stay independent of engine
 updates. `faq-sections@1.0.0` is the first optional package and depends on the base.
+Patch `faq-sections@1.0.1` wraps long questions/answers, highlights an opened
+question and refines the starting page copy. It retains the same item keys and
+settings contract. Both versions stay in staging so Gallery can approve and test
+them separately; existing tenant pages retain their copied content. A tenant's
+local component change requires an explicit keep-local/use-library decision.
 
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
