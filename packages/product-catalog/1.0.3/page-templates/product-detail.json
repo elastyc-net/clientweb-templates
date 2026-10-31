@@ -1,0 +1,29 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "product-detail",
+  "label": "Prikaz proizvoda",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Proizvod",
+    "description": "Stranica jednog proizvoda."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "product-main",
+        "componentKey": "product-detail",
+        "settings": {},
+        "providerInput": {}
+      }
+    ]
+  }
+}

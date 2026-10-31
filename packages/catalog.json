@@ -42,6 +42,12 @@
       "version": "1.0.0",
       "manifest": "hero-sections/1.0.0/manifest.json",
       "sha256": "a92d5bb5a974302a604f0bfa54346d6a2592226bd59ef36e7df5665ca3cff3fb"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.0.3",
+      "manifest": "product-catalog/1.0.3/manifest.json",
+      "sha256": "50c2653a13f68faa6de63abfe3dd3eb313bf8328f89f74cb42dccb3e1dcc03b3"
     }
   ]
 }
