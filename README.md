@@ -81,6 +81,10 @@ Their server handlers remain part of the reviewed engine. The catalog-capable
 Gallery feed distributes the complete approved package; the default feed keeps
 serving compatible designs to older engines. Use a catalog-capable engine before
 staging/approving/installing this release. Git sync alone does not install it.
+Patch `product-catalog@1.0.1` keeps the same contracts and guards access to browser
+storage itself, so the catalog also renders in an opaque sandboxed CMS preview.
+Unavailable or full storage only disables remembered filter/scroll preferences.
+The prior `1.0.0` remains immutable and is not approved for clients.
 
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
