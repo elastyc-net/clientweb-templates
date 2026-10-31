@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../packages');
 const args=process.argv.slice(2);
-if(args.length && !(args.length===2 && args[0]==='--export'))throw new Error('Usage: node tools/library-catalog.mjs [--export directory]');
+if(args.length && !(args.length===2 && ['--export','--export-starter','--bundle'].includes(args[0])))throw new Error('Usage: node tools/library-catalog.mjs [--export-starter directory | --export directory | --bundle file]');
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const files=new Map();
 function read(relative,hash){
@@ -38,13 +38,29 @@ for(const entry of catalog.packages){
     if(definition.formatVersion!==2||definition.contractVersion!==1)throw new Error('Unsupported contract '+key);
   }
 }
-if(args.length){
+const payload={formatVersion:1,files:Object.fromEntries([...files].map(([relative,bytes])=>[relative,bytes.toString('utf8')]))};
+if(args[0]==='--bundle'){
+  fs.writeFileSync(path.resolve(args[1]),JSON.stringify(payload)+'\n');
+}else if(fs.existsSync(path.join(root,'staged-bundle.json'))){
+  const staged=JSON.parse(fs.readFileSync(path.join(root,'staged-bundle.json'),'utf8'));
+  if(staged.formatVersion!==1||JSON.stringify(staged.files)!==JSON.stringify(payload.files))throw new Error('Staging bundle is stale; regenerate with --bundle packages/staged-bundle.json');
+}
+if(['--export','--export-starter'].includes(args[0])){
+  const exported=new Map(files);
+  if(args[0]==='--export-starter'){
+    const entry=catalog.packages.find(p=>p.packageKey==='starter-site'&&p.version==='1.0.0');
+    if(!entry)throw new Error('Pinned bootstrap release is missing');
+    const manifest=JSON.parse(files.get(entry.manifest));
+    const keep=new Set(['catalog.json',entry.manifest,...manifest.items.map(i=>path.posix.join(path.posix.dirname(entry.manifest),i.path))]);
+    for(const file of exported.keys())if(!keep.has(file))exported.delete(file);
+    exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:[entry]},null,2)+'\n'));
+  }
   const destination=path.resolve(args[1]);
   // Do not erase arbitrary output directories, or leave stale releases in a snapshot.
   if(fs.existsSync(destination)){
     const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.relative(destination,path.join(dir,e.name)).split(path.sep).join('/')]);
-    if(walk(destination).some(file=>!files.has(file)))throw new Error('Output contains files outside this catalog; use a fresh directory');
+    if(walk(destination).some(file=>!exported.has(file)))throw new Error('Output contains files outside this catalog; use a fresh directory');
   }
-  for(const [relative,bytes]of files){const target=path.join(destination,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);}
+  for(const [relative,bytes]of exported){const target=path.join(destination,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);}
 }
-console.log('Verified '+releases.size+' immutable package release(s), '+files.size+' files'+(args.length?'; exported pinned snapshot':''));
+console.log('Verified '+releases.size+' immutable package release(s), '+files.size+' files'+(args[0]?.startsWith('--export')?'; exported snapshot':args[0]==='--bundle'?'; generated staging bundle':''));

@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "packageKey": "faq-sections",
+  "version": "1.0.0",
+  "label": "Česta pitanja",
+  "description": "Dodatna FAQ komponenta i gotov izgled stranice sa odgovorima.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "library-faq",
+      "path": "library-faq.json",
+      "sha256": "2179c2117ea4111c6d838c7ad58689331035d0551217fbc400ed084a27b39434"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "library-faq-page",
+      "path": "library-faq-page.json",
+      "sha256": "7d2a19957b5ce1cb52a5cc927e3c3593e76e26d97749d25803cc4dd64f561199"
+    }
+  ]
+}

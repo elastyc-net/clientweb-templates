@@ -53,8 +53,21 @@ four page templates, five static components, a layout and two shared sections.
 It contains no pages, providers, tracking code, external assets or tenant secrets.
 
 Verify content checksums with `node tools/library-catalog.mjs`. Export the pinned
-new-instance snapshot with `node tools/library-catalog.mjs --export ../instance-template/webfront/Package/Library`, then run the engine's library,
+new-instance snapshot with `node tools/library-catalog.mjs --export-starter ../instance-template/webfront/Package/Library`, then run the engine's library,
 render and deployment tests. Versioned files must never be edited after release;
 changes require a new semantic version and new checksums. Git sync does not
 install a package into a tenant Draft. Tenant installation and upgrade use the
 reviewed Library panel. The legacy post-commit hook does not match this tree.
+
+The central staging transport is generated with
+`node tools/library-catalog.mjs --bundle packages/staged-bundle.json`. The regular
+verification command also rejects a stale generated bundle. `--export-starter`
+exports only the pinned base package; optional packages stay independent of engine
+updates. `faq-sections@1.0.0` is the first optional package and depends on the base.
+
+Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
+→ inspect and apply to Draft → build and inspect Candidate → reopen the library
+→ Odobri izdanje za klijente. Approval requires the exact unmodified installed
+package and a current verified Candidate, and keeps immutable private provenance.
+Tenants use Proveri nova izdanja, choose an approved version, inspect local changes
+and apply to Draft. Neither refresh nor approval publishes the public website.
