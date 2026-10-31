@@ -1,0 +1,58 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "providerKey": "catalog-products",
+  "label": "Lista proizvoda",
+  "kind": "query",
+  "dataScope": "tenant",
+  "handler": "catalog.products.list",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {
+      "q": {"type": "string", "maxLength": 160},
+      "page": {"type": "integer", "minimum": 1, "maximum": 100000},
+      "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+      "sort": {"type": "string", "maxLength": 20, "enum": ["default", "name-asc", "name-desc", "price-asc", "price-desc"]},
+      "category": {"type": "string", "maxLength": 80},
+      "filters": {"type": "array", "maxItems": 10, "items": {"type": "object", "additionalProperties": false, "required": ["field", "values"], "properties": {"field": {"type": "string", "maxLength": 40}, "values": {"type": "array", "maxItems": 50, "items": {"type": "string", "maxLength": 160}}}}},
+      "attributes": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["name", "values"], "properties": {"name": {"type": "string", "maxLength": 120}, "values": {"type": "array", "maxItems": 50, "items": {"type": "string", "maxLength": 160}}}}}
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["items", "total", "page", "limit", "filters"],
+    "properties": {
+      "items": {"type": "array", "maxItems": 100, "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "name", "price"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1, "maxLength": 80},
+          "name": {"type": "string", "minLength": 1, "maxLength": 200},
+          "price": {"type": "number", "minimum": 0},
+          "image-url": {"type": "string", "maxLength": 2048, "format": "safe-url"},
+          "stock": {"type": "number", "minimum": 0},
+          "stock-known": {"type": "boolean"},
+          "currency": {"type": "string", "maxLength": 20},
+          "brand": {"type": "string", "maxLength": 160},
+          "category": {"type": "string", "maxLength": 160}
+        }
+      }},
+      "total": {"type": "integer", "minimum": 0},
+      "page": {"type": "integer", "minimum": 1},
+      "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+      "filters": {"type": "object", "additionalProperties": false,
+        "required": ["categories", "direct", "attributes"],
+        "properties": {
+          "categories": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["value", "label", "count"], "properties": {"value": {"type": "string", "maxLength": 160}, "label": {"type": "string", "maxLength": 160}, "count": {"type": "integer", "minimum": 0}}}},
+          "direct": {"type": "array", "maxItems": 10, "items": {"type": "object", "additionalProperties": false, "required": ["field", "label", "values"], "properties": {"field": {"type": "string", "maxLength": 40}, "label": {"type": "string", "maxLength": 160}, "values": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["value", "label", "count"], "properties": {"value": {"type": "string", "maxLength": 160}, "label": {"type": "string", "maxLength": 160}, "count": {"type": "integer", "minimum": 0}}}}}}},
+          "attributes": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["name", "values"], "properties": {"name": {"type": "string", "maxLength": 120}, "values": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["value", "label", "count"], "properties": {"value": {"type": "string", "maxLength": 160}, "label": {"type": "string", "maxLength": 160}, "count": {"type": "integer", "minimum": 0}}}}}}}
+        }
+      }
+    }
+  },
+  "timeoutMs": 2500,
+  "endpoint": {"exposure": "browser", "method": "GET", "authentication": "optional", "csrf": false}
+}

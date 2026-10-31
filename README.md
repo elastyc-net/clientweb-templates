@@ -85,6 +85,10 @@ Patch `product-catalog@1.0.1` keeps the same contracts and guards access to brow
 storage itself, so the catalog also renders in an opaque sandboxed CMS preview.
 Unavailable or full storage only disables remembered filter/scroll preferences.
 The prior `1.0.0` remains immutable and is not approved for clients.
+Patch `product-catalog@1.0.2` normalizes a serialized empty provider input (`[]`)
+to a record before applying list search/category/sort state. This covers adding
+the component as a first block without a page template; existing object input
+and page content are retained. Detail, providers and templates are unchanged.
 
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
