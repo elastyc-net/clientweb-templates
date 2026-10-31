@@ -1,0 +1,53 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "1.0.0",
+  "label": "Katalog proizvoda",
+  "description": "Postojeći katalog i detalj proizvoda: pretraga, filteri, cene i zalihe iz ove Elastyc instance. Uključuje potrebne izvore podataka i dva početna izgleda.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "50c8f22f545c9010acb8e12387e18856c899221d976c9538028a1f2da2e78732"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "128e88472a6e2a44e4855a36c2e732bb01ae7efb53f6d7c6b26d2e3f8928cd24"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "f1b1a7b94b388d574c9dbb412da1c2b0066799b97f6bc0cca7b1a9ee5d15b9bf"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "9bf24e6e3da9bd00ac2be712c71991042b85876de13cb1bbaea2c8160c9e898e"
+    }
+  ]
+}

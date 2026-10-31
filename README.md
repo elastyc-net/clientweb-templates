@@ -70,6 +70,18 @@ settings contract. Both versions stay in staging so Gallery can approve and test
 them separately; existing tenant pages retain their copied content. A tenant's
 local component change requires an explicit keep-local/use-library decision.
 
+`product-catalog@1.0.0` reuses the engine's existing `product-list` and
+`product-detail` definitions unchanged, with their existing `catalog-products`
+and `catalog-product` query contracts. Two starting page templates use the base
+starter layout; the package creates no pages or public routes. It requires
+`starter-site@1.0.0`. Source verification pins the provider file bytes; engine
+`LibraryProviderContracts` independently pins the complete canonical definitions.
+The two providers contain no credentials, SQL, endpoint URLs or handler code.
+Their server handlers remain part of the reviewed engine. The catalog-capable
+Gallery feed distributes the complete approved package; the default feed keeps
+serving compatible designs to older engines. Use a catalog-capable engine before
+staging/approving/installing this release. Git sync alone does not install it.
+
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
 → Odobri izdanje za klijente. Approval requires the exact unmodified installed

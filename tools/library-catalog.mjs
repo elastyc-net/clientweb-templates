@@ -31,11 +31,18 @@ for(const entry of catalog.packages){
   const keys=new Set();
   for(const item of manifest.items){
     const key=item.itemType+':'+item.itemKey;
-    if(keys.has(key)||!['component','layout','global-section','page-template'].includes(item.itemType))throw new Error('Invalid item '+key);
+    if(keys.has(key)||!['component','layout','global-section','page-template','provider'].includes(item.itemType))throw new Error('Invalid item '+key);
     keys.add(key);
     if(typeof item.path!=='string'||item.path.split('/').some(p=>p==='..'||p==='.'||!p)||path.posix.isAbsolute(item.path))throw new Error('Unsafe item path '+key);
     const definition=read(path.posix.join(path.posix.dirname(entry.manifest),item.path),item.sha256);
     if(definition.formatVersion!==2||definition.contractVersion!==1)throw new Error('Unsupported contract '+key);
+    if(item.itemType==='provider'){
+      const handlers={'catalog-products':'catalog.products.list','catalog-product':'catalog.products.detail'};
+      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||definition.handler!==handlers[item.itemKey]||definition.kind!=='query'||definition.dataScope!=='tenant')throw new Error('Unsupported query contract '+key);
+      const reviewed={'catalog-products':'29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','catalog-product':'4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998'};
+      if(item.sha256!==reviewed[item.itemKey])throw new Error('Unreviewed provider bytes '+key);
+      // Engine LibraryProviderContracts independently pins the canonical JSON definition.
+    }
   }
 }
 const payload={formatVersion:1,files:Object.fromEntries([...files].map(([relative,bytes])=>[relative,bytes.toString('utf8')]))};
