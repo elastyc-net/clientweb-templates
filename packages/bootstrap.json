@@ -1,0 +1,25 @@
+{
+  "formatVersion": 1,
+  "packages": [
+    {
+      "packageKey": "starter-site",
+      "version": "1.0.0"
+    },
+    {
+      "packageKey": "faq-sections",
+      "version": "1.0.1"
+    },
+    {
+      "packageKey": "hero-sections",
+      "version": "1.0.0"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.0.5"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.0"
+    }
+  ]
+}

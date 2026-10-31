@@ -18,6 +18,10 @@ $loader = new LibraryCatalog();
 $catalog = $loader->load(__DIR__ . '/../packages');
 $package = $loader->latest($catalog, 'hero-sections');
 $initial = WorkspaceInitializer::package('site-hero', 'hero.example');
+// Reproduce an older tenant which has not installed the now-bundled Hero package.
+$heroTokens=array_fill_keys(array_map(function($i){return $i['itemType'].':'.$i['itemKey'];},$package['items']),true);
+$initial['items']=array_values(array_filter($initial['items'],function($i)use($heroTokens){return !isset($heroTokens[$i['itemType'].':'.$i['itemKey']]);}));
+$initial['items'][0]['definition']['libraryPackages']=array_values(array_filter($initial['items'][0]['definition']['libraryPackages'],function($r){return $r['packageKey']!=='hero-sections';}));
 $snapshot = array('siteKey' => $initial['siteKey'], 'items' => $initial['items']);
 foreach ($snapshot['items'] as &$item) $item['draftRevision'] = 1;
 unset($item);

@@ -1,0 +1,29 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "header-main",
+  "label": "Glavno zaglavlje",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<header class=\"wf-header\"><a href=\"/\" class=\"wf-brand\">{{setting:brand}}</a><nav aria-label=\"Glavna navigacija\" data-wf-menu></nav></header>",
+  "styles": [
+    {"name": "header.css", "content": ".wf-header{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--wf-space-unit)*4);padding:calc(var(--wf-space-unit)*4);border-bottom:1px solid var(--wf-color-border);background:var(--wf-color-surface);color:var(--wf-color-text);font-family:var(--wf-font-body)}.wf-brand{color:var(--wf-color-primary);font-family:var(--wf-font-heading);font-weight:var(--wf-heading-weight);text-decoration:none}.wf-brand:hover,.wf-brand:focus-visible{color:var(--wf-color-accent)}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["brand"],
+    "properties": {
+      "brand": {"type": "string", "minLength": 1, "maxLength": 80}
+    }
+  },
+  "themeBindings": {
+    "brand": "brand.name"
+  },
+  "providerKey": null,
+  "cache": {"scope": "public", "ttlSeconds": 3600, "varyBy": ["tenant", "locale", "release"]},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

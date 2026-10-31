@@ -1,0 +1,104 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "feature-cards",
+  "label": "Kartice sadržaja",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section data-wf-design-root class=\"wf-feature-cards wf:px-6 wf:py-16\"><div class=\"wf:mx-auto wf:max-w-6xl\"><header class=\"wf-feature-cards__head wf:max-w-3xl\"><h2 class=\"wf:text-3xl wf:font-bold wf:tracking-tight\">{{setting:section-title}}</h2><p class=\"wf:mt-4 wf:text-lg\">{{setting:section-lead}}</p></header><div class=\"wf-feature-cards__grid wf:mt-10 wf:grid wf:gap-6\">{{each:cards}}<article class=\"wf-feature-card wf:rounded-2xl wf:p-6\" data-wf-design-surface data-wf-design-content><h3 class=\"wf:text-xl wf:font-bold\">{{item:title}}</h3><p class=\"wf:mt-3\">{{item:body}}</p><a class=\"wf:mt-5 wf:inline-flex wf:font-bold\" href=\"{{item:url}}\">{{item:label}}</a></article>{{/each:cards}}</div></div></section>",
+  "styles": [
+    {
+      "name": "feature-cards.css",
+      "content": ".wf-feature-cards{background:#f8fafc;color:#172033}.wf-feature-cards__head p{color:#526071;line-height:1.7}.wf-feature-cards__grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wf-feature-card{border:1px solid #dfe5ec;background:#fff;box-shadow:0 12px 28px rgba(15,23,42,.06)}.wf-feature-card p{color:#526071;line-height:1.65}.wf-feature-card a{color:#0f766e;text-decoration:none}.wf-feature-card a:hover,.wf-feature-card a:focus-visible{text-decoration:underline}@media(max-width:1100px){.wf-feature-cards__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:860px){.wf-feature-cards__grid{grid-template-columns:1fr}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "section-title",
+      "section-lead",
+      "cards"
+    ],
+    "properties": {
+      "section-title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "section-lead": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "cards": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "body",
+            "label",
+            "url"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 500
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "url": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048,
+              "format": "safe-url"
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "height",
+    "minHeight",
+    "padding",
+    "contentAlign",
+    "textAlign",
+    "background",
+    "radius"
+  ]
+}

@@ -1,0 +1,167 @@
+{
+  "formatVersion": 1,
+  "packageKey": "repository-components",
+  "version": "1.0.0",
+  "label": "Komplet komponenti",
+  "description": "Sve ostale komponente iz repozitorijuma: navigacija, rasporedi, sadržaj, forme i baza znanja. Definicije ne kopiraju tenant podatke ili prava. Finansijski widget zahteva zasebnu postojeću integraciju; instalacija je ne uključuje.",
+  "distribution": "base",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "account-menu",
+      "path": "components/account-menu.json",
+      "sha256": "8e2c3bfa9cd7a01539ae1eb94c842c489b66943bb5f4f133827d5a70c502de0e"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "brand-logo",
+      "path": "components/brand-logo.json",
+      "sha256": "d6bb91504ee9be42c27b92859b114169c3182ad332b195b9b89a395d248378b4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "call-to-action",
+      "path": "components/call-to-action.json",
+      "sha256": "f42b04341f8ec52f3ae23aee275f6435659a390b8cb39482753bddc8de02d702"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "cart-summary",
+      "path": "components/cart-summary.json",
+      "sha256": "aeca0f014a76e1543d74971594d3fe6386f410492fa23de15e530c53ef5365c3"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "case-form",
+      "path": "components/case-form.json",
+      "sha256": "a68421625f36b827d865f4bfa0cd98f2debf78d8a06ae8659d2a7b65b998e13d"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "contact-form",
+      "path": "components/contact-form.json",
+      "sha256": "3da6ba8bb2c9002903a6219a4e39eafde4c3bd8a7d2c680396abf9808bd49f0a"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "custom-html",
+      "path": "components/custom-html.json",
+      "sha256": "5f89e3b09f1b57a70e8ed6bddbe59c41a2eff89413beb3fccd99bea82397054d"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "dashboard-widget",
+      "path": "components/dashboard-widget.json",
+      "sha256": "1aef10d8b602099c784702e69cb3b57064ef192628e0694193d5cf4a9b7b8de2"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "faq-list",
+      "path": "components/faq-list.json",
+      "sha256": "5b569ca36c8ab0ce9d298956d4ea273d8fafeb977fb1c7fda6fb851e20250701"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "feature-cards",
+      "path": "components/feature-cards.json",
+      "sha256": "9b88cef3ff0b748bccbb7cfd20571685460b250abb7a0baabde9c978f81bef7a"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "footer-main",
+      "path": "components/footer-main.json",
+      "sha256": "bf911c86f9f07e5bc05e0b72766349542b631e89323d649b40a34783f259faa2"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "header-main",
+      "path": "components/header-main.json",
+      "sha256": "a19bf5d63331528d5b02d9c25e649ba578d2b03cbf1f6e5603e4d058260033e9"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "kb-article",
+      "path": "components/kb-article.json",
+      "sha256": "f81915a897f745e7ae5dc5809dbbd8bb0acdec81ff85e05126cbfc76ceee6897"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "kb-children",
+      "path": "components/kb-children.json",
+      "sha256": "9c67d334f397706292ea68a1aadc3035d46375079e4670309a33b1d42cf51679"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "landing-hero",
+      "path": "components/landing-hero.json",
+      "sha256": "87952af4dbccd3259b39e477b16ac040f4be07ddd8f2b1177c7073ab6ec8ed61"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "layout-container",
+      "path": "components/layout-container.json",
+      "sha256": "7b11911ba35e38b18e5dba0d53a545fedb86716da2da281524b18388e1fa6e5d"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "layout-grid",
+      "path": "components/layout-grid.json",
+      "sha256": "2a9b212f68a8d7fd62d2f05819f6cd1ba927196bc2ce579890ec4191bc9063c9"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "layout-stack",
+      "path": "components/layout-stack.json",
+      "sha256": "6431a71efaae4c150ee45efba8aefb0379658ff66a8f97a4336f2c032f4ec8d5"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "live-chat",
+      "path": "components/live-chat.json",
+      "sha256": "af664bbbc773b6d335abdc6cd2fee19f9f1cd5267a1b6bc4c0c9cf9f12f41c2a"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "media-text",
+      "path": "components/media-text.json",
+      "sha256": "f79359716708305a275a768d74167b321d0ffd110d967b6fdc65524cd0bbcfe9"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "navigation-menu",
+      "path": "components/navigation-menu.json",
+      "sha256": "8dcce3dafb96ed51d14f91269347bb7bad8bfaa9ce1e521fc9b7d21f262952a0"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-search",
+      "path": "components/site-search.json",
+      "sha256": "f7719531c7111e8f330c5997be6c4afc0cfdbafd6722113318b8c308b39ac474"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "finance-summary",
+      "path": "providers/finance-summary.json",
+      "sha256": "23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "kb-article",
+      "path": "providers/kb-article.json",
+      "sha256": "1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "kb-children",
+      "path": "providers/kb-children.json",
+      "sha256": "00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883"
+    }
+  ]
+}

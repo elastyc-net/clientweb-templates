@@ -37,9 +37,9 @@ for(const entry of catalog.packages){
     const definition=read(path.posix.join(path.posix.dirname(entry.manifest),item.path),item.sha256);
     if(definition.formatVersion!==2||definition.contractVersion!==1)throw new Error('Unsupported contract '+key);
     if(item.itemType==='provider'){
-      const handlers={'catalog-products':'catalog.products.list','catalog-product':'catalog.products.detail'};
-      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||definition.handler!==handlers[item.itemKey]||definition.kind!=='query'||definition.dataScope!=='tenant')throw new Error('Unsupported query contract '+key);
-      const reviewed={'catalog-products':'29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','catalog-product':'4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998'};
+      const handlers={'catalog-products':'catalog.products.list','catalog-product':'catalog.products.detail','kb-article':'kb.article','kb-children':'kb.children','finance-summary':'finance.summary.read'};
+      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||definition.handler!==handlers[item.itemKey]||definition.kind!=='query'||definition.dataScope!==(item.itemKey==='finance-summary'?'permission':'tenant'))throw new Error('Unsupported query contract '+key);
+      const reviewed={'catalog-products':'29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','catalog-product':'4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998','kb-article':'1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491','kb-children':'00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883','finance-summary':'23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066'};
       if(item.sha256!==reviewed[item.itemKey])throw new Error('Unreviewed provider bytes '+key);
       // Engine LibraryProviderContracts independently pins the canonical JSON definition.
     }
@@ -55,12 +55,33 @@ if(args[0]==='--bundle'){
 if(['--export','--export-starter'].includes(args[0])){
   const exported=new Map(files);
   if(args[0]==='--export-starter'){
-    const entry=catalog.packages.find(p=>p.packageKey==='starter-site'&&p.version==='1.0.0');
-    if(!entry)throw new Error('Pinned bootstrap release is missing');
-    const manifest=JSON.parse(files.get(entry.manifest));
-    const keep=new Set(['catalog.json',entry.manifest,...manifest.items.map(i=>path.posix.join(path.posix.dirname(entry.manifest),i.path))]);
+    const pins=JSON.parse(fs.readFileSync(path.join(root,'bootstrap.json'),'utf8'));
+    if(pins.formatVersion!==1||!Array.isArray(pins.packages)||!pins.packages.length||pins.packages.length>32)throw new Error('Invalid bootstrap selection');
+    const selected=pins.packages.map(pin=>{
+      const entry=catalog.packages.find(p=>p.packageKey===pin.packageKey&&p.version===pin.version);
+      if(!entry)throw new Error('Pinned bootstrap release is missing: '+pin.packageKey+'@'+pin.version);
+      return entry;
+    });
+    if(new Set(selected.map(p=>p.packageKey)).size!==selected.length)throw new Error('Duplicate bootstrap package');
+    const keep=new Set(['catalog.json']);
+    const owners=new Set();
+    for(const entry of selected){
+      keep.add(entry.manifest);
+      const manifest=JSON.parse(files.get(entry.manifest));
+      for(const dependency of manifest.dependencies){
+        const found=selected.find(p=>p.packageKey===dependency.packageKey);
+        const compare=(a,b)=>{const aa=a.split('.').map(Number),bb=b.split('.').map(Number);for(let i=0;i<3;i++)if(aa[i]!==bb[i])return aa[i]-bb[i];return 0;};
+        if(!found||compare(found.version,dependency.minimumVersion)<0)throw new Error('Missing bootstrap dependency '+dependency.packageKey);
+      }
+      for(const item of manifest.items){
+        const key=item.itemType+':'+item.itemKey;
+        if(owners.has(key))throw new Error('Duplicate bootstrap item owner '+key);
+        owners.add(key);
+        keep.add(path.posix.join(path.posix.dirname(entry.manifest),item.path));
+      }
+    }
     for(const file of exported.keys())if(!keep.has(file))exported.delete(file);
-    exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:[entry]},null,2)+'\n'));
+    exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:selected},null,2)+'\n'));
   }
   const destination=path.resolve(args[1]);
   // Do not erase arbitrary output directories, or leave stale releases in a snapshot.

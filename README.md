@@ -116,3 +116,26 @@ content. Further changes to `hero-visual` require a new package version through
 the same Gallery approval and tenant upgrade flow. Run
 `php tools/test-library-hero.php` with a sibling `instance-template` checkout to
 validate the actual checksummed source using its planner, graph and renderer.
+
+### Complete new-instance library
+
+`packages/bootstrap.json` pins the complete first-install selection: starter,
+FAQ, image Hero, product catalog and `repository-components`. Export it with
+`node tools/library-catalog.mjs --export-starter ../instance-template/webfront/Package/Library`.
+The exported catalog contains one exact version per package, with disjoint item
+ownership and satisfied dependencies. It currently installs 31 component
+contracts (all 24 engine repository components and seven additional designs),
+five package receipts and no customer pages or tenant integration data.
+
+`repository-components@1.0.0` preserves the existing 22 remaining engine
+component definitions and their three declarative provider contracts. It adds
+no handler code, permissions or connection settings. The internal finance widget
+still needs a registered tenant integration; forms and data components need
+existing tenant configuration. Branding/global content remain site settings.
+
+For additions and updates, create a new immutable release, validate it on
+Gallery, then expose it to clients through the approved library. Update the
+explicit bootstrap pins when promoting the new baseline. The engine regression
+`tests/webfrontRepositoryLibraryTest.php` compares every repository component
+and latest package component with the actual initializer, and fails on omission
+or drift. Do not edit previously released manifest/payload bytes.

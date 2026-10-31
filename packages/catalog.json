@@ -60,6 +60,12 @@
       "version": "1.0.5",
       "manifest": "product-catalog/1.0.5/manifest.json",
       "sha256": "8e7806d8d1e0a7ab40db8ae1c769bb765bdbaafe604254316512149e3b960663"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.0",
+      "manifest": "repository-components/1.0.0/manifest.json",
+      "sha256": "dd995b47598f133224441b8f456b1db18498efba3d860fbf404ec019c2062922"
     }
   ]
 }

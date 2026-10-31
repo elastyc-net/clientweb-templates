@@ -1,0 +1,70 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "landing-hero",
+  "label": "Hero sekcija",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section data-wf-design-root data-wf-design-surface class=\"wf-hero wf:relative wf:overflow-hidden wf:px-6 wf:py-20\"><div data-wf-design-content class=\"wf-hero__inner wf:mx-auto wf:max-w-5xl wf:text-center\"><p class=\"wf-hero__eyebrow wf:mb-4 wf:text-sm wf:font-bold wf:uppercase wf:tracking-widest\">{{setting:eyebrow}}</p><h1 class=\"wf:mx-auto wf:max-w-4xl wf:text-4xl wf:font-bold wf:tracking-tight\">{{setting:title}}</h1><p class=\"wf:mx-auto wf:mt-6 wf:max-w-2xl wf:text-lg\">{{setting:lead}}</p></div></section>",
+  "styles": [
+    {
+      "name": "hero.css",
+      "content": ".wf-hero{background:radial-gradient(circle at 50% 0,#dff7ef 0,transparent 42rem),#f8fafc;color:#172033}.wf-hero h1{margin:0;font-size:clamp(2.25rem,7vw,5.25rem);line-height:.98}.wf-hero__eyebrow{color:#0f766e}.wf-hero p:last-child{color:#526071;line-height:1.7}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "lead"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 500
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "height",
+    "minHeight",
+    "padding",
+    "contentAlign",
+    "textAlign",
+    "background",
+    "radius"
+  ]
+}
