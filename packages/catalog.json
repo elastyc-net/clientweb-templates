@@ -48,6 +48,12 @@
       "version": "1.0.3",
       "manifest": "product-catalog/1.0.3/manifest.json",
       "sha256": "50c2653a13f68faa6de63abfe3dd3eb313bf8328f89f74cb42dccb3e1dcc03b3"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.0.4",
+      "manifest": "product-catalog/1.0.4/manifest.json",
+      "sha256": "55a72711859ea2bd351f4ccfc187104c76573dfdab2c6c26b067396044897f38"
     }
   ]
 }

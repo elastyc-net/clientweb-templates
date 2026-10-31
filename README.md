@@ -89,10 +89,12 @@ Patch `product-catalog@1.0.2` normalizes a serialized empty provider input (`[]`
 to a record before applying list search/category/sort state. This covers adding
 the component as a first block without a page template; existing object input
 and page content are retained. Detail, providers and templates are unchanged.
-Patch `product-catalog@1.0.3` also tolerates denied History push/replace calls in
+Patch `product-catalog@1.0.4` also tolerates denied History push/replace calls in
 an opaque preview. Search, filters and sorting still reach the parent provider
 when the browser cannot remember the URL; normal pages retain their URL state.
 Only the list script changes. Existing detail customizations remain local.
+The unapproved `1.0.3` staging attempt retained the old declared list payload;
+its manifest remains immutable and must not be approved as the History fix.
 
 Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the release
 → inspect and apply to Draft → build and inspect Candidate → reopen the library
