@@ -1,0 +1,37 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "hero-visual-page",
+  "label": "Uvodna stranica sa slikom",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Dobro došli",
+    "description": "Predstavite svoju ponudu naslovom, slikom i jasnim pozivom na akciju."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "hero-visual-primary",
+        "componentKey": "hero-visual",
+        "settings": {
+          "eyebrow": "Vaša priča",
+          "title": "Predstavite ono što vas izdvaja.",
+          "lead": "Dodajte kratku poruku, izaberite svoju sliku i povežite dugme sa sledećim korakom.",
+          "button-label": "Saznajte više",
+          "button-url": "/",
+          "image-url": "/",
+          "image-alt": "",
+          "image-position": "right"
+        }
+      }
+    ]
+  }
+}

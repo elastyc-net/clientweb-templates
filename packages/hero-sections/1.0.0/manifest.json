@@ -1,0 +1,29 @@
+{
+  "formatVersion": 1,
+  "packageKey": "hero-sections",
+  "version": "1.0.0",
+  "label": "Hero sa slikom",
+  "description": "Gotov Hero blok i početni izgled: naslov, uvod, slika iz Media biblioteke i glavni poziv na akciju. Tekstualni Hero izgledi ostaju dostupni.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "hero-visual",
+      "path": "hero-visual.json",
+      "sha256": "e81521d0808e0d75bb4542a5690b7829ebe0e78ce26a37f45423a1b2eb80e09a"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "hero-visual-page",
+      "path": "hero-visual-page.json",
+      "sha256": "7940db3033d412130c5d487b5f1e4160879ebde79a614a5ba50647a90fc8727d"
+    }
+  ]
+}

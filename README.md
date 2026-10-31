@@ -96,3 +96,13 @@ Gallery Admin: Biblioteka šablona → Preuzmi izdanja za proveru → choose the
 package and a current verified Candidate, and keeps immutable private provenance.
 Tenants use Proveri nova izdanja, choose an approved version, inspect local changes
 and apply to Draft. Neither refresh nor approval publishes the public website.
+
+`hero-sections@1.0.0` adds **Hero sa slikom** (`hero-visual`) and the
+`hero-visual-page` starting layout. It includes heading, lead, image/alt, CTA and
+left/right image position, with a responsive mobile layout. The initial image
+slot explicitly asks the editor to choose their own tenant media; no remote
+photo is borrowed. The existing text-only heroes retain their settings and
+content. Further changes to `hero-visual` require a new package version through
+the same Gallery approval and tenant upgrade flow. Run
+`php tools/test-library-hero.php` with a sibling `instance-template` checkout to
+validate the actual checksummed source using its planner, graph and renderer.

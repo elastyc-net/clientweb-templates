@@ -1,0 +1,104 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "hero-visual",
+  "label": "Hero sa slikom",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section data-wf-design-root data-wf-design-surface class=\"wfh-hero\" data-image-position=\"{{setting:image-position}}\"><div class=\"wfh-hero__inner\"><div data-wf-design-content class=\"wfh-hero__copy\"><p class=\"wfh-hero__eyebrow\">{{setting:eyebrow}}</p><h1>{{setting:title}}</h1><p class=\"wfh-hero__lead\">{{setting:lead}}</p><a class=\"wfh-hero__button\" href=\"{{setting:button-url}}\">{{setting:button-label}}</a></div><figure class=\"wfh-hero__media\"><img src=\"{{setting:image-url}}\" alt=\"{{setting:image-alt}}\" fetchpriority=\"high\" width=\"1200\" height=\"900\"><figcaption>Slika Hero sekcije<span>Izaberite sliku u podešavanjima komponente.</span></figcaption></figure></div></section>",
+  "styles": [
+    {
+      "name": "hero-visual.css",
+      "content": ".wfh-hero{padding:clamp(32px,7vw,88px) 24px;background:var(--wf-color-background,#f1f5f3);color:var(--wf-color-text,#172c25)}.wfh-hero__inner{max-width:var(--wf-container-max-width,1112px);margin:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(24px,5vw,64px)}.wfh-hero__copy{min-width:0}.wfh-hero__eyebrow{font-size:13px;font-weight:700;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;color:var(--wf-color-primary,#1c6851)}.wfh-hero h1{margin:16px 0;font-size:clamp(34px,5vw,64px);font-weight:750;line-height:1.08;letter-spacing:-.035em;overflow-wrap:anywhere;text-wrap:balance}.wfh-hero__lead{font-size:clamp(17px,2vw,20px);line-height:1.7;color:var(--wf-color-muted,#52625d);white-space:pre-line}.wfh-hero__button{display:inline-flex;align-items:center;min-height:44px;margin-top:16px;padding:12px 22px;border-radius:var(--wf-radius,6px);background:var(--wf-color-primary,#1c6851);color:var(--wf-color-on-primary,#fff);text-decoration:none;font-weight:700;overflow-wrap:anywhere}.wfh-hero__button:focus-visible{outline:3px solid currentColor;outline-offset:4px}.wfh-hero__media{position:relative;margin:0;min-width:0;aspect-ratio:4/3;border-radius:var(--wf-radius,12px);overflow:hidden;background:var(--wf-color-surface,#e3ebe7)}.wfh-hero__media img{display:block;width:100%;height:100%;object-fit:cover}.wfh-hero__media img[src=\"/\"]{display:none}.wfh-hero__media figcaption{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center;color:var(--wf-color-muted,#52625d);font-weight:700}.wfh-hero__media figcaption span{font-size:14px;line-height:1.5;font-weight:400}.wfh-hero__media img:not([src=\"/\"])+figcaption{display:none}.wfh-hero[data-image-position=\"left\"] .wfh-hero__media{order:-1}@media(max-width:760px){.wfh-hero__inner{grid-template-columns:minmax(0,1fr)}.wfh-hero__media,.wfh-hero[data-image-position=\"left\"] .wfh-hero__media{order:0}.wfh-hero h1{font-size:clamp(32px,8vw,48px)}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "lead",
+      "button-label",
+      "button-url",
+      "image-url",
+      "image-alt",
+      "image-position"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 1200
+      },
+      "button-label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "button-url": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "image-url": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "image-alt": {
+        "type": "string",
+        "maxLength": 240
+      },
+      "image-position": {
+        "type": "string",
+        "enum": [
+          "right",
+          "left"
+        ],
+        "maxLength": 16
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "height",
+    "minHeight",
+    "padding",
+    "contentAlign",
+    "textAlign",
+    "background",
+    "radius"
+  ]
+}
