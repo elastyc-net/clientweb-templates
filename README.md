@@ -148,3 +148,12 @@ in the shared editor. Existing client content is never switched by package apply
 Run `php tools/test-library-site-chrome.php` to validate all six combinations,
 central brand bindings, preserved text/links and compatibility with the original
 package. Bootstrap pins 1.1.0; older immutable releases remain available.
+
+## Retaining immutable export history
+
+Bootstrap export keeps earlier immutable payloads already present in an engine
+checkout when they match the verified canonical catalog byte for byte. The active
+bootstrap catalog still selects one version per package. This avoids implicit
+code removals when an installed engine moves to a newer bootstrap. Unknown or
+modified historical files are rejected. Verify with
+`node tools/test-library-export-history.mjs`.

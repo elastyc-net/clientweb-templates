@@ -84,10 +84,17 @@ if(['--export','--export-starter'].includes(args[0])){
     exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:selected},null,2)+'\n'));
   }
   const destination=path.resolve(args[1]);
-  // Do not erase arbitrary output directories, or leave stale releases in a snapshot.
+  // The catalog pins the bootstrap. Verified immutable payloads from earlier engine
+  // releases must remain on disk so a code upgrade does not silently remove them.
   if(fs.existsSync(destination)){
-    const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.relative(destination,path.join(dir,e.name)).split(path.sep).join('/')]);
-    if(walk(destination).some(file=>!exported.has(file)))throw new Error('Output contains files outside this catalog; use a fresh directory');
+    const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>{
+      if(e.isSymbolicLink())throw new Error('Output contains a symbolic link');
+      return e.isDirectory()?walk(path.join(dir,e.name)):[path.relative(destination,path.join(dir,e.name)).split(path.sep).join('/')];
+    });
+    for(const file of walk(destination)){
+      if(exported.has(file))continue;
+      if(!files.has(file)||sha(fs.readFileSync(path.join(destination,file)))!==sha(files.get(file)))throw new Error('Output contains unknown or modified historical files; use a fresh directory');
+    }
   }
   for(const [relative,bytes]of exported){const target=path.join(destination,relative);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,bytes);}
 }
