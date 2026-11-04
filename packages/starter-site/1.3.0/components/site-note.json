@@ -1,0 +1,50 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-note",
+  "label": "Tekst i kontakt",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<p class=\"wfz-note\">{{setting:text}}</p>",
+  "styles": [
+    {
+      "name": "site-note.css",
+      "content": ".wfz-note{margin:0;white-space:pre-line;overflow-wrap:anywhere;font:inherit}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "text": {
+        "type": "string",
+        "maxLength": 2000
+      }
+    },
+    "required": [
+      "text"
+    ]
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

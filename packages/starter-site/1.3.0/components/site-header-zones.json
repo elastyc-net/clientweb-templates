@@ -1,0 +1,90 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-header-zones",
+  "label": "Zone zaglavlja",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<header class=\"wfz-chrome wfz-header\" data-variant=\"{{setting:variant}}\" data-gap=\"{{setting:gap}}\" data-ratio=\"{{setting:ratio}}\" data-mobile=\"{{setting:mobile}}\"><div class=\"wfz-zone wfz-left\">{{slot:left}}</div><div class=\"wfz-zone wfz-center\">{{slot:center}}</div><div class=\"wfz-zone wfz-right\">{{slot:right}}</div><div class=\"wfz-zone wfz-lower\">{{slot:lower}}</div></header>",
+  "styles": [
+    {
+      "name": "site-header-zones.css",
+      "content": ".wfz-chrome{max-width:var(--wf-container-max-width);margin:auto;padding:calc(var(--wf-space-unit)*5);color:var(--wf-color-text);background:var(--wf-color-surface);font-family:var(--wf-font-body);display:grid;gap:calc(var(--wf-space-unit)*4);grid-template-columns:auto minmax(0,1fr) auto;align-items:center}.wfz-zone{min-width:0}.wfz-zone>.wf-slot{display:flex;align-items:center;flex-wrap:wrap;gap:calc(var(--wf-space-unit)*3)}.wfz-center>.wf-slot{justify-content:center}.wfz-right>.wf-slot{justify-content:flex-end}.wfz-lower{grid-column:1/-1}.wfz-chrome[data-gap=\"small\"]{gap:var(--wf-space-unit)}.wfz-chrome[data-gap=\"large\"]{gap:calc(var(--wf-space-unit)*8)}.wfz-chrome[data-ratio=\"equal\"]{grid-template-columns:repeat(3,minmax(0,1fr))}.wfz-chrome[data-mobile=\"stack\"]{--wfz-mobile-stack:1}@media(max-width:700px){.wfz-chrome{padding:calc(var(--wf-space-unit)*4);grid-template-columns:minmax(0,1fr) auto!important}.wfz-center{grid-row:2;grid-column:1/-1}.wfz-left{grid-row:1;grid-column:1}.wfz-right{grid-row:1;grid-column:2}.wfz-lower{grid-row:3}.wfz-chrome[data-mobile=\"stack\"]{display:flex;flex-direction:column;align-items:stretch}.wfz-center>.wf-slot,.wfz-right>.wf-slot{justify-content:flex-start}}.wfz-header[data-variant=\"below\"] .wfz-center{grid-column:1/-1;grid-row:2}.wfz-header[data-variant=\"center\"]{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}@media(min-width:701px){.wfz-header[data-variant=\"center\"] .wfz-left{grid-column:2;grid-row:1}.wfz-header[data-variant=\"center\"] .wfz-center{grid-column:1;grid-row:1}.wfz-header[data-variant=\"center\"] .wfz-right{grid-column:3;grid-row:1}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "variant": {
+        "type": "string",
+        "enum": [
+          "left",
+          "center",
+          "below",
+          "shop"
+        ],
+        "maxLength": 24
+      },
+      "gap": {
+        "type": "string",
+        "enum": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "maxLength": 24
+      },
+      "ratio": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "equal"
+        ],
+        "maxLength": 24
+      },
+      "mobile": {
+        "type": "string",
+        "enum": [
+          "zones",
+          "stack"
+        ],
+        "maxLength": 24
+      }
+    },
+    "required": [
+      "variant",
+      "gap",
+      "ratio",
+      "mobile"
+    ]
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "slots": [
+    "left",
+    "center",
+    "right",
+    "lower"
+  ]
+}

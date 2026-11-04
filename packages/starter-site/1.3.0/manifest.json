@@ -1,0 +1,126 @@
+{
+  "formatVersion": 1,
+  "packageKey": "starter-site",
+  "version": "1.3.0",
+  "label": "Poslovni sajt",
+  "description": "Sastavljanje zaglavlja i podnožja po zonama, sa nezavisnim logom, menijem, tekstom i alatima. Postojeći delovi ostaju do izbora šablona.",
+  "distribution": "base",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "starter-header",
+      "path": "components/starter-header.json",
+      "sha256": "892f1a651cfd1294485c8f8d1e37b4394dbb4d7decaf8e251bfbf5913ae155a4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-footer",
+      "path": "components/starter-footer.json",
+      "sha256": "887af13a58c3dadc33e74ee8f6fba17161be2fc3133835803936f91a1039c0e3"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-hero",
+      "path": "components/starter-hero.json",
+      "sha256": "6b9cc97097c89ad088c161523634fd09a863f23bec03b912a3046f79be6599f8"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-cards",
+      "path": "components/starter-cards.json",
+      "sha256": "e8a2c719fb55a5de1dcd05fa23b683ef6f4be0532b667a8e442bed3f4d99cfb4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-text",
+      "path": "components/starter-text.json",
+      "sha256": "f0630206ceef6ce1691681020f1edf685c1bf9e194c0594e0f7ba33575c40d66"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "starter-site-header",
+      "path": "global-sections/starter-site-header.json",
+      "sha256": "5442127759672aa7dfd3a0178dbbaf69182265d0df7cddbbccce8a486b2eebcc"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "starter-site-footer",
+      "path": "global-sections/starter-site-footer.json",
+      "sha256": "48b3eb4f13cce793cdd15d4139694c9de477b66049264fe076f522a49a7e7982"
+    },
+    {
+      "itemType": "layout",
+      "itemKey": "starter-layout",
+      "path": "layouts/starter-layout.json",
+      "sha256": "9529ec2e36fe23932e80a4365df472e28fecce38ffdcb5c44012983671e630d3"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-home",
+      "path": "page-templates/starter-home.json",
+      "sha256": "72287d88660c66d27a57062a8383e53c1b596929eb591bccae274af45b429a11"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-about",
+      "path": "page-templates/starter-about.json",
+      "sha256": "8e5e1373b479faafce225cb07990c5eb020bff4685582a2cb53d3e9a6a0f98fc"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-services",
+      "path": "page-templates/starter-services.json",
+      "sha256": "e82219f600098cf7386b3ff9d5e1cb100b508d8544d8508fc8fb0de16e77b7f9"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "starter-contact",
+      "path": "page-templates/starter-contact.json",
+      "sha256": "d3e33e44446433809fbeeafc92e8168816fb6304187b19c92c73213199699cb2"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-header-visual",
+      "path": "components/starter-header-visual.json",
+      "sha256": "7d33bd70f7204c7e899f9eb9fd4937a48d31cb3ff3c6df4f0cf4584c6a77c019"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "starter-footer-visual",
+      "path": "components/starter-footer-visual.json",
+      "sha256": "17f075480e6e0fdd6915ac85d8295a90124dd6298f77e83183045f9cbdf842fa"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-header-zones",
+      "path": "components/site-header-zones.json",
+      "sha256": "9ee69836a8e3ed2a6df9b8b05a2c2c1b1d738cd462a0d49b94a35e4916393516"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-footer-zones",
+      "path": "components/site-footer-zones.json",
+      "sha256": "f81ac03df38e8f6e2b1cae65047caca6f6456aae8003df31d839e995fdb81457"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-brand",
+      "path": "components/site-brand.json",
+      "sha256": "ad398c568fbfb3b16508b7fa1cd31913c39e34f57d1e8e5385d08e036575db66"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-links",
+      "path": "components/site-links.json",
+      "sha256": "21e25684d6f9e0207adabb628b264f060b163b85beae17fdd68f391e2a7cd8e7"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "site-note",
+      "path": "components/site-note.json",
+      "sha256": "f51274979f5423b96a61041777d28201969704913da17592ea94af127fdcb23d"
+    }
+  ]
+}

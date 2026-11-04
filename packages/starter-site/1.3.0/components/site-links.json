@@ -1,0 +1,83 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-links",
+  "label": "Meni i linkovi",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"wfz-links\"><button type=\"button\" aria-expanded=\"false\">{{setting:label}}</button><nav aria-label=\"{{setting:label}}\">{{each:links}}<a href=\"{{item:url}}\">{{item:label}}</a>{{/each:links}}</nav></div>",
+  "styles": [
+    {
+      "name": "site-links.css",
+      "content": ".wfz-links{min-width:0}.wfz-links button{display:none;min-height:44px;background:transparent;color:inherit;border:1px solid currentColor;padding:8px 12px;font:inherit}.wfz-links nav{display:flex;gap:16px;flex-wrap:wrap}.wfz-links a{color:inherit;overflow-wrap:anywhere}.wfz-links a:focus-visible,.wfz-links button:focus-visible{outline:2px solid currentColor;outline-offset:3px}@media(max-width:700px){.wfz-header .wfz-links button{display:block}.wfz-header .wfz-links[data-ready=\"true\"] nav{display:none}.wfz-header .wfz-links[data-open=\"true\"] nav{display:flex;flex-direction:column}.wfz-header .wfz-links nav a{padding:12px}}"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "site-links.js",
+      "content": "document.querySelectorAll('.wfz-links').forEach(function(root,index){if(root.dataset.ready)return;var button=root.querySelector('button'),nav=root.querySelector('nav');root.dataset.ready='true';nav.id='wfz-menu-'+index;button.setAttribute('aria-controls',nav.id);var close=function(){root.dataset.open='false';button.setAttribute('aria-expanded','false');};button.addEventListener('click',function(){var open=button.getAttribute('aria-expanded')!=='true';root.dataset.open=open?'true':'false';button.setAttribute('aria-expanded',open?'true':'false');});root.addEventListener('keydown',function(e){if(e.key==='Escape'){close();button.focus();}});nav.addEventListener('click',function(e){if(e.target.closest('a'))close();});});"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "label": {
+        "type": "string",
+        "maxLength": 80,
+        "minLength": 1
+      },
+      "links": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 8,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 60,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "format": "safe-url"
+            }
+          }
+        }
+      }
+    },
+    "required": [
+      "label",
+      "links"
+    ]
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

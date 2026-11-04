@@ -1,0 +1,67 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-text",
+  "label": "Tekst i detalji",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wfs-text\" data-wf-design-root data-wf-design-surface><div class=\"wfs-wrap\" data-wf-design-content><p class=\"wfs-eyebrow\">{{setting:eyebrow}}</p><h2>{{setting:title}}</h2><p class=\"wfs-text-body\">{{setting:body}}</p></div></section>",
+  "styles": [
+    {
+      "name": "starter-text.css",
+      "content": ".wfs-text{padding:64px 24px;color:var(--wf-color-text,#172c25)}.wfs-text .wfs-wrap{max-width:800px}.wfs-text h2{font-size:clamp(28px,4vw,42px);line-height:1.15;letter-spacing:-.03em;margin:12px 0 24px}.wfs-text-body{font-size:18px;line-height:1.85;white-space:pre-line;color:var(--wf-color-muted,#52625d)}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "body"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 200,
+        "minLength": 1
+      },
+      "body": {
+        "type": "string",
+        "maxLength": 6000,
+        "minLength": 1
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "padding",
+    "textAlign",
+    "background"
+  ]
+}

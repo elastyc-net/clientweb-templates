@@ -1,0 +1,81 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-hero",
+  "label": "Naslov i poziv na akciju",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wfs-hero\" data-wf-design-root data-wf-design-surface><div class=\"wfs-wrap\" data-wf-design-content><p class=\"wfs-eyebrow\">{{setting:eyebrow}}</p><h1>{{setting:title}}</h1><p class=\"wfs-lead\">{{setting:lead}}</p><a class=\"wfs-button\" href=\"{{setting:url}}\">{{setting:label}}</a></div></section>",
+  "styles": [
+    {
+      "name": "starter-hero.css",
+      "content": ".wfs-hero{padding:88px 24px;background:var(--wf-color-background,#f1f5f3);color:var(--wf-color-text,#172c25)}.wfs-wrap{max-width:1112px;margin:auto}.wfs-eyebrow{font-size:13px;font-weight:750;letter-spacing:.12em;text-transform:uppercase;color:var(--wf-color-primary,#1c6851)}.wfs-hero h1{max-width:850px;margin:20px 0;font-size:clamp(36px,6vw,76px);font-weight:750;line-height:1.05;letter-spacing:-.045em;text-wrap:balance}.wfs-lead{max-width:640px;font-size:19px;line-height:1.7;color:var(--wf-color-muted,#52625d)}.wfs-button{display:inline-flex;margin-top:18px;padding:14px 22px;border-radius:6px;background:var(--wf-color-primary,#1c6851);color:var(--wf-color-on-primary,#fff);text-decoration:none;font-size:15px;font-weight:700}.wfs-button:focus-visible{outline:3px solid currentColor;outline-offset:4px}@media(max-width:600px){.wfs-hero{padding:56px 24px}.wfs-lead{font-size:17px}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "lead",
+      "label",
+      "url"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 100
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 200,
+        "minLength": 1
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 1200
+      },
+      "label": {
+        "type": "string",
+        "maxLength": 80,
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "maxLength": 2048,
+        "minLength": 1,
+        "format": "safe-url"
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "padding",
+    "textAlign",
+    "contentAlign",
+    "background",
+    "radius"
+  ]
+}

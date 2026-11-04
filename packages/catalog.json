@@ -78,6 +78,12 @@
       "version": "1.2.0",
       "manifest": "starter-site/1.2.0/manifest.json",
       "sha256": "13059d14f41826c4929d8bad1f9810b8477bdc485eef658d26cd48db3513c4dc"
+    },
+    {
+      "packageKey": "starter-site",
+      "version": "1.3.0",
+      "manifest": "starter-site/1.3.0/manifest.json",
+      "sha256": "9be1033780f5cc2f25a6b1d33b1d09e840a1eb0d2a36c43d2b10cff335db50f1"
     }
   ]
 }

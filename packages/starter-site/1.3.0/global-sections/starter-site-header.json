@@ -1,0 +1,16 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "globalSectionKey": "starter-site-header",
+  "label": "Zaglavlje sajta",
+  "instance": {
+    "instanceKey": "starter-site-header",
+    "componentKey": "starter-header",
+    "settings": {
+      "brand": "Vaš brend",
+      "home-url": "/",
+      "links": []
+    }
+  },
+  "role": "header"
+}

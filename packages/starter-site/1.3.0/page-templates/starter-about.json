@@ -1,0 +1,65 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "starter-about",
+  "label": "O nama",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "O nama",
+    "description": "Priča o timu, vrednostima i načinu rada."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "uvod",
+        "componentKey": "starter-hero",
+        "settings": {
+          "title": "Ljudi i ideje iza vašeg poslovanja.",
+          "lead": "Ispričajte ko ste, šta vas pokreće i kako stvarate vrednost za klijente.",
+          "eyebrow": "O nama",
+          "label": "Naša priča",
+          "url": "#main-content"
+        }
+      },
+      {
+        "instanceKey": "detalji",
+        "componentKey": "starter-text",
+        "settings": {
+          "title": "Naša priča",
+          "body": "Predstavite svoje početke, iskustvo i ljude koji čine vaš tim.\n\nNapišite šta vas izdvaja i kakav odnos gradite sa klijentima.",
+          "eyebrow": "O nama"
+        }
+      },
+      {
+        "instanceKey": "prednosti",
+        "componentKey": "starter-cards",
+        "settings": {
+          "title": "Vrednosti koje delimo",
+          "lead": "Pokažite kako vaše vrednosti izgledaju u praksi.",
+          "cards": [
+            {
+              "title": "Odgovornost",
+              "body": "Držimo se dogovora i preuzimamo odgovornost za rezultate."
+            },
+            {
+              "title": "Saradnja",
+              "body": "Slušamo, razgovaramo i zajedno tražimo pravo rešenje."
+            },
+            {
+              "title": "Razvoj",
+              "body": "Učimo iz iskustva i stalno unapređujemo svoj rad."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

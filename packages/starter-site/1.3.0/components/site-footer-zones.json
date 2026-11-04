@@ -1,0 +1,89 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-footer-zones",
+  "label": "Kolone podnožja",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<footer class=\"wfz-chrome wfz-footer\" data-variant=\"{{setting:variant}}\" data-gap=\"{{setting:gap}}\" data-ratio=\"{{setting:ratio}}\" data-mobile=\"{{setting:mobile}}\"><div class=\"wfz-zone wfz-left\">{{slot:left}}</div><div class=\"wfz-zone wfz-center\">{{slot:center}}</div><div class=\"wfz-zone wfz-right\">{{slot:right}}</div><div class=\"wfz-zone wfz-lower\">{{slot:lower}}</div></footer>",
+  "styles": [
+    {
+      "name": "site-footer-zones.css",
+      "content": ".wfz-chrome{max-width:var(--wf-container-max-width);margin:auto;padding:calc(var(--wf-space-unit)*5);color:var(--wf-color-text);background:var(--wf-color-surface);font-family:var(--wf-font-body);display:grid;gap:calc(var(--wf-space-unit)*4);grid-template-columns:auto minmax(0,1fr) auto;align-items:center}.wfz-zone{min-width:0}.wfz-zone>.wf-slot{display:flex;align-items:center;flex-wrap:wrap;gap:calc(var(--wf-space-unit)*3)}.wfz-center>.wf-slot{justify-content:center}.wfz-right>.wf-slot{justify-content:flex-end}.wfz-lower{grid-column:1/-1}.wfz-chrome[data-gap=\"small\"]{gap:var(--wf-space-unit)}.wfz-chrome[data-gap=\"large\"]{gap:calc(var(--wf-space-unit)*8)}.wfz-chrome[data-ratio=\"equal\"]{grid-template-columns:repeat(3,minmax(0,1fr))}.wfz-chrome[data-mobile=\"stack\"]{--wfz-mobile-stack:1}@media(max-width:700px){.wfz-chrome{padding:calc(var(--wf-space-unit)*4);grid-template-columns:minmax(0,1fr) auto!important}.wfz-center{grid-row:2;grid-column:1/-1}.wfz-left{grid-row:1;grid-column:1}.wfz-right{grid-row:1;grid-column:2}.wfz-lower{grid-row:3}.wfz-chrome[data-mobile=\"stack\"]{display:flex;flex-direction:column;align-items:stretch}.wfz-center>.wf-slot,.wfz-right>.wf-slot{justify-content:flex-start}}.wfz-footer{align-items:start;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--wf-color-border)}.wfz-footer .wfz-zone>.wf-slot{align-items:flex-start;flex-direction:column}.wfz-footer .wfz-links button{display:none}.wfz-footer .wfz-links nav{display:flex;flex-direction:column}.wfz-footer[data-variant=\"contact\"]{grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr)}@media(max-width:700px){.wfz-footer{display:flex;flex-direction:column}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "variant": {
+        "type": "string",
+        "enum": [
+          "simple",
+          "columns",
+          "contact"
+        ],
+        "maxLength": 24
+      },
+      "gap": {
+        "type": "string",
+        "enum": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "maxLength": 24
+      },
+      "ratio": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "equal"
+        ],
+        "maxLength": 24
+      },
+      "mobile": {
+        "type": "string",
+        "enum": [
+          "zones",
+          "stack"
+        ],
+        "maxLength": 24
+      }
+    },
+    "required": [
+      "variant",
+      "gap",
+      "ratio",
+      "mobile"
+    ]
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "slots": [
+    "left",
+    "center",
+    "right",
+    "lower"
+  ]
+}

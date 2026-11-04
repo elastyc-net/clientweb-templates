@@ -167,3 +167,5 @@ Old releases and existing global-section definitions remain byte-identical.
 The CMS presents four header and three footer cards in Site settings, with an
 explicit local choice, preview and Undo. Bootstrap pins 1.2.0; existing tenants
 need an explicit library plan/apply and their own branding setup.
+
+`starter-site@1.3.0` adds independent `site-header-zones`, `site-footer-zones`, `site-brand`, `site-links`, and `site-note` contracts. Four slots support horizontal header layouts, footer columns and a full-width lower row; mobile stacking and menu toggles are built in. Existing definitions/releases stay byte-identical. Presets explicitly convert a local shared draft, preserving content and configurable account/cart links. Bootstrap now pins 1.3.0; existing tenants require a reviewed library apply.

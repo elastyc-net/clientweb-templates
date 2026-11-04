@@ -1,0 +1,72 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-brand",
+  "label": "Logo i naziv sajta",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<a class=\"wfz-brand\" href=\"{{setting:home-url}}\"><img src=\"{{setting:logo-url}}\" alt=\"{{setting:logo-alt}}\"><span>{{setting:brand}}</span></a>",
+  "styles": [
+    {
+      "name": "site-brand.css",
+      "content": ".wfz-brand{display:inline-flex;align-items:center;gap:12px;color:inherit;text-decoration:none;font-weight:700;max-width:100%;overflow-wrap:anywhere}.wfz-brand img{height:40px;width:auto;max-width:160px;object-fit:contain}.wfz-brand span{min-width:0}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "brand": {
+        "type": "string",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "home-url": {
+        "type": "string",
+        "maxLength": 2048,
+        "minLength": 1,
+        "format": "safe-url"
+      },
+      "logo-url": {
+        "type": "string",
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "logo-alt": {
+        "type": "string",
+        "maxLength": 160
+      }
+    },
+    "required": [
+      "brand",
+      "home-url"
+    ]
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "themeBindings": {
+    "brand": "brand.name",
+    "logo-url": "brand.logoUrl",
+    "logo-alt": "brand.logoAlt"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-header",
+  "label": "Zaglavlje i navigacija",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<header class=\"wfs-header\"><a class=\"wfs-brand\" href=\"{{setting:home-url}}\">{{setting:brand}}</a><nav aria-label=\"Glavna navigacija\">{{each:links}}<a href=\"{{item:url}}\">{{item:label}}</a>{{/each:links}}</nav></header>",
+  "styles": [
+    {
+      "name": "starter-header.css",
+      "content": ".wfs-header{max-width:1160px;margin:auto;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:system-ui,sans-serif}.wfs-brand{font-size:20px;font-weight:800;letter-spacing:-.04em}.wfs-header a{color:inherit;text-decoration:none}.wfs-header nav{display:flex;flex-wrap:wrap;gap:20px;font-size:14px}.wfs-header a:hover{text-decoration:underline}.wfs-header a:focus-visible{outline:2px solid currentColor;outline-offset:5px}@media(max-width:600px){.wfs-header{align-items:flex-start;flex-direction:column;gap:16px}.wfs-header nav{gap:14px}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "brand",
+      "home-url",
+      "links"
+    ],
+    "properties": {
+      "brand": {
+        "type": "string",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "home-url": {
+        "type": "string",
+        "maxLength": 2048,
+        "minLength": 1,
+        "format": "safe-url"
+      },
+      "links": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 8,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 60,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "format": "safe-url"
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}
