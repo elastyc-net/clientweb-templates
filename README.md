@@ -157,3 +157,13 @@ bootstrap catalog still selects one version per package. This avoids implicit
 code removals when an installed engine moves to a newer bootstrap. Unknown or
 modified historical files are rejected. Verify with
 `node tools/test-library-export-history.mjs`.
+
+`starter-site@1.2.0` extends the opt-in header/footer designs with a shop variant,
+a contact footer, and nested actions/extras slots. Header templates retain menu
+links and branding bindings; switching variants retains added components and
+local presentation. Shop composition reuses the separately installed account and
+cart components; these are configurable links, not live account/cart integration.
+Old releases and existing global-section definitions remain byte-identical.
+The CMS presents four header and three footer cards in Site settings, with an
+explicit local choice, preview and Undo. Bootstrap pins 1.2.0; existing tenants
+need an explicit library plan/apply and their own branding setup.

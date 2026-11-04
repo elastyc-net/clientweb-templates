@@ -1,0 +1,87 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-cards",
+  "label": "Usluge i prednosti",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wfs-cards\" data-wf-design-root><div class=\"wfs-wrap\"><header><h2>{{setting:title}}</h2><p>{{setting:lead}}</p></header><div class=\"wfs-card-grid\">{{each:cards}}<article data-wf-design-surface data-wf-design-content><h3>{{item:title}}</h3><p>{{item:body}}</p></article>{{/each:cards}}</div></div></section>",
+  "styles": [
+    {
+      "name": "starter-cards.css",
+      "content": ".wfs-cards{padding:64px 24px;color:var(--wf-color-text,#172c25)}.wfs-cards header{max-width:650px}.wfs-cards h2{font-size:32px;letter-spacing:-.03em;margin:0 0 16px}.wfs-cards p{color:var(--wf-color-muted,#52625d);line-height:1.75}.wfs-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:32px}.wfs-card-grid article{padding:28px;border:1px solid var(--wf-color-border,#dce3e1);border-radius:8px;background:var(--wf-color-surface,#fff)}.wfs-card-grid h3{font-size:19px;margin:0 0 12px}.wfs-card-grid p{margin:0}@media(max-width:720px){.wfs-card-grid{grid-template-columns:1fr}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "lead",
+      "cards"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "maxLength": 160,
+        "minLength": 1
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 500
+      },
+      "cards": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "body"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 100,
+              "minLength": 1
+            },
+            "body": {
+              "type": "string",
+              "maxLength": 800,
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "padding",
+    "background",
+    "radius"
+  ]
+}
