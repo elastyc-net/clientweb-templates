@@ -1,0 +1,65 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "starter-home",
+  "label": "Početna stranica",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Početna stranica",
+    "description": "Predstavite poslovanje, usluge i glavnu poruku."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "uvod",
+        "componentKey": "starter-hero",
+        "settings": {
+          "title": "Prava rešenja počinju dobrim partnerstvom.",
+          "lead": "Pomozite posetiocima da razumeju šta radite i zašto da izaberu baš vas.",
+          "eyebrow": "Vaš brend",
+          "label": "Upoznajte naš rad",
+          "url": "#main-content"
+        }
+      },
+      {
+        "instanceKey": "prednosti",
+        "componentKey": "starter-cards",
+        "settings": {
+          "title": "Kako vam možemo pomoći",
+          "lead": "Tri ključne oblasti vašeg poslovanja, jasno predstavljene.",
+          "cards": [
+            {
+              "title": "Pouzdanost",
+              "body": "Opišite šta klijenti mogu da očekuju od saradnje."
+            },
+            {
+              "title": "Stručnost",
+              "body": "Predstavite znanje i iskustvo koje donosite."
+            },
+            {
+              "title": "Podrška",
+              "body": "Objasnite kako pratite klijente tokom saradnje."
+            }
+          ]
+        }
+      },
+      {
+        "instanceKey": "detalji",
+        "componentKey": "starter-text",
+        "settings": {
+          "title": "Upoznajmo se",
+          "body": "Dodajte priču o svom timu, vrednostima i načinu rada. Ovaj sadržaj je početni primer koji menjate svojim tekstom.",
+          "eyebrow": "O nama"
+        }
+      }
+    ]
+  }
+}

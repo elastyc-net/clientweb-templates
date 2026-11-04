@@ -1,0 +1,56 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-footer",
+  "label": "Podnožje sajta",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<footer class=\"wfs-footer\"><p>{{setting:brand}}</p><span>{{setting:note}}</span></footer>",
+  "styles": [
+    {
+      "name": "starter-footer.css",
+      "content": ".wfs-footer{max-width:1160px;margin:auto;padding:32px 24px;display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--wf-color-border,#dce3e1);color:var(--wf-color-muted,#52625d);font:14px/1.6 system-ui,sans-serif}.wfs-footer p{margin:0;font-weight:700}@media(max-width:600px){.wfs-footer{flex-direction:column}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "brand",
+      "note"
+    ],
+    "properties": {
+      "brand": {
+        "type": "string",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "note": {
+        "type": "string",
+        "maxLength": 240
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

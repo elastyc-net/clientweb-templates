@@ -1,0 +1,65 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "starter-services",
+  "label": "Usluge",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Usluge",
+    "description": "Pregled ponude sa prostorom za detalje."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "uvod",
+        "componentKey": "starter-hero",
+        "settings": {
+          "title": "Rešenja prilagođena vašim potrebama.",
+          "lead": "Predstavite usluge kroz koristi koje donose vašim klijentima.",
+          "eyebrow": "Naša ponuda",
+          "label": "Pogledajte ponudu",
+          "url": "#main-content"
+        }
+      },
+      {
+        "instanceKey": "prednosti",
+        "componentKey": "starter-cards",
+        "settings": {
+          "title": "Naše usluge",
+          "lead": "Zamenite primere svojim uslugama i konkretnim opisima.",
+          "cards": [
+            {
+              "title": "Savetovanje",
+              "body": "Razumevanje potreba i priprema jasnog plana."
+            },
+            {
+              "title": "Realizacija",
+              "body": "Stručna realizacija uz dogovorene rokove i prioritete."
+            },
+            {
+              "title": "Podrška",
+              "body": "Praktična pomoć i pouzdan nastavak saradnje."
+            }
+          ]
+        }
+      },
+      {
+        "instanceKey": "detalji",
+        "componentKey": "starter-text",
+        "settings": {
+          "title": "Kako sarađujemo",
+          "body": "Opišite korake saradnje, očekivane rokove i način na koji klijenti mogu da zatraže ponudu.",
+          "eyebrow": "Proces"
+        }
+      }
+    ]
+  }
+}

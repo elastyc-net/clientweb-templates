@@ -66,6 +66,12 @@
       "version": "1.0.0",
       "manifest": "repository-components/1.0.0/manifest.json",
       "sha256": "dd995b47598f133224441b8f456b1db18498efba3d860fbf404ec019c2062922"
+    },
+    {
+      "packageKey": "starter-site",
+      "version": "1.1.0",
+      "manifest": "starter-site/1.1.0/manifest.json",
+      "sha256": "5c59cc49589a1d103190339bcd8449f0260f58fac43b08dfc5721d5eca356ca5"
     }
   ]
 }

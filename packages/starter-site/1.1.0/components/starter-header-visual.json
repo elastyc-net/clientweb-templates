@@ -1,0 +1,113 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "starter-header-visual",
+  "label": "Zaglavlje sa logom",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<header class=\"wfv-header\" data-variant=\"{{setting:variant}}\"><a class=\"wfv-brand\" href=\"{{setting:home-url}}\"><img src=\"{{setting:logo-url}}\" alt=\"{{setting:logo-alt}}\"><span>{{setting:brand}}</span></a><div class=\"wfv-menu\"><button type=\"button\" class=\"wfv-menu-toggle\" aria-expanded=\"false\">Meni</button><nav aria-label=\"Glavna navigacija\">{{each:links}}<a href=\"{{item:url}}\">{{item:label}}</a>{{/each:links}}</nav></div></header>",
+  "styles": [
+    {
+      "name": "starter-header-visual.css",
+      "content": ".wfv-header{max-width:var(--wf-container-max-width,1160px);margin:auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;font-family:var(--wf-font-body,system-ui)}.wfv-header a{color:inherit;text-decoration:none}.wfv-brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:20px}.wfv-brand img{height:44px;width:auto;max-width:180px;object-fit:contain}.wfv-brand img[src=\"\"]{display:none}.wfv-header nav{display:flex;gap:20px;flex-wrap:wrap}.wfv-header a:focus-visible,.wfv-menu-toggle:focus-visible{outline:2px solid currentColor;outline-offset:4px}.wfv-menu-toggle{cursor:pointer;min-height:44px;padding:12px;background:transparent;color:inherit;border:1px solid currentColor;border-radius:4px}.wfv-header[data-variant=\"center\"],.wfv-header[data-variant=\"below\"]{flex-direction:column}.wfv-header[data-variant=\"below\"] .wfv-brand{align-self:flex-start}@media(min-width:701px){.wfv-menu-toggle{display:none}.wfv-menu:not([open])>nav{display:flex}}@media(max-width:700px){.wfv-header{padding:16px;align-items:stretch;flex-direction:column;gap:8px}.wfv-brand img{max-width:140px}.wfv-menu nav{flex-direction:column;gap:0}.wfv-menu nav a{padding:12px}.wfv-menu-toggle{display:inline-flex}.wfv-header[data-menu-ready=\"true\"] .wfv-menu nav{display:none}.wfv-header[data-menu-open=\"true\"] .wfv-menu nav{display:flex}}"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "starter-header-visual.js",
+      "content": "(function(){document.querySelectorAll(\".wfv-header\").forEach(function(root,index){if(root.dataset.menuReady)return;var button=root.querySelector(\".wfv-menu-toggle\"),nav=root.querySelector(\"nav\");if(!button||!nav)return;root.dataset.menuReady=\"true\";nav.id=\"wfv-navigation-\"+index;button.setAttribute(\"aria-controls\",nav.id);button.addEventListener(\"click\",function(){var open=button.getAttribute(\"aria-expanded\")!==\"true\";button.setAttribute(\"aria-expanded\",open?\"true\":\"false\");root.dataset.menuOpen=open?\"true\":\"false\";});});})();"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "brand",
+      "home-url",
+      "links"
+    ],
+    "properties": {
+      "brand": {
+        "type": "string",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "home-url": {
+        "type": "string",
+        "maxLength": 2048,
+        "minLength": 1,
+        "format": "safe-url"
+      },
+      "links": {
+        "type": "array",
+        "minItems": 0,
+        "maxItems": 8,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 60,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "format": "safe-url"
+            }
+          }
+        }
+      },
+      "variant": {
+        "type": "string",
+        "enum": [
+          "left",
+          "center",
+          "below"
+        ],
+        "maxLength": 16
+      },
+      "logo-url": {
+        "type": "string",
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "logo-alt": {
+        "type": "string",
+        "maxLength": 160
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "themeBindings": {
+    "brand": "brand.name",
+    "logo-url": "brand.logoUrl",
+    "logo-alt": "brand.logoAlt"
+  }
+}

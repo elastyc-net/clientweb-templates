@@ -139,3 +139,12 @@ explicit bootstrap pins when promoting the new baseline. The engine regression
 `tests/webfrontRepositoryLibraryTest.php` compares every repository component
 and latest package component with the actual initializer, and fails on omission
 or drift. Do not edit previously released manifest/payload bytes.
+
+`starter-site@1.1.0` keeps the original page templates and global instances,
+adds opt-in logo-based header/footer components (three header layouts and two
+footer layouts), and removes the starter shell's blanket image height override.
+The new components require a configured site theme/logo and are chosen explicitly
+in the shared editor. Existing client content is never switched by package apply.
+Run `php tools/test-library-site-chrome.php` to validate all six combinations,
+central brand bindings, preserved text/links and compatibility with the original
+package. Bootstrap pins 1.1.0; older immutable releases remain available.

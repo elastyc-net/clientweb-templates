@@ -1,0 +1,40 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "layoutKey": "starter-layout",
+  "label": "Poslovni sajt — osnovni raspored",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<!doctype html><html lang=\"{{wf:lang}}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">{{wf:head}}{{wf:styles}}</head><body class=\"wfs-site\" data-release=\"{{wf:release}}\">{{region:header}}<main id=\"main-content\">{{region:main}}</main>{{region:footer}}{{wf:scripts}}</body></html>",
+  "styles": [
+    {
+      "name": "starter-shell.css",
+      "content": ".wfs-site{margin:0;background:var(--wf-color-surface,#fff);color:var(--wf-color-text,#172c25);font-family:var(--wf-font-body,system-ui,sans-serif)}.wfs-site *{box-sizing:border-box}.wfs-site img{max-width:100%}.wfs-site main{min-height:65vh}.wfs-site h1,.wfs-site h2,.wfs-site h3,.wfs-site p{overflow-wrap:anywhere}.wfs-site a:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    }
+  ],
+  "scripts": [],
+  "regions": {
+    "header": {
+      "required": true,
+      "defaults": [
+        {
+          "globalSectionKey": "starter-site-header"
+        }
+      ]
+    },
+    "main": {
+      "required": true,
+      "defaults": []
+    },
+    "footer": {
+      "required": true,
+      "defaults": [
+        {
+          "globalSectionKey": "starter-site-footer"
+        }
+      ]
+    }
+  }
+}
