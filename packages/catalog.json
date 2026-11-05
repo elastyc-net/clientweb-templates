@@ -84,6 +84,12 @@
       "version": "1.3.0",
       "manifest": "starter-site/1.3.0/manifest.json",
       "sha256": "9be1033780f5cc2f25a6b1d33b1d09e840a1eb0d2a36c43d2b10cff335db50f1"
+    },
+    {
+      "packageKey": "reference-chrome",
+      "version": "1.0.0",
+      "manifest": "reference-chrome/1.0.0/manifest.json",
+      "sha256": "0c46ac550415eb83bdb1b2f4f5a3c028d3ce077683739359c8236b184876a136"
     }
   ]
 }

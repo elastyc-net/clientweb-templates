@@ -1,0 +1,87 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-link-group",
+  "label": "Grupa linkova podnožja",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<details class=\"wfcr-link-group\" open><summary>{{setting:title}}</summary><nav aria-label=\"{{setting:title}}\">{{each:links}}<a href=\"{{item:url}}\">{{item:label}}</a>{{/each:links}}</nav></details>",
+  "styles": [
+    {
+      "name": "chrome-link-group.css",
+      "content": ".wfcr-link-group{min-width:0}.wfcr-link-group summary{font-weight:650;font-size:15px;list-style:none;margin-bottom:16px;cursor:default}.wfcr-link-group nav{display:flex;flex-direction:column;gap:12px}.wfcr-link-group a{font-size:13px;text-decoration:none;overflow-wrap:anywhere}.wfcr-link-group a:hover{text-decoration:underline}@media(min-width:641px){.wfcr-link-group:not([open]) nav{display:flex}}@media(max-width:640px){.wfcr-link-group{border-bottom:1px solid var(--wf-surface-border,var(--wf-color-border));padding:16px 0}.wfcr-link-group summary{cursor:pointer;margin-bottom:0;display:flex;justify-content:space-between}.wfcr-link-group summary:after{content:\"+\"}.wfcr-link-group[open] summary:after{content:\"−\"}.wfcr-link-group[open] nav{padding-top:16px}}"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "chrome-link-group.js",
+      "content": "document.querySelectorAll('.wfcr-link-group').forEach(function(root){if(root.dataset.ready)return;root.dataset.ready='true';var mobile=matchMedia('(max-width:640px)');function sync(){root.open=!mobile.matches;}sync();if(mobile.addEventListener)mobile.addEventListener('change',sync);root.querySelector('summary').addEventListener('click',function(event){if(!mobile.matches){event.preventDefault();root.open=true;}});});"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "links"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "title": "Naslov grupe",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "links": {
+        "type": "array",
+        "title": "Linkovi",
+        "minItems": 0,
+        "maxItems": 40,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "title": "Naziv",
+              "maxLength": 120,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "title": "Odredište",
+              "maxLength": 2048,
+              "format": "safe-url",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

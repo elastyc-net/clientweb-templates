@@ -20,6 +20,10 @@
     {
       "packageKey": "repository-components",
       "version": "1.0.0"
+    },
+    {
+      "packageKey": "reference-chrome",
+      "version": "1.0.0"
     }
   ]
 }
