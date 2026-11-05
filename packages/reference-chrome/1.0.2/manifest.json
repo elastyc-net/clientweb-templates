@@ -1,0 +1,81 @@
+{
+  "formatVersion": 1,
+  "packageKey": "reference-chrome",
+  "version": "1.0.2",
+  "label": "Zaglavlja i podnožja po uzoru na sajt",
+  "description": "Prodajni i korporativni izgled sa više redova, mega menijem, grupama linkova, javnim kontaktima i nezavisnim površinama. Veze za nalog i korpu su odvojene od poslovne integracije. Zahteva editor sa chrome-design-v1 mogućnostima. Neuspešno učitavanje logotipa koristi naziv brenda. Čitljivi podmeniji na tamnom zaglavlju i bez praznih kontaktnih naslova.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.3.0"
+    },
+    {
+      "packageKey": "repository-components",
+      "minimumVersion": "1.0.1"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "chrome-header",
+      "path": "components/chrome-header.json",
+      "sha256": "6648dfdad948108faf31e06aff5ecd7051a9048c7d37d620e6e70ba4d17da55d"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-footer",
+      "path": "components/chrome-footer.json",
+      "sha256": "c8f5abae30a75e4098f3c50c1e51159deb65be9e58e0d64f386d5d885cf1eb35"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-brand",
+      "path": "components/chrome-brand.json",
+      "sha256": "a05d78b0cc53b2098e2866e06ab4b310f69af771ef337ef1a36a0fb583c116c1"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-link-group",
+      "path": "components/chrome-link-group.json",
+      "sha256": "0266f19345d406d197756aae47b89378ec11006dd6572f9af9e8e869707b6cd6"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-actions",
+      "path": "components/chrome-actions.json",
+      "sha256": "5c81b4465f7ed21a09a951da3c57ba95cd70ff321802b619e8e6bb9575ed63cb"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-contact",
+      "path": "components/chrome-contact.json",
+      "sha256": "eace84d4a6c497892b3508c6fddc2ee54dba4957fa930772983f82fe4fa5bd10"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-social",
+      "path": "components/chrome-social.json",
+      "sha256": "6b0b8291aea91ec1acdffbf89e3cc5181a0c21f770aadf849a4956a9bd099a9e"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-trust",
+      "path": "components/chrome-trust.json",
+      "sha256": "4bfc062775fff8b0a32f102931b996dbc9c1c3afee94174bc03903ae3f394f9e"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-note",
+      "path": "components/chrome-note.json",
+      "sha256": "8de10dfba6dafa8a7f0a3dd4e78d9c41fdc636577a21f366de36d91a4aae5ad9"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "chrome-navigation",
+      "path": "components/chrome-navigation.json",
+      "sha256": "12d0a7a83d74987d0697228a36e37043d990e22e8dbd3f96fac708b516370107"
+    }
+  ]
+}

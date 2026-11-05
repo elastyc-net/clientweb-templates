@@ -1,0 +1,64 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-header",
+  "label": "Zaglavlje sa više redova",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<header class=\"wfcr-header\" data-wf-theme-surface=\"header\" data-style=\"{{setting:variant}}\"><div class=\"wfcr-zone wfcr-promo\">{{slot:promo}}</div><div class=\"wfcr-inner\"><div class=\"wfcr-zone wfcr-utility\">{{slot:utility}}</div><div class=\"wfcr-main\"><div class=\"wfcr-zone wfcr-brand-zone\">{{slot:brand}}</div><div class=\"wfcr-zone wfcr-navigation\">{{slot:navigation}}</div><div class=\"wfcr-zone wfcr-search\">{{slot:search}}</div><div class=\"wfcr-zone wfcr-actions-zone\">{{slot:actions}}</div></div><div class=\"wfcr-zone wfcr-lower\">{{slot:lower}}</div></div></header>",
+  "styles": [
+    {
+      "name": "chrome-header.css",
+      "content": ".wfcr-header,.wfcr-footer{font-family:var(--wf-font-body,system-ui);background:var(--wf-surface-background,var(--wf-color-surface,#fff));color:var(--wf-surface-text,var(--wf-color-text,#172033))}.wfcr-header a,.wfcr-footer a{color:var(--wf-surface-link,inherit)}.wfcr-header a:hover,.wfcr-footer a:hover{color:var(--wf-surface-link,inherit);background:var(--wf-surface-hover,var(--wf-color-background))}.wfcr-header :focus-visible,.wfcr-footer :focus-visible{outline:2px solid var(--wf-surface-focus,var(--wf-color-primary));outline-offset:4px}.wfcr-zone{min-width:0}.wfcr-zone:has(>.wf-slot:empty){display:none}.wfcr-inner{max-width:var(--wf-container-max-width,1440px);margin-inline:auto;width:100%;box-sizing:border-box;padding-inline:24px}.wfcr-header .wfcr-zone>.wf-slot{display:flex;gap:20px;align-items:center}.wfcr-header [data-wf-component=\"chrome-navigation\"]{min-width:0;flex:1}.wfcr-header [data-wf-component=\"site-search\"]{min-width:180px;flex:1}.wfcr-header [data-wf-component=\"site-search\"] input{width:100%;background:transparent;color:inherit;border:1px solid var(--wf-surface-border,var(--wf-color-border));border-radius:0;min-height:42px}.wfcr-header .wf-nav-list>.wf-nav-item>:is(a,button){color:inherit}.wfcr-header .wf-nav-children{color:var(--wf-color-text);background:var(--wf-color-surface)}.wfcr-header .wf-nav-description{font-size:13px;line-height:1.4}.wfcr-header .wf-nav-image{max-width:56px;max-height:56px;object-fit:contain}.wfcr-header [data-wf-component=\"chrome-actions\"]{flex:none}.wfcr-header .wf-nav-link{font-weight:500}.wfcr-header .wf-primary-nav{position:static}.wfcr-main{display:flex;gap:28px;align-items:center;min-height:84px}.wfcr-brand-zone{flex:0 0 auto}.wfcr-navigation{flex:1}.wfcr-search{flex:0 1 360px}.wfcr-utility>.wf-slot{justify-content:flex-end;padding:10px 0;font-size:12px}.wfcr-promo{background:var(--wf-color-primary);color:var(--wf-color-secondary)}.wfcr-lower>.wf-slot{padding-block:12px}.wfcr-header[data-style=\"shop\"] .wfcr-main{gap:20px}.wfcr-header[data-style=\"corporate\"] .wfcr-search{display:none}@media(max-width:1050px){.wfcr-main{flex-wrap:wrap;gap:12px;padding-block:14px}.wfcr-navigation{flex:1 1 auto}.wfcr-search{flex:1 0 100%;order:4}.wfcr-actions-zone{margin-left:auto}.wfcr-header .wf-primary-nav{position:relative}}@media(max-width:640px){.wfcr-inner{padding-inline:16px}.wfcr-main{gap:10px;min-height:60px}.wfcr-brand-zone{max-width:48%}.wfcr-navigation{flex:0 0 auto;margin-left:auto}.wfcr-actions-zone{flex:1 0 100%;margin-left:0}.wfcr-header .wfcr-actions-zone>.wf-slot{flex-wrap:wrap;justify-content:flex-start}.wfcr-utility>.wf-slot{justify-content:flex-start;flex-wrap:wrap}.wfcr-header .wf-nav-list{right:0;left:auto;width:min(88vw,400px);max-height:70vh;overflow-y:auto}.wfcr-header .wf-nav-children{position:static;box-shadow:none;width:100%}}\n.wfcr-header .wf-nav-list .wf-nav-children :is(a,button){color:var(--wf-color-text)}.wfcr-header .wf-nav-list .wf-nav-children :is(a,button):is(:hover,:focus-visible){color:var(--wf-color-text);background:var(--wf-color-background)}.wfcr-header .wf-nav-list :focus-visible{outline:2px solid var(--wf-color-text);outline-offset:2px}@media(max-width:780px){.wfcr-header .wf-nav-list{background:var(--wf-color-surface);color:var(--wf-color-text)}.wfcr-header .wf-nav-list>.wf-nav-item>:is(a,button):is(:hover,:focus-visible){color:var(--wf-color-text);background:var(--wf-color-background)}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "variant"
+    ],
+    "properties": {
+      "variant": {
+        "type": "string",
+        "title": "Vrsta zaglavlja",
+        "maxLength": 40,
+        "enum": [
+          "shop",
+          "corporate"
+        ]
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "slots": [
+    "promo",
+    "utility",
+    "brand",
+    "navigation",
+    "search",
+    "actions",
+    "lower"
+  ]
+}
