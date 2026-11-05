@@ -1,0 +1,235 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "case-form",
+  "label": "Forma predmeta",
+  "category": "forms",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wf-case-form wf:px-6 wf:py-8\" data-wf-case-form data-form-key=\"{{setting:form-key}}\" data-columns=\"{{setting:columns}}\" data-title=\"{{setting:title}}\" data-lead=\"{{setting:lead}}\" data-submit=\"{{setting:submit-label}}\" data-success=\"{{setting:success-message}}\"><div data-wf-case-source hidden><ol data-wf-case-groups>{{each:groups}}<li data-key=\"{{item:key}}\" data-label=\"{{item:label}}\"></li>{{/each:groups}}</ol><ol data-wf-case-fields>{{each:fields}}<li data-key=\"{{item:key}}\" data-label=\"{{item:label}}\" data-inherited-label=\"{{item:inherited-label}}\" data-hint=\"{{item:hint}}\" data-type=\"{{item:type}}\" data-required=\"{{item:required}}\" data-format=\"{{item:format}}\" data-phone-country=\"{{item:phone-country}}\" data-connected-field=\"{{item:connected-field}}\" data-connected-values=\"{{item:connected-values}}\" data-rules=\"{{item:rules-json}}\" data-group=\"{{item:group}}\" data-options=\"{{item:options}}\"></li>{{/each:fields}}</ol></div><div data-wf-case-mount></div></section>",
+  "styles": [
+    {
+      "name": "case-form.css",
+      "content": ".wf-case-form {\n  color: var(--wf-color-text, #172033);\n  font-family: var(--wf-font-body, inherit);\n}\n\n.wf-case-form__form {\n  display: grid;\n  gap: 1rem;\n  max-width: 40rem;\n}\n\n.wf-case-form__title {\n  margin: 0;\n  font-size: 1.35rem;\n  font-weight: var(--wf-heading-weight, 700);\n  letter-spacing: -0.02em;\n}\n\n.wf-case-form__lead,\n.wf-case-form__hint,\n.wf-case-form__status {\n  margin: 0;\n  color: var(--wf-color-muted, #526071);\n  line-height: 1.5;\n}\n\n.wf-case-form__group {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  display: grid;\n  gap: 0.75rem;\n}\n\n.wf-case-form__legend {\n  padding: 0;\n  font-size: 0.78rem;\n  font-weight: 700;\n  letter-spacing: 0.04em;\n  text-transform: uppercase;\n  color: var(--wf-color-muted, #526071);\n}\n\n.wf-case-form__grid {\n  display: grid;\n  gap: 0.85rem;\n}\n\n.wf-case-form__grid[data-columns=\"2\"] {\n  grid-template-columns: repeat(2, minmax(0, 1fr));\n}\n\n.wf-case-form__field {\n  display: grid;\n  align-content: start;\n  gap: 0.35rem;\n  min-width: 0;\n}\n\n.wf-case-form__label {\n  font-size: 0.92rem;\n  font-weight: 650;\n}\n\n.wf-case-form__control {\n  width: 100%;\n  box-sizing: border-box;\n  border: 1px solid var(--wf-color-border, #ccd6e2);\n  border-radius: var(--wf-radius, 0.6rem);\n  background: var(--wf-color-background, #fff);\n  color: inherit;\n  font: inherit;\n  padding: 0.65rem 0.75rem;\n}\n\n.wf-case-form__control:focus {\n  border-color: var(--wf-color-primary, #0f766e);\n  outline: 2px solid color-mix(in srgb, var(--wf-color-primary, #0f766e) 18%, transparent);\n}\n\n.wf-case-form__check {\n  width: 1rem;\n  height: 1rem;\n  margin-right: 0.45rem;\n  accent-color: var(--wf-color-primary, #0f766e);\n}\n\n.wf-case-form__combo { position: relative; min-width: 0; }\n.wf-case-form__combo > select[hidden] { display: none; }\n.wf-case-form__combo-input { padding-right: 2.75rem; }\n.wf-case-form__combo-toggle {\n  position: absolute; inset: 1px 0.5rem 1px auto; width: 2rem;\n  display: grid; place-items: center; padding: 0; border: 0;\n  background: transparent; color: var(--wf-color-muted, #526071); cursor: pointer;\n}\n.wf-case-form__combo-toggle::after {\n  content: ''; width: 0.4rem; height: 0.4rem;\n  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;\n  transform: translateY(-2px) rotate(45deg);\n}\n.wf-case-form__combo-popup {\n  position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; right: 0;\n  border: 1px solid var(--wf-color-border, #ccd6e2);\n  border-radius: var(--wf-radius, 0.6rem);\n  background: var(--wf-color-surface, var(--wf-color-background, #fff));\n  overflow: hidden;\n}\n.wf-case-form__combo-popup[hidden] { display: none; }\n.wf-case-form__combo[data-open-up=\"true\"] .wf-case-form__combo-popup { top: auto; bottom: calc(100% + 4px); }\n.wf-case-form__combo-list { max-height: min(15rem, 40vh); overflow-y: auto; overscroll-behavior: contain; }\n.wf-case-form__combo-option { padding: 0.65rem 0.75rem; cursor: pointer; overflow-wrap: anywhere; }\n.wf-case-form__combo-option:hover,\n.wf-case-form__combo-option[aria-selected=\"true\"] {\n  background: color-mix(in srgb, var(--wf-color-primary, #0f766e) 14%, var(--wf-color-surface, var(--wf-color-background, #fff)));\n}\n.wf-case-form__combo-count { margin: 0; padding: 0.5rem 0.75rem; font-size: 0.8rem; color: var(--wf-color-muted, #526071); border-top: 1px solid var(--wf-color-border, #ccd6e2); }\n.wf-case-form__protection { min-width: 0; }\n.wf-case-form__protection-status { margin: 0; color: var(--wf-color-muted, #526071); font-size: 0.85rem; }\n.wf-case-form__protection-retry {\n  margin-top: 0.5rem; padding: 0.5rem 0.75rem; border-radius: var(--wf-radius, 0.6rem);\n  border: 1px solid var(--wf-color-border, #ccd6e2); background: var(--wf-color-surface, var(--wf-color-background, #fff));\n  color: inherit; font: inherit; cursor: pointer;\n}\n.wf-case-form__submit:disabled { opacity: 0.6; cursor: default; }\n\n.wf-case-form__error {\n  margin: 0;\n  min-height: 1em;\n  color: var(--wf-color-danger, #9f1239);\n  font-size: 0.82rem;\n}\n\n.wf-case-form__error:empty {\n  display: none;\n}\n\n.wf-case-form__submit {\n  display: inline-flex;\n  align-items: center;\n  text-decoration: none;\n  justify-self: start;\n  min-height: 42px;\n  border: 0;\n  border-radius: var(--wf-radius, 0.6rem);\n  background: var(--wf-color-primary, #0f766e);\n  color: #fff;\n  font: inherit;\n  font-weight: var(--wf-heading-weight, 700);\n  padding: 0.65rem 1rem;\n  cursor: pointer;\n}\n\n.wf-case-form__submit:focus-visible {\n  outline: 2px solid var(--wf-color-primary, #0f766e);\n  outline-offset: 2px;\n}\n\n.wf-case-form [data-wf-case-source] {\n  display: none;\n}\n\n@media (max-width: 720px) {\n  .wf-case-form__grid[data-columns=\"2\"] {\n    grid-template-columns: 1fr;\n  }\n}\n\n/* Conditional fields and standard phone widget inherit the public site's tokens. */\n.wf-case-form__field[hidden], .wf-case-form__group[hidden] { display: none; }\n.wf-case-form .iti {\n  width: 100%; min-width: 0;\n  --iti-border-color: var(--wf-color-border, #ccd6e2);\n  --iti-country-selector-bg: var(--wf-color-surface, var(--wf-color-background, #fff));\n  --iti-icon-color: var(--wf-color-muted, #526071);\n  --iti-hover-color: color-mix(in srgb, var(--wf-color-primary, #0f766e) 12%, transparent);\n}\n.wf-case-form .iti__country-selector { color: var(--wf-color-text, #172033); }\n.wf-case-form .iti__search-input { background: var(--wf-color-background, #fff); color: inherit; }\n"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "case-form.js",
+      "content": "(function () {\n  var SRC = '/common/Elastyc/CaseForm/case-form.js?v=20261014-profile';\n  function attr(node, name) { return node.getAttribute(name) || ''; }\n  function readList(host, selector, map) {\n    var out = [];\n    Array.prototype.forEach.call(host.querySelectorAll(selector), function (node) { out.push(map(node)); });\n    return out;\n  }\n  function binding(host) {\n    return {\n      formKey: attr(host, 'data-form-key'),\n      title: attr(host, 'data-title'),\n      lead: attr(host, 'data-lead'),\n      columns: attr(host, 'data-columns'),\n      submitLabel: attr(host, 'data-submit'),\n      successMessage: attr(host, 'data-success'),\n      groups: readList(host, '[data-wf-case-groups] li', function (node) {\n        return { key: attr(node, 'data-key'), label: attr(node, 'data-label') };\n      }),\n      fields: readList(host, '[data-wf-case-fields] li', function (node) {\n        return {\n          key: attr(node, 'data-key'),\n          label: attr(node, 'data-label'),\n          inheritedLabel: attr(node, 'data-inherited-label'),\n          hint: attr(node, 'data-hint'),\n          type: attr(node, 'data-type'),\n          required: attr(node, 'data-required'),\n          format: attr(node, 'data-format'),\n          phoneCountry: attr(node, 'data-phone-country'),\n          'connected-field': attr(node, 'data-connected-field'),\n          'connected-values': attr(node, 'data-connected-values'),\n          rules: JSON.parse(attr(node, 'data-rules') || '[]'),\n          group: attr(node, 'data-group'),\n          options: attr(node, 'data-options')\n        };\n      })\n    };\n  }\n  function boot() {\n    if (!window.ElastycCaseForm) return;\n    Array.prototype.forEach.call(document.querySelectorAll('[data-wf-case-form]'), function (host) {\n      var mount = host.querySelector('[data-wf-case-mount]');\n      if (!mount || mount.getAttribute('data-wf-case-ready') === 'true') return;\n      mount.setAttribute('data-wf-case-ready', 'true');\n      var wrap = host.closest('[data-wf-instance]');\n      var requested = wrap && attr(wrap, 'data-wf-case-mode') === 'live' ? 'live' : 'mock';\n      var framed = false;\n      try { framed = window.parent !== window; } catch (error) { framed = true; }\n      var mode = framed ? 'mock' : requested;\n      var channel = wrap && attr(wrap, 'data-wf-channel') === 'candidate' ? 'candidate' : 'production';\n      window.ElastycCaseForm.init({\n        host: mount,\n        binding: binding(host),\n        mode: mode,\n        submit: {\n          instanceKey: wrap ? attr(wrap, 'data-wf-instance') : '',\n          schemaHash: wrap ? attr(wrap, 'data-wf-case-schema') : '',\n          csrfCookie: 'wf_case_csrf',\n          identityContext: wrap ? attr(wrap, 'data-wf-case-identity') : '',\n          route: wrap ? attr(wrap, 'data-wf-case-route') : '',\n          channel: channel,\n          protection: {\n            provider: wrap ? attr(wrap, 'data-wf-case-protection') : '',\n            siteKey: wrap ? attr(wrap, 'data-wf-case-site-key') : ''\n          }\n        }\n      });\n    });\n  }\n  if (window.ElastycCaseForm) { boot(); return; }\n  if (window.__wfCaseFormBoot) { window.__wfCaseFormBoot.push(boot); return; }\n  window.__wfCaseFormBoot = [boot];\n  var script = document.createElement('script');\n  script.src = SRC;\n  if (document.currentScript && document.currentScript.nonce) script.nonce = document.currentScript.nonce;\n  script.onload = function () {\n    (window.__wfCaseFormBoot || []).splice(0).forEach(function (fn) { fn(); });\n  };\n  script.onerror = function () {\n    Array.prototype.forEach.call(document.querySelectorAll('[data-wf-case-mount]'), function (mount) {\n      if (!mount.textContent) mount.textContent = 'Forma trenutno nije dostupna.';\n    });\n  };\n  document.head.appendChild(script);\n})();"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "form-key",
+      "title",
+      "columns",
+      "submit-label",
+      "success-message",
+      "groups",
+      "fields"
+    ],
+    "properties": {
+      "form-key": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 600
+      },
+      "columns": {
+        "type": "string",
+        "maxLength": 1,
+        "enum": [
+          "1",
+          "2"
+        ]
+      },
+      "submit-label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "success-message": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 240
+      },
+      "groups": {
+        "type": "array",
+        "maxItems": 20,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "key",
+            "label"
+          ],
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 120
+            }
+          }
+        }
+      },
+      "fields": {
+        "type": "array",
+        "maxItems": 40,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "key",
+            "inherited-label",
+            "type",
+            "group"
+          ],
+          "properties": {
+            "key": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "inherited-label": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "hint": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "type": {
+              "type": "string",
+              "maxLength": 20,
+              "enum": [
+                "text",
+                "textarea",
+                "numeric",
+                "datum",
+                "checkbox",
+                "select"
+              ]
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "format": {
+              "type": "string",
+              "maxLength": 20,
+              "enum": [
+                "",
+                "email",
+                "phone"
+              ]
+            },
+            "group": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "options": {
+              "type": "string",
+              "maxLength": 100000
+            },
+            "phone-country": {
+              "type": "string",
+              "maxLength": 2
+            },
+            "connected-field": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "connected-values": {
+              "type": "string",
+              "maxLength": 4000
+            },
+            "rules-json": {
+              "type": "string",
+              "maxLength": 2000
+            },
+            "rules": {
+              "type": "array",
+              "maxItems": 10,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "properties": {
+                  "key": {
+                    "type": "string",
+                    "enum": [
+                      "minLength",
+                      "maxLength"
+                    ],
+                    "maxLength": 20
+                  },
+                  "value": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4000
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "notify-email": {
+        "type": "string",
+        "enum": [
+          "inherit",
+          "on",
+          "off"
+        ],
+        "maxLength": 7
+      },
+      "notify-push": {
+        "type": "string",
+        "enum": [
+          "inherit",
+          "on",
+          "off"
+        ],
+        "maxLength": 7
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "providerKey": "finance-summary",
+  "label": "Finansijski zbir",
+  "kind": "query",
+  "dataScope": "permission",
+  "handler": "finance.summary.read",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["period"],
+    "properties": {
+      "period": {"type": "string", "maxLength": 20, "enum": ["day", "month", "year"]}
+    }
+  },
+  "outputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["total", "currency"],
+    "properties": {
+      "total": {"type": "number"},
+      "currency": {"type": "string", "minLength": 3, "maxLength": 3}
+    }
+  },
+  "timeoutMs": 2000,
+  "endpoint": {"exposure": "internal"}
+}

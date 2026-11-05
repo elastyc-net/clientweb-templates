@@ -1,0 +1,89 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-brand",
+  "label": "Brend sa svetlim i tamnim logotipom",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<a class=\"wfcr-brand\" href=\"{{setting:home-url}}\"><img class=\"wfcr-logo-light\" src=\"{{setting:logo-light-url}}\" alt=\"{{setting:logo-alt}}\"><img class=\"wfcr-logo-dark\" src=\"{{setting:logo-dark-url}}\" alt=\"{{setting:logo-alt}}\"><span>{{setting:brand}}</span></a>",
+  "styles": [
+    {
+      "name": "chrome-brand.css",
+      "content": ".wfcr-brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font-size:24px;font-weight:750;max-width:100%}.wfcr-brand img{max-width:200px;max-height:48px;width:auto;object-fit:contain}.wfcr-brand .wfcr-logo-light{display:var(--wf-logo-light-display,block)}.wfcr-brand .wfcr-logo-dark{display:var(--wf-logo-dark-display,none)}.wfcr-brand img[src=\"\"]{display:none}.wfcr-brand:has(img:not([src=\"\"]))>span{display:none}@media(max-width:640px){.wfcr-brand{font-size:21px}.wfcr-brand img{max-width:160px;max-height:38px}}"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "chrome-brand.js",
+      "content": "document.querySelectorAll('.wfcr-brand').forEach(function(root){if(root.dataset.logoReady)return;root.dataset.logoReady='true';var images=Array.from(root.querySelectorAll('img')),name=root.querySelector('span');function sync(){var ready=images.some(function(img){return getComputedStyle(img).display!=='none'&&img.complete&&img.naturalWidth>0;});if(name)name.style.display=ready?'none':'inline';}images.forEach(function(img){img.addEventListener('error',function(){img.style.display='none';sync();});img.addEventListener('load',sync);});sync();});"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "brand",
+      "home-url",
+      "logo-alt",
+      "logo-light-url",
+      "logo-dark-url"
+    ],
+    "properties": {
+      "brand": {
+        "type": "string",
+        "title": "Naziv brenda",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "home-url": {
+        "type": "string",
+        "title": "Link na početnu",
+        "maxLength": 2048,
+        "format": "safe-url",
+        "minLength": 1
+      },
+      "logo-alt": {
+        "type": "string",
+        "title": "Opis logotipa",
+        "maxLength": 160
+      },
+      "logo-light-url": {
+        "type": "string",
+        "title": "Logo na svetloj podlozi",
+        "maxLength": 2048
+      },
+      "logo-dark-url": {
+        "type": "string",
+        "title": "Logo na tamnoj podlozi",
+        "maxLength": 2048
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "themeBindings": {
+    "brand": "brand.name",
+    "logo-alt": "brand.logoAlt",
+    "logo-light-url": "brand.logoLightUrl",
+    "logo-dark-url": "brand.logoDarkUrl"
+  }
+}

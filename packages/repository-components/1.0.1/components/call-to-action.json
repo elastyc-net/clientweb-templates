@@ -1,0 +1,93 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "call-to-action",
+  "label": "Poziv na akciju",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section data-wf-design-root class=\"wf-cta wf:px-6 wf:py-14\" data-tone=\"{{setting:tone}}\"><div data-wf-design-surface class=\"wf-cta__inner wf:mx-auto wf:flex wf:max-w-6xl wf:items-center wf:justify-between wf:gap-8 wf:rounded-3xl wf:p-10\"><div data-wf-design-content><p class=\"wf-cta__eyebrow wf:text-sm wf:font-bold wf:uppercase wf:tracking-widest\">{{setting:eyebrow}}</p><h2 class=\"wf:mt-3 wf:text-3xl wf:font-bold wf:tracking-tight\">{{setting:title}}</h2><p class=\"wf:mt-4 wf:max-w-2xl wf:text-lg\">{{setting:body}}</p></div><a class=\"wf-cta__button wf:inline-flex wf:shrink-0 wf:items-center wf:justify-center wf:rounded-xl wf:px-6 wf:py-3 wf:font-bold wf:transition-colors wf:duration-200\" href=\"{{setting:action-url}}\">{{setting:action-label}}</a></div></section>",
+  "styles": [
+    {
+      "name": "call-to-action.css",
+      "content": ".wf-cta__inner{background:#102c25;color:#fff}.wf-cta[data-tone=\"light\"] .wf-cta__inner{background:#e6f4f1;color:#17342d}.wf-cta__eyebrow{color:#69e3b4}.wf-cta[data-tone=\"light\"] .wf-cta__eyebrow{color:#0f766e}.wf-cta__inner p:last-child{color:#c9d8d3}.wf-cta[data-tone=\"light\"] .wf-cta__inner p:last-child{color:#45645b}.wf-cta__button{background:#69e3b4;color:#082018;text-decoration:none}.wf-cta__button:hover,.wf-cta__button:focus-visible{background:#8aefc8;outline:none}@media(max-width:760px){.wf-cta__inner{align-items:flex-start;flex-direction:column;padding:2rem}.wf-cta__button{width:100%}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "body",
+      "action-label",
+      "action-url",
+      "tone"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "body": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 600
+      },
+      "action-label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "action-url": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "tone": {
+        "type": "string",
+        "enum": [
+          "dark",
+          "light"
+        ],
+        "maxLength": 16
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "height",
+    "minHeight",
+    "padding",
+    "contentAlign",
+    "textAlign",
+    "background",
+    "radius"
+  ]
+}

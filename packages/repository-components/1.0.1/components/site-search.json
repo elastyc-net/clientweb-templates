@@ -1,0 +1,29 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "site-search",
+  "label": "Pretraga sajta",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<form class=\"wf-site-search\" role=\"search\" action=\"{{setting:search-url}}\" method=\"get\"><label class=\"wf-visually-hidden\" for=\"wf-site-search-input\">{{setting:search-label}}</label><input class=\"wf-site-search__input\" id=\"wf-site-search-input\" name=\"q\" type=\"search\" autocomplete=\"off\" placeholder=\"{{setting:placeholder}}\"><button class=\"wf-site-search__button\" type=\"submit\" aria-label=\"{{setting:submit-label}}\"><span aria-hidden=\"true\">⌕</span></button></form>",
+  "styles": [
+    {"name": "site-search.css", "content": ".wf-site-search{display:flex;align-items:center;min-width:0;height:42px;border:1px solid var(--wf-color-border);border-radius:var(--wf-radius);background:var(--wf-color-background);transition:border-color .18s,box-shadow .18s}.wf-site-search:focus-within{border-color:var(--wf-color-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--wf-color-primary) 14%,transparent);background:var(--wf-color-surface)}.wf-site-search__input{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:calc(var(--wf-space-unit)*2.5) calc(var(--wf-space-unit)*.75) calc(var(--wf-space-unit)*2.5) calc(var(--wf-space-unit)*3);color:var(--wf-color-text);font:inherit}.wf-site-search__input::placeholder{color:var(--wf-color-muted)}.wf-site-search__button{width:42px;height:40px;flex:0 0 42px;border:0;background:transparent;color:var(--wf-color-primary);font-size:1.5rem;line-height:1;cursor:pointer}.wf-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["search-url", "search-label", "placeholder", "submit-label"],
+    "properties": {
+      "search-url": {"type": "string", "minLength": 1, "maxLength": 2048},
+      "search-label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "placeholder": {"type": "string", "minLength": 1, "maxLength": 120},
+      "submit-label": {"type": "string", "minLength": 1, "maxLength": 80}
+    }
+  },
+  "providerKey": null,
+  "cache": {"scope": "public", "ttlSeconds": 3600, "varyBy": ["tenant", "locale", "release"]},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

@@ -1,0 +1,75 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-contact",
+  "label": "Javni kontakt podaci",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wfcr-contact\"><h3>{{setting:company}}</h3><p>{{setting:description}}</p><p>{{setting:address}}</p><a href=\"tel:{{setting:phone}}\">{{setting:phone}}</a><a href=\"mailto:{{setting:email}}\">{{setting:email}}</a></section>",
+  "styles": [
+    {
+      "name": "chrome-contact.css",
+      "content": ".wfcr-contact{display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.6}.wfcr-contact h3{font-size:16px;margin:0}.wfcr-contact p{margin:0;white-space:pre-line}.wfcr-contact p:empty,.wfcr-contact a[href=\"tel:\"],.wfcr-contact a[href=\"mailto:\"]{display:none}.wfcr-contact a{display:block;text-decoration:none}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "company",
+      "description",
+      "address",
+      "phone",
+      "email"
+    ],
+    "properties": {
+      "company": {
+        "type": "string",
+        "title": "Firma",
+        "maxLength": 160
+      },
+      "description": {
+        "type": "string",
+        "title": "Kratak opis",
+        "maxLength": 400
+      },
+      "address": {
+        "type": "string",
+        "title": "Adresa",
+        "maxLength": 400
+      },
+      "phone": {
+        "type": "string",
+        "title": "Telefon",
+        "maxLength": 160
+      },
+      "email": {
+        "type": "string",
+        "title": "Email",
+        "maxLength": 160
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

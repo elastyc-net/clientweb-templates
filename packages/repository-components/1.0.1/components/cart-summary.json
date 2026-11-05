@@ -1,0 +1,28 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "cart-summary",
+  "label": "Sažetak korpe",
+  "category": "commerce",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<a class=\"wf-header-action wf-cart-summary\" href=\"{{setting:cart-url}}\" aria-label=\"{{setting:label}}: {{setting:item-count}}\"><span class=\"wf-header-action__icon\" aria-hidden=\"true\">▱</span><span class=\"wf-header-action__label\">{{setting:label}}</span><span class=\"wf-cart-summary__count\">{{setting:item-count}}</span></a>",
+  "styles": [
+    {"name": "cart-summary.css", "content": ".wf-cart-summary__count{display:grid;place-items:center;min-width:19px;height:19px;padding:0 calc(var(--wf-space-unit)*1.25);border-radius:999px;background:var(--wf-color-primary);color:var(--wf-color-surface);font-size:.7rem}@media(max-width:620px){.wf-cart-summary .wf-header-action__label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["label", "cart-url", "item-count"],
+    "properties": {
+      "label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "cart-url": {"type": "string", "minLength": 1, "maxLength": 2048},
+      "item-count": {"type": "integer", "minimum": 0, "maximum": 999}
+    }
+  },
+  "providerKey": null,
+  "cache": {"scope": "none", "ttlSeconds": 0, "varyBy": []},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

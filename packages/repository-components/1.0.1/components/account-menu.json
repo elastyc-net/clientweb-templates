@@ -1,0 +1,28 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "account-menu",
+  "label": "Korisnički nalog",
+  "category": "account",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<a class=\"wf-header-action wf-account-menu\" href=\"{{setting:account-url}}\" aria-label=\"{{setting:label}}\"><span class=\"wf-account-menu__avatar\" aria-hidden=\"true\">{{setting:avatar-text}}</span><span class=\"wf-header-action__label\">{{setting:label}}</span></a>",
+  "styles": [
+    {"name": "account-menu.css", "content": ".wf-account-menu__avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--wf-color-primary) 14%,var(--wf-color-surface));color:var(--wf-color-primary);font-size:.76rem;font-weight:var(--wf-heading-weight);letter-spacing:.02em}@media(max-width:620px){.wf-account-menu .wf-header-action__label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["label", "account-url", "avatar-text"],
+    "properties": {
+      "label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "account-url": {"type": "string", "minLength": 1, "maxLength": 2048},
+      "avatar-text": {"type": "string", "minLength": 1, "maxLength": 3}
+    }
+  },
+  "providerKey": null,
+  "cache": {"scope": "none", "ttlSeconds": 0, "varyBy": []},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}
