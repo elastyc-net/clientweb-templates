@@ -37,10 +37,10 @@ for(const entry of catalog.packages){
     const definition=read(path.posix.join(path.posix.dirname(entry.manifest),item.path),item.sha256);
     if(definition.formatVersion!==2||definition.contractVersion!==1)throw new Error('Unsupported contract '+key);
     if(item.itemType==='provider'){
-      const handlers={'catalog-products':'catalog.products.list','catalog-product':'catalog.products.detail','kb-article':'kb.article','kb-children':'kb.children','finance-summary':'finance.summary.read'};
-      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||definition.handler!==handlers[item.itemKey]||definition.kind!=='query'||definition.dataScope!==(item.itemKey==='finance-summary'?'permission':'tenant'))throw new Error('Unsupported query contract '+key);
-      const reviewed={'catalog-products':'29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','catalog-product':'4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998','kb-article':'1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491','kb-children':'00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883','finance-summary':'23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066'};
-      if(item.sha256!==reviewed[item.itemKey])throw new Error('Unreviewed provider bytes '+key);
+      const handlers={'catalog-products':['catalog.products.list','catalog.products.list.v2'],'catalog-product':['catalog.products.detail','catalog.products.detail.v2'],'catalog-offers':['catalog.products.offers'],'kb-article':'kb.article','kb-children':'kb.children','finance-summary':'finance.summary.read'};
+      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||![].concat(handlers[item.itemKey]).includes(definition.handler)||definition.kind!=='query'||definition.dataScope!==(item.itemKey==='finance-summary'?'permission':item.itemKey==='catalog-offers'?'visitor':'tenant'))throw new Error('Unsupported query contract '+key);
+      const reviewed={'catalog-offers':['c318e9efe4740a1bc2b28df343d7f67b6a23297654ebd2094027ab349302fc79'],'catalog-products':['29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','8b8dad94472374d278631e8993d7010aa191321ba11deae9c9759290172c7159'],'catalog-product':['4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998','5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69'],'kb-article':'1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491','kb-children':'00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883','finance-summary':'23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066'};
+      if(![].concat(reviewed[item.itemKey]).includes(item.sha256))throw new Error('Unreviewed provider bytes '+key);
       // Engine LibraryProviderContracts independently pins the canonical JSON definition.
     }
   }

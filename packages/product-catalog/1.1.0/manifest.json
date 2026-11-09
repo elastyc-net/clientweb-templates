@@ -1,0 +1,59 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "1.1.0",
+  "label": "Katalog proizvoda",
+  "description": "Početni serverski prikaz, front filteri prema tenant definiciji i odvojena dopuna aktuelnih cena, popusta i zaliha.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "44c0844010899121efc1598a1af09e73642bb971f39845d940f4dfaf4b71438b"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "4cd0374547b21b488200c2ed7f13efcb36ef8a561ff55b2efcec9c2bbab54c3f"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "8b8dad94472374d278631e8993d7010aa191321ba11deae9c9759290172c7159"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "63a577f3269e07e5441ccd64e08aab7045a1fdc3766505658b2e8eba088209b7"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "b01fbbb5eb0df04ccff6306add2b905860d7db862108d7b675efcd78774d6710"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-offers",
+      "path": "providers/catalog-offers.json",
+      "sha256": "c318e9efe4740a1bc2b28df343d7f67b6a23297654ebd2094027ab349302fc79"
+    }
+  ]
+}

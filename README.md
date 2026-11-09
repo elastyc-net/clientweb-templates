@@ -169,3 +169,16 @@ explicit local choice, preview and Undo. Bootstrap pins 1.2.0; existing tenants
 need an explicit library plan/apply and their own branding setup.
 
 `starter-site@1.3.0` adds independent `site-header-zones`, `site-footer-zones`, `site-brand`, `site-links`, and `site-note` contracts. Four slots support horizontal header layouts, footer columns and a full-width lower row; mobile stacking and menu toggles are built in. Existing definitions/releases stay byte-identical. Presets explicitly convert a local shared draft, preserving content and configurable account/cart links. Bootstrap now pins 1.3.0; existing tenants require a reviewed library apply.
+
+`product-catalog@1.1.0` promotes a server-rendered initial catalog/detail with
+client hydration, ordered tenant front facets (including numeric ranges), real
+pagination links and an independent visitor-specific live offers binding. It
+refreshes current price, active discount, regular/final prices and stock only for
+loaded eligible IDs. Display switches and catalog/detail routes are component
+settings; tenant branding and page content are preserved. Semantic theme tokens
+replace the old catalog's fixed palette. Bootstrap now pins 1.1.0, retaining the
+immutable 1.0.5 payload for installed older contracts. This requires an engine
+with `catalog-live-v1`, SSR hydration, named query providers and typed settings
+defaults; older capability feeds exclude it. Source and engine independently pin
+all three reviewed provider definitions. Engine deployment alone does not apply
+an upgrade to existing tenant Drafts or publish content.

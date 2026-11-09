@@ -114,6 +114,12 @@
       "version": "1.0.3",
       "manifest": "reference-chrome/1.0.3/manifest.json",
       "sha256": "1860b2985eefde9a401b5b19f8e7f1433888a6a4fd2d2b59bef240c07ff720dc"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.1.0",
+      "manifest": "product-catalog/1.1.0/manifest.json",
+      "sha256": "e5b1a41b08083d030620de5612f73b935b2a5ed30fb77d33aa427614aa5ad61c"
     }
   ]
 }
