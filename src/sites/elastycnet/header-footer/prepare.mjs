@@ -15,4 +15,6 @@ for (const name of (await readdir(path.join(directory, 'components'))).filter(na
 const layoutPath = path.join(directory, 'layout.json');
 const layout = JSON.parse(await readFile(layoutPath, 'utf8'));
 layout.styles[0].content = await readFile(path.join(directory, 'header.css'), 'utf8');
+const typographyStyle = layout.styles.find(style => style.name === 'elastyc-typography.css');
+if (typographyStyle) typographyStyle.content = await readFile(path.join(directory, '../typography/components.css'), 'utf8');
 await writeFile(layoutPath, `${JSON.stringify(layout, null, 2)}\n`);

@@ -1,0 +1,94 @@
+{
+  "access": {
+    "permissions": [],
+    "visibility": "public"
+  },
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 60,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "provider-input",
+      "release"
+    ]
+  },
+  "category": "content",
+  "componentKey": "kb-children",
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "htmlContent": "<section class=\"wf-kb-children\" data-columns=\"{{setting:columns}}\" data-show-image=\"{{setting:show-image}}\" data-show-description=\"{{setting:show-description}}\" data-image-ratio=\"{{setting:image-ratio}}\"><form data-kb-search class=\"wf-kb-children__search\"><input type=\"search\" data-kb-q placeholder=\"Pretraga\"></form><div data-kb-list><p data-kb-status>Učitavanje…</p></div></section>",
+  "label": "Podređene strane",
+  "providerKey": "kb-children",
+  "renderMode": "client-data",
+  "scripts": [
+    {
+      "content": "(function(){\nfunction decode(value){if(!value)return null;try{var text=decodeURIComponent(Array.prototype.map.call(atob(value.replace(/-/g,'+').replace(/_/g,'/')),function(c){return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);}).join(''));return JSON.parse(text);}catch(e){return null;}}\nfunction encode(value){var bytes=unescape(encodeURIComponent(JSON.stringify(value)));return btoa(bytes).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');}\nfunction pageHref(child){var route=child&&child.route?String(child.route):'';if(route.charAt(0)==='/')return route;var slug=String(child&&child.slug||'').trim();if(!slug)return '';return '/baza/'+slug.split('/').map(function(part){return encodeURIComponent(part);}).join('/');}\nfunction safeImage(value){var image=String(value||'');return image.charAt(0)==='/'||image.indexOf('https://')===0?image:'';}\ndocument.querySelectorAll('.wf-instance[data-wf-component=\"kb-children\"]').forEach(function(host){\nif(host.dataset.kbReady==='true')return;\nhost.dataset.kbReady='true';\nvar list=host.querySelector('[data-kb-list]');\nvar status=host.querySelector('[data-kb-status]');\nvar form=host.querySelector('[data-kb-search]');\nvar query=host.querySelector('[data-kb-q]');\nvar section=host.querySelector('.wf-kb-children')||host;\nif(!list)return;\nfunction paint(data){\nlist.innerHTML='';\nlist.className='wf-kb-children__list';\nvar showImage=section.getAttribute('data-show-image')!=='false';\nvar showDescription=section.getAttribute('data-show-description')!=='false';\nvar title=document.createElement('h1');\ntitle.className='wf-kb-children__title';\ntitle.textContent=(data&&data.title)||'Baza znanja';\nlist.appendChild(title);\nif(data&&data.intro){var intro=document.createElement('p');intro.className='wf-kb-children__intro';intro.textContent=data.intro;list.appendChild(intro);}\nvar items=(data&&data.children)||[];\nif(!items.length){var empty=document.createElement('p');empty.className='wf-kb-children__empty';empty.textContent='Nema podređenih strana.';list.appendChild(empty);return;}\nvar grid=document.createElement('div');\ngrid.className='wf-kb-children__grid';\nitems.forEach(function(child){\nvar href=pageHref(child);\nvar card=href?document.createElement('a'):document.createElement('article');\nif(href)card.href=href;\ncard.className='wf-kb-card';\nif(showImage){\nvar media=document.createElement('div');\nmedia.className='wf-kb-card__media';\nvar image=safeImage(child&&child.image);\nif(image){var img=document.createElement('img');img.src=image;img.alt='';media.appendChild(img);}\ncard.appendChild(media);\n}\nvar body=document.createElement('div');\nbody.className='wf-kb-card__body';\nvar heading=document.createElement('h2');\nheading.className='wf-kb-card__title';\nheading.textContent=(child&&(child.title||child.slug))||'';\nbody.appendChild(heading);\nif(showDescription&&child&&child.description){var text=document.createElement('p');text.className='wf-kb-card__text';text.textContent=String(child.description);body.appendChild(text);}\ncard.appendChild(body);\ngrid.appendChild(card);\n});\nlist.appendChild(grid);\n}\nfunction requestId(){var suffix=Math.random().toString(36).replace(/[^a-z0-9]/g,\"\").slice(0,8);var prefix=(\"00000000\"+Date.now().toString(36)).slice(-8);return (prefix+suffix).slice(0,40);}\nvar pendingId=\"\";\nwindow.addEventListener(\"message\",function(event){\nif(event.source!==window.parent)return;\nvar data=event.data;\nif(!data||data.type!==\"elastyc-webfront-catalog-provider-result-v1\")return;\nif(data.requestId!==pendingId||data.instanceKey!==host.dataset.wfInstance)return;\nif(!data.ok){if(status)status.textContent=data.error||\"Strane trenutno nisu dostupne.\";return;}\npaint(data.data||{});\n});\nfunction load(){\nvar input=decode(host.dataset.wfProviderInput)||{};\nvar term=query?String(query.value||'').trim():'';\nif(term){input.q=term;}else{delete input.q;}\nif(!term){\nvar preview=decode(host.dataset.wfProviderPreview);\nif(preview){paint(preview);return;}\nvar previewError=host.getAttribute(\"data-wf-provider-preview-error\");\nif(previewError){if(status)status.textContent=previewError;return;}\n}\nif(window.parent!==window){\npendingId=requestId();\nwindow.parent.postMessage({type:\"elastyc-webfront-catalog-provider-v1\",pageKey:host.dataset.wfPage||\"\",instanceKey:host.dataset.wfInstance||\"\",input:input,requestId:pendingId},\"*\");\nreturn;\n}\nvar url=host.dataset.wfProviderUrl;\nif(!url){if(status)status.textContent='Nema podređenih strana.';return;}\nvar targetUrl=new URL(url,window.location.href);\ntargetUrl.searchParams.set('wf_input',encode(input));\nfetch(targetUrl.toString(),{credentials:'same-origin',headers:{Accept:'application/json'}}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.json();}).then(function(payload){paint(payload&&payload.data?payload.data:payload);}).catch(function(){if(status)status.textContent='Strane trenutno nisu dostupne.';});\n}\nif(form){form.addEventListener('submit',function(event){event.preventDefault();load();});}\nload();\n});\n})();\n",
+      "name": "kb-children.js"
+    }
+  ],
+  "seo": {
+    "mode": "none"
+  },
+  "settingsSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "columns": {
+        "enum": [
+          2,
+          1,
+          3,
+          4
+        ],
+        "type": "integer"
+      },
+      "image-ratio": {
+        "enum": [
+          "16/9",
+          "4/3",
+          "1/1",
+          "3/4"
+        ],
+        "maxLength": 8,
+        "type": "string"
+      },
+      "show-description": {
+        "enum": [
+          true,
+          false
+        ],
+        "type": "boolean"
+      },
+      "show-image": {
+        "enum": [
+          true,
+          false
+        ],
+        "type": "boolean"
+      },
+      "title": {
+        "maxLength": 160,
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "title",
+      "columns",
+      "show-image",
+      "show-description",
+      "image-ratio"
+    ],
+    "type": "object"
+  },
+  "styles": [
+    {
+      "content": ".wf-kb-children{color:#172033}.wf-kb-children__search{max-width:42rem;margin:0 auto 1.5rem}.wf-kb-children__search input{width:100%;min-height:2.7rem;padding:.55rem .8rem;border:1px solid #d5dee6;border-radius:.7rem;font:inherit}.wf-kb-children__list{max-width:72rem;margin:0 auto}.wf-kb-children__title{margin:0;font-size:1.875rem;font-weight:var(--wf-heading-weight,700);letter-spacing:-.02em}.wf-kb-children__intro,.wf-kb-children__empty{margin:1rem 0 0;max-width:42rem;color:#526071;line-height:1.7}.wf-kb-children__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;margin-top:1.5rem}.wf-kb-children[data-columns=\"1\"] .wf-kb-children__grid{grid-template-columns:1fr}.wf-kb-children[data-columns=\"3\"] .wf-kb-children__grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wf-kb-children[data-columns=\"4\"] .wf-kb-children__grid{grid-template-columns:repeat(4,minmax(0,1fr))}.wf-kb-card{display:flex;flex-direction:column;overflow:hidden;border:1px solid #dfe5ec;border-radius:1rem;background:#fff;color:inherit;text-decoration:none;box-shadow:0 12px 28px rgba(15,23,42,.06)}.wf-kb-card:hover,.wf-kb-card:focus-visible{border-color:#0f766e}.wf-kb-card__media{aspect-ratio:16/9;background:#eef3f7}.wf-kb-children[data-image-ratio=\"4/3\"] .wf-kb-card__media{aspect-ratio:4/3}.wf-kb-children[data-image-ratio=\"1/1\"] .wf-kb-card__media{aspect-ratio:1/1}.wf-kb-children[data-image-ratio=\"3/4\"] .wf-kb-card__media{aspect-ratio:3/4}.wf-kb-card__media img{display:block;width:100%;height:100%;object-fit:cover}.wf-kb-card__body{padding:1rem 1.1rem 1.2rem}.wf-kb-card__title{margin:0;font-size:1.15rem;font-weight:var(--wf-heading-weight,700)}.wf-kb-card__text{margin:.55rem 0 0;color:#526071;line-height:1.55}@media(max-width:720px){.wf-kb-children__grid{grid-template-columns:1fr}}",
+      "name": "kb-children.css"
+    }
+  ],
+  "targets": [
+    "web",
+    "mobile"
+  ]
+}

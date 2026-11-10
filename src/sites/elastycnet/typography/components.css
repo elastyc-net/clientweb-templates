@@ -1,0 +1,11 @@
+/* Elastyc Draft: bind the existing custom and installed components to site typography. */
+.wf-site-main{font-family:var(--wf-font-body,Inter,Arial,sans-serif);font-weight:var(--wf-body-weight,400)}
+[data-wf-component] :is(h1,h2,h3,h4,h5,h6){font-family:var(--wf-font-heading,Manrope,Arial,sans-serif);font-weight:var(--wf-heading-weight,700)}
+.wf-site-main [data-wf-component] :is(button,input[type="submit"],.wf-cta__button,.wf-contact-form__button){font-family:var(--wf-font-body,Inter,Arial,sans-serif);font-weight:var(--wf-button-weight,600)}
+.wf-site-main [data-wf-component] :is(input:not([type="submit"]),textarea,select){font-family:var(--wf-font-body,Inter,Arial,sans-serif);font-weight:var(--wf-body-weight,400)}
+.wf-site-header :is(.es-nav-link,.es-nav-group-button,.es-nav-toggle,.es-login,.wf-nav-link,.wf-nav-group-label){font-weight:var(--wf-menu-weight,500)}
+.wf-site-header :is(.es-contact,.es-nav-mobile-cta),.es-footer-cta{font-weight:var(--wf-button-weight,600)}
+.wf-site-header .es-nav-mobile-actions>a.es-nav-mobile-cta{font-weight:var(--wf-button-weight,600)}
+.wf-feature-card>a{font-weight:var(--wf-button-weight,600)}
+.wf-faq__item summary,.wf-contact-form__form label{font-weight:var(--wf-menu-weight,500)}
+.wf-site-main :is(.wf-hero__eyebrow,.wf-cta__eyebrow,.wf-media-text__eyebrow){font-weight:var(--wf-menu-weight,500)}

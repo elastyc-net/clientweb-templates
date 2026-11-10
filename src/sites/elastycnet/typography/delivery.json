@@ -1,0 +1,90 @@
+{
+  "status": "saved-draft-only",
+  "siteKey": "elastycnet",
+  "engineCommit": "cc15cc8f43656085bfac272ff161a4beeff02f94",
+  "channelsUnchanged": true,
+  "treeUnchanged": true,
+  "pageDefinitionsUnchanged": true,
+  "unrelatedDefinitionsUnchanged": true,
+  "buildPerformed": false,
+  "publishPerformed": false,
+  "snapshotHashAfter": "1d2e6e960a8b0543b045d7841e73cdf84a68671d8481e4ce9a459b28a723ccc1",
+  "savedOn": "2026-11-10",
+  "sharedPageCount": 71,
+  "typography": {
+    "baseSizePx": 16,
+    "bodyFamily": "Inter, Arial, sans-serif",
+    "bodyGoogleFamily": "Inter",
+    "bodyWeight": 400,
+    "buttonWeight": 600,
+    "headingFamily": "Manrope, Arial, sans-serif",
+    "headingGoogleFamily": "Manrope",
+    "headingWeight": 700,
+    "menuWeight": 500
+  },
+  "enginePlan": "https://github.com/elastyc-net/instance-template/actions/runs/42910196608",
+  "engineDeployment": "https://github.com/elastyc-net/instance-template/actions/runs/42910999711",
+  "engineRuntimeFilesVerified": 6,
+  "allReleaseChannelsUnchangedFromBeforeEngineDeployment": true,
+  "documents": [
+    {
+      "itemType": "component",
+      "itemKey": "account-menu",
+      "draftRevision": 2
+    },
+    {
+      "itemType": "component",
+      "itemKey": "elastyc-site-footer",
+      "draftRevision": 3
+    },
+    {
+      "itemType": "component",
+      "itemKey": "kb-children",
+      "draftRevision": 2
+    },
+    {
+      "itemType": "component",
+      "itemKey": "kb-sales-hero",
+      "draftRevision": 3
+    },
+    {
+      "itemType": "component",
+      "itemKey": "navigation-menu",
+      "draftRevision": 2
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "draftRevision": 2
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "draftRevision": 2
+    },
+    {
+      "itemType": "layout",
+      "itemKey": "main-layout",
+      "draftRevision": 3
+    },
+    {
+      "itemType": "site-config",
+      "itemKey": "site",
+      "draftRevision": 3
+    }
+  ],
+  "validation": {
+    "phpSuitesPassed": 78,
+    "nativeGraphAndRender": true,
+    "loadedFontWeights": [
+      "Inter 400",
+      "Inter 500",
+      "Inter 600",
+      "Manrope 700"
+    ],
+    "desktopRolesVerified": true,
+    "mobileRolesAndWidthVerified": true,
+    "platformPageInheritsHeading": true,
+    "liveMenuControlAndUndoVerified": true
+  }
+}

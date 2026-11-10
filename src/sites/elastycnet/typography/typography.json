@@ -1,0 +1,11 @@
+{
+  "baseSizePx": 16,
+  "bodyFamily": "Inter, Arial, sans-serif",
+  "headingFamily": "Manrope, Arial, sans-serif",
+  "bodyGoogleFamily": "Inter",
+  "headingGoogleFamily": "Manrope",
+  "bodyWeight": 400,
+  "menuWeight": 500,
+  "buttonWeight": 600,
+  "headingWeight": 700
+}

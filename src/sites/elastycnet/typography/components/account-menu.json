@@ -1,0 +1,59 @@
+{
+  "access": {
+    "permissions": [],
+    "visibility": "public"
+  },
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "category": "account",
+  "componentKey": "account-menu",
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "htmlContent": "<a class=\"wf-header-action wf-account-menu\" href=\"{{setting:account-url}}\" aria-label=\"{{setting:label}}\"><span class=\"wf-account-menu__avatar\" aria-hidden=\"true\">{{setting:avatar-text}}</span><span class=\"wf-header-action__label\">{{setting:label}}</span></a>",
+  "label": "Korisnički nalog",
+  "providerKey": null,
+  "renderMode": "static",
+  "scripts": [],
+  "seo": {
+    "mode": "none"
+  },
+  "settingsSchema": {
+    "additionalProperties": false,
+    "properties": {
+      "account-url": {
+        "maxLength": 2048,
+        "minLength": 1,
+        "type": "string"
+      },
+      "avatar-text": {
+        "maxLength": 3,
+        "minLength": 1,
+        "type": "string"
+      },
+      "label": {
+        "maxLength": 80,
+        "minLength": 1,
+        "type": "string"
+      }
+    },
+    "required": [
+      "label",
+      "account-url",
+      "avatar-text"
+    ],
+    "type": "object"
+  },
+  "styles": [
+    {
+      "content": ".wf-account-menu__avatar{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:color-mix(in srgb,var(--wf-color-primary) 14%,var(--wf-color-surface));color:var(--wf-color-primary);font-size:.76rem;font-weight:var(--wf-menu-weight,500);letter-spacing:.02em}@media(max-width:620px){.wf-account-menu .wf-header-action__label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}}",
+      "name": "account-menu.css"
+    }
+  ],
+  "targets": [
+    "web",
+    "mobile"
+  ]
+}
