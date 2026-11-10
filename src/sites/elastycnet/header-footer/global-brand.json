@@ -1,0 +1,15 @@
+{
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "globalSectionKey": "site-brand",
+  "instance": {
+    "componentKey": "elastyc-site-brand",
+    "instanceKey": "global-brand",
+    "settings": {
+      "home-url": "/elastyc-ai",
+      "logo-url": "/common/Elastyc/Forms/Main/assets/elastyc-logo-light.svg"
+    }
+  },
+  "label": "Logo sajta",
+  "role": "header"
+}

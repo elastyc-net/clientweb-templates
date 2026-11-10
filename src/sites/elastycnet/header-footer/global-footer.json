@@ -1,0 +1,98 @@
+{
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "globalSectionKey": "site-footer",
+  "instance": {
+    "componentKey": "elastyc-site-footer",
+    "instanceKey": "global-footer",
+    "settings": {
+      "year": 2026,
+      "home-url": "/elastyc-ai",
+      "logo-url": "/common/Elastyc/Forms/Main/assets/elastyc-logo-dark.svg",
+      "eyebrow": "JEDNO POSLOVNO OKRUŽENJE. VIŠE POVEZANIH MOGUĆNOSTI.",
+      "title": "Povežite ljude, procese i znanje.",
+      "description": "Elastyc okuplja poslovne procese i informacije vašeg tima u zajedničkom okruženju. Krenite od onoga što vašem poslovanju najviše znači.",
+      "signature": "Znanje ostaje. Tim ide napred.",
+      "contact-url": "/elastyc-ai/kontakt",
+      "contact-label": "Razgovarajmo o vašem timu",
+      "login-url": "/incKomponente/auth/index.php",
+      "bottom-line": "Poslovanje. Povezano.",
+      "solutions": [
+        {
+          "label": "Prodaja",
+          "url": "/elastyc-ai/resenja/prodaja"
+        },
+        {
+          "label": "Nabavka",
+          "url": "/elastyc-ai/resenja/nabavka"
+        },
+        {
+          "label": "Podrška",
+          "url": "/elastyc-ai/resenja/podrska"
+        },
+        {
+          "label": "Baza znanja — rešenje",
+          "url": "/elastyc-ai/resenja/podrska/baza-znanja"
+        },
+        {
+          "label": "Projekti",
+          "url": "/elastyc-ai/resenja/projekti"
+        },
+        {
+          "label": "Ljudi i HR",
+          "url": "/elastyc-ai/resenja/hr"
+        }
+      ],
+      "platform": [
+        {
+          "label": "Pregled platforme",
+          "url": "/elastyc-ai/platforma"
+        },
+        {
+          "label": "AI asistenti i agenti",
+          "url": "/elastyc-ai/platforma/ai-asistenti-i-agenti"
+        },
+        {
+          "label": "Automatizacija",
+          "url": "/elastyc-ai/platforma/automatizacija"
+        },
+        {
+          "label": "Integracije",
+          "url": "/elastyc-ai/platforma/integracije"
+        },
+        {
+          "label": "Vebsajt i Webfront",
+          "url": "/elastyc-ai/resenja/marketing/vebsajt-i-webfront-builder"
+        }
+      ],
+      "resources": [
+        {
+          "label": "Dokumentacija i uputstva",
+          "url": "/elastyc-ai/baza-znanja"
+        },
+        {
+          "label": "Demonstracije",
+          "url": "/elastyc-ai/resursi/demonstracije"
+        },
+        {
+          "label": "Primeri primene",
+          "url": "/elastyc-ai/resursi/primeri-primene"
+        },
+        {
+          "label": "Novosti",
+          "url": "/elastyc-ai/resursi/novosti"
+        },
+        {
+          "label": "O nama",
+          "url": "/elastyc-ai/o-nama"
+        },
+        {
+          "label": "Kontakt",
+          "url": "/elastyc-ai/kontakt"
+        }
+      ]
+    }
+  },
+  "label": "Glavno podnozje",
+  "role": "footer"
+}

@@ -1,0 +1,17 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "globalSectionKey": "site-header-actions",
+  "label": "Elastyc · prijava i kontakt",
+  "role": "header",
+  "instance": {
+    "instanceKey": "global-header-actions",
+    "componentKey": "elastyc-site-actions",
+    "settings": {
+      "login-url": "/incKomponente/auth/index.php",
+      "login-label": "Prijava",
+      "contact-url": "/elastyc-ai/kontakt",
+      "contact-label": "Razgovarajmo"
+    }
+  }
+}

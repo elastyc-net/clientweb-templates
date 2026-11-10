@@ -1,0 +1,64 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "elastyc-site-actions",
+  "label": "Elastyc · akcije u zaglavlju",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"es-header-actions\"><a class=\"es-login\" href=\"{{setting:login-url}}\">{{setting:login-label}}</a><a class=\"es-contact\" href=\"{{setting:contact-url}}\">{{setting:contact-label}} <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 17 17 7H7m10 0v10\"/></svg></a></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "login-url",
+      "login-label",
+      "contact-url",
+      "contact-label"
+    ],
+    "properties": {
+      "login-url": {
+        "type": "string",
+        "title": "Adresa prijave",
+        "maxLength": 2048
+      },
+      "login-label": {
+        "type": "string",
+        "title": "Oznaka prijave",
+        "maxLength": 80
+      },
+      "contact-url": {
+        "type": "string",
+        "title": "Kontakt stranica",
+        "maxLength": 2048
+      },
+      "contact-label": {
+        "type": "string",
+        "title": "Poziv na razgovor",
+        "maxLength": 80
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

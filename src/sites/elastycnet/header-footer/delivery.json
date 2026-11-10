@@ -1,0 +1,84 @@
+{
+  "status": "saved-draft-only",
+  "siteKey": "elastycnet",
+  "savedOn": "2026-11-10",
+  "previewPage": "tree-baza-znanja-2",
+  "editorUrl": "https://elastyc.net/webfront-admin.php?page=tree-baza-znanja-2",
+  "sharedPageCount": 71,
+  "pageDefinitionsUnchanged": true,
+  "siteTreeUnchanged": true,
+  "unrelatedDefinitionsUnchanged": true,
+  "candidateAndProductionChannelsUnchangedDuringApply": true,
+  "buildPerformed": false,
+  "publishPerformed": false,
+  "snapshotHashAfter": "d3a95a3e8303afcafcd3ac3cef0ebe32be532004d59ff90440229537c8ae5284",
+  "documents": [
+    {
+      "itemType": "component",
+      "itemKey": "elastyc-site-actions",
+      "draftRevision": 1,
+      "source": "components/actions.json"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "elastyc-site-brand",
+      "draftRevision": 1,
+      "source": "components/brand.json"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "elastyc-site-footer",
+      "draftRevision": 2,
+      "source": "components/footer.json"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "elastyc-site-navigation",
+      "draftRevision": 3,
+      "source": "components/navigation.json"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "site-header-actions",
+      "draftRevision": 1,
+      "source": "global-actions.json"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "site-brand",
+      "draftRevision": 2,
+      "source": "global-brand.json"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "site-footer",
+      "draftRevision": 2,
+      "source": "global-footer.json"
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "site-navigation",
+      "draftRevision": 3,
+      "source": "global-navigation.json"
+    },
+    {
+      "itemType": "layout",
+      "itemKey": "main-layout",
+      "draftRevision": 2,
+      "source": "layout.json"
+    }
+  ],
+  "validation": {
+    "nativeDefinitionValidator": true,
+    "nativeCompositionGraphValidator": true,
+    "nativeDraftPreviewRenderer": true,
+    "allLocalSourcesMatchSavedDraft": true,
+    "navigationAndFooterRoutesMatchDraftPages": true,
+    "verifiedPageRouteCount": 33,
+    "desktopDropdownClickAndKeyboard": true,
+    "mobileMenuAndExpandableGroups": true,
+    "escapeClosesGroupThenMobileMenu": true,
+    "noMobileHorizontalOverflow": true,
+    "browserConsoleErrors": 0
+  }
+}

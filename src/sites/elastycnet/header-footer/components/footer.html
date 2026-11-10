@@ -1,0 +1,12 @@
+<footer class="es-footer" data-es-footer>
+  <div class="es-footer-inner">
+    <div class="es-footer-top"><div><span class="es-footer-eyebrow">{{setting:eyebrow}}</span><h2>{{setting:title}}</h2></div><a class="es-footer-cta" href="{{setting:contact-url}}">{{setting:contact-label}} <span class="es-footer-arrow" aria-hidden="true">↗</span></a></div>
+    <div class="es-footer-grid">
+      <div class="es-footer-brand"><a href="{{setting:home-url}}" aria-label="{{setting:brand-name}} — početna"><img src="{{setting:logo-url}}" alt="{{setting:brand-name}}" width="132" height="36"></a><p>{{setting:description}}</p><span class="es-footer-signature">{{setting:signature}}</span></div>
+      <nav class="es-footer-column" aria-label="Rešenja u podnožju"><h3>Rešenja</h3><ul>{{each:solutions}}<li><a href="{{item:url}}">{{item:label}}</a></li>{{/each:solutions}}</ul></nav>
+      <nav class="es-footer-column" aria-label="Platforma u podnožju"><h3>Platforma</h3><ul>{{each:platform}}<li><a href="{{item:url}}">{{item:label}}</a></li>{{/each:platform}}</ul></nav>
+      <nav class="es-footer-column" aria-label="Resursi i kompanija u podnožju"><h3>Resursi i kompanija</h3><ul>{{each:resources}}<li><a href="{{item:url}}">{{item:label}}</a></li>{{/each:resources}}</ul></nav>
+    </div>
+    <div class="es-footer-bottom"><span>© {{setting:year}} {{setting:brand-name}}</span><span>{{setting:bottom-line}}</span><a href="{{setting:login-url}}">Prijava za korisnike <span aria-hidden="true">↗</span></a></div>
+  </div>
+</footer>

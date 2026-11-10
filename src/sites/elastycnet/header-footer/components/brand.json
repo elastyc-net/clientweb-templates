@@ -1,0 +1,61 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "elastyc-site-brand",
+  "label": "Elastyc · logo sajta",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<a class=\"es-brand\" href=\"{{setting:home-url}}\" aria-label=\"{{setting:brand-name}} — početna\"><img src=\"{{setting:logo-url}}\" alt=\"{{setting:brand-name}}\" width=\"140\" height=\"38\"></a>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "brand-name",
+      "home-url",
+      "logo-url"
+    ],
+    "properties": {
+      "brand-name": {
+        "type": "string",
+        "title": "Naziv brenda",
+        "maxLength": 80
+      },
+      "home-url": {
+        "type": "string",
+        "title": "Početna stranica",
+        "maxLength": 2048
+      },
+      "logo-url": {
+        "type": "string",
+        "title": "Logo",
+        "maxLength": 2048
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "themeBindings": {
+    "brand-name": "brand.name"
+  }
+}

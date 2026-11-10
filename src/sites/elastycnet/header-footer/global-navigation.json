@@ -1,0 +1,360 @@
+{
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "globalSectionKey": "site-navigation",
+  "instance": {
+    "componentKey": "elastyc-site-navigation",
+    "instanceKey": "global-navigation",
+    "settings": {
+      "menu-label": "Meni",
+      "items": [
+        {
+          "key": "solutions",
+          "label": "Rešenja",
+          "url": "",
+          "kind": "group",
+          "target": "_self",
+          "depth": 0,
+          "enabled": true,
+          "presentation": "mega"
+        },
+        {
+          "key": "solutions-prodaja",
+          "label": "Prodaja",
+          "url": "/elastyc-ai/resenja/prodaja",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-ponude",
+          "label": "Ponude",
+          "url": "/elastyc-ai/resenja/prodaja/ponude",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-narudzbine-kupaca",
+          "label": "Narudžbine kupaca",
+          "url": "/elastyc-ai/resenja/prodaja/narudzbine-kupaca",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solutions-nabavka",
+          "label": "Nabavka",
+          "url": "/elastyc-ai/resenja/nabavka",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-ulazni-racuni",
+          "label": "Ulazni računi",
+          "url": "/elastyc-ai/resenja/nabavka/ulazni-racuni",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-narudzbine-dobavljaca",
+          "label": "Narudžbine dobavljača",
+          "url": "/elastyc-ai/resenja/nabavka/narudzbine-dobavljaca",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solutions-podrska",
+          "label": "Podrška",
+          "url": "/elastyc-ai/resenja/podrska",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-baza-znanja-2",
+          "label": "Baza znanja",
+          "url": "/elastyc-ai/resenja/podrska/baza-znanja",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "featured"
+        },
+        {
+          "key": "solution-zahtevi-podrske",
+          "label": "Zahtevi podrške",
+          "url": "/elastyc-ai/resenja/podrska/zahtevi-podrske",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-sla-i-ugovori",
+          "label": "SLA i ugovori",
+          "url": "/elastyc-ai/resenja/podrska/sla-i-ugovori",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solutions-projekti",
+          "label": "Projekti",
+          "url": "/elastyc-ai/resenja/projekti",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-upravljanje-projektima",
+          "label": "Upravljanje projektima",
+          "url": "/elastyc-ai/resenja/projekti/upravljanje-projektima",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-zadaci",
+          "label": "Zadaci",
+          "url": "/elastyc-ai/resenja/projekti/zadaci",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solutions-hr",
+          "label": "Ljudi i HR",
+          "url": "/elastyc-ai/resenja/hr",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-zaposleni",
+          "label": "Zaposleni",
+          "url": "/elastyc-ai/resenja/hr/zaposleni",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-onboarding",
+          "label": "Uvođenje zaposlenih",
+          "url": "/elastyc-ai/resenja/hr/onboarding",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solutions-marketing",
+          "label": "Marketing",
+          "url": "/elastyc-ai/resenja/marketing",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-marketinske-kampanje",
+          "label": "Marketinške kampanje",
+          "url": "/elastyc-ai/resenja/marketing/marketinske-kampanje",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "solution-vebsajt-i-webfront-builder",
+          "label": "Vebsajt i Webfront",
+          "url": "/elastyc-ai/resenja/marketing/vebsajt-i-webfront-builder",
+          "kind": "link",
+          "target": "_self",
+          "depth": 2,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform",
+          "label": "Platforma",
+          "url": "",
+          "kind": "group",
+          "target": "_self",
+          "depth": 0,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-platforma",
+          "label": "Pregled platforme",
+          "url": "/elastyc-ai/platforma",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-ai-asistenti-i-agenti",
+          "label": "AI asistenti i agenti",
+          "url": "/elastyc-ai/platforma/ai-asistenti-i-agenti",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-automatizacija",
+          "label": "Automatizacija",
+          "url": "/elastyc-ai/platforma/automatizacija",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-komunikacija",
+          "label": "Komunikacija",
+          "url": "/elastyc-ai/platforma/komunikacija",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-analitika",
+          "label": "Analitika",
+          "url": "/elastyc-ai/platforma/analitika",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-integracije",
+          "label": "Integracije",
+          "url": "/elastyc-ai/platforma/integracije",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "platform-katalog-proizvoda",
+          "label": "Katalog proizvoda",
+          "url": "/elastyc-ai/platforma/katalog-proizvoda",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "resources",
+          "label": "Resursi",
+          "url": "",
+          "kind": "group",
+          "target": "_self",
+          "depth": 0,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "resource-baza-znanja",
+          "label": "Dokumentacija i uputstva",
+          "url": "/elastyc-ai/baza-znanja",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "resource-demonstracije",
+          "label": "Demonstracije",
+          "url": "/elastyc-ai/resursi/demonstracije",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "resource-primeri-primene",
+          "label": "Primeri primene",
+          "url": "/elastyc-ai/resursi/primeri-primene",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "resource-novosti",
+          "label": "Novosti",
+          "url": "/elastyc-ai/resursi/novosti",
+          "kind": "link",
+          "target": "_self",
+          "depth": 1,
+          "enabled": true,
+          "presentation": "default"
+        },
+        {
+          "key": "about",
+          "label": "O nama",
+          "url": "/elastyc-ai/o-nama",
+          "kind": "link",
+          "target": "_self",
+          "depth": 0,
+          "enabled": true,
+          "presentation": "default"
+        }
+      ],
+      "login-url": "/incKomponente/auth/index.php",
+      "login-label": "Prijava",
+      "contact-url": "/elastyc-ai/kontakt",
+      "contact-label": "Razgovarajmo"
+    }
+  },
+  "label": "Glavni meni",
+  "role": "navigation"
+}

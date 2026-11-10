@@ -1,0 +1,154 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "elastyc-site-navigation",
+  "label": "Elastyc · glavni meni",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<nav class=\"es-nav\" aria-label=\"{{setting:menu-label}}\" data-es-nav>\n  <button class=\"es-nav-toggle\" type=\"button\" aria-expanded=\"false\" aria-controls=\"es-navigation-panel\" data-es-nav-toggle><span class=\"es-nav-toggle-icon\" aria-hidden=\"true\"><i></i><i></i><i></i></span><span>{{setting:menu-label}}</span></button>\n  <div class=\"es-nav-panel\" id=\"es-navigation-panel\" data-es-nav-panel>\n    <ul class=\"es-nav-list\" id=\"es-primary-nav-list\">{{navigation:items}}</ul>\n    <div class=\"es-nav-mobile-actions\"><a href=\"{{setting:login-url}}\">{{setting:login-label}}</a><a class=\"es-nav-mobile-cta\" href=\"{{setting:contact-url}}\">{{setting:contact-label}} <span aria-hidden=\"true\">↗</span></a></div>\n  </div>\n</nav>",
+  "styles": [],
+  "scripts": [
+    {
+      "name": "elastyc-navigation.js",
+      "content": "(function(){\n  document.querySelectorAll('[data-es-nav]').forEach(function(nav){\n    if(nav.dataset.esReady==='true')return;\n    nav.dataset.esReady='true';\n    var header=nav.closest('[data-wf-header]');\n    var toggle=nav.querySelector('[data-es-nav-toggle]');\n    var list=nav.querySelector('.es-nav-list');\n    if(!header||!toggle||!list)return;\n    var mobile=window.matchMedia('(max-width:980px)');\n    var groups=Array.from(list.children).filter(function(li){return li.dataset.wfMenuHasChildren==='true';});\n    var closeTimer=null,previousOverflow=null;\n    function groupButton(li){return li.querySelector(':scope > .es-nav-group-button');}\n    function closeGroups(except){groups.forEach(function(li){if(li===except)return;li.removeAttribute('data-es-open');delete li.dataset.esHoverOpened;var button=groupButton(li);if(button)button.setAttribute('aria-expanded','false');});}\n    function setOpen(li,open){clearTimeout(closeTimer);closeGroups(open?li:null);if(open)li.setAttribute('data-es-open','true');else li.removeAttribute('data-es-open');groupButton(li).setAttribute('aria-expanded',String(open));}\n    function closeMobile(){header.removeAttribute('data-wf-menu-open');toggle.setAttribute('aria-expanded','false');closeGroups();if(previousOverflow!==null){document.body.style.overflow=previousOverflow;previousOverflow=null;}}\n    groups.forEach(function(li,index){\n      var button=groupButton(li),panel=li.querySelector(':scope > .es-nav-children');\n      if(!button||!panel)return;\n      button.id='es-menu-trigger-'+index;panel.id='es-menu-panel-'+index;\n      button.setAttribute('aria-controls',panel.id);button.setAttribute('aria-expanded','false');panel.setAttribute('aria-labelledby',button.id);\n      button.addEventListener('click',function(event){var keepOpen=!mobile.matches&&event.detail>0&&li.dataset.esHoverOpened==='true';delete li.dataset.esHoverOpened;setOpen(li,keepOpen||li.dataset.esOpen!=='true');});\n      li.addEventListener('pointerenter',function(event){if(!mobile.matches&&event.pointerType!=='touch'){var wasOpen=li.dataset.esOpen==='true';setOpen(li,true);if(!wasOpen)li.dataset.esHoverOpened='true';}});\n      li.addEventListener('pointerleave',function(){delete li.dataset.esHoverOpened;if(!mobile.matches){closeTimer=setTimeout(function(){if(!li.contains(document.activeElement))setOpen(li,false);},160);}});\n      li.addEventListener('focusout',function(){setTimeout(function(){if(!li.contains(document.activeElement)&&!li.matches(':hover'))setOpen(li,false);},0);});\n      button.addEventListener('keydown',function(event){if(event.key==='ArrowDown'){event.preventDefault();setOpen(li,true);var first=panel.querySelector('a,button');if(first)first.focus();}});\n    });\n    toggle.addEventListener('click',function(){var open=header.getAttribute('data-wf-menu-open')==='true';if(open)closeMobile();else{header.setAttribute('data-wf-menu-open','true');toggle.setAttribute('aria-expanded','true');previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';}});\n    nav.addEventListener('click',function(event){if(event.target.closest('a'))closeMobile();});\n    nav.addEventListener('keydown',function(event){\n      if(event.key==='Escape'){\n        var active=groups.find(function(li){return li.dataset.esOpen==='true';});\n        event.preventDefault();if(active){closeGroups();groupButton(active).focus();}else{closeMobile();toggle.focus();}\n      }\n      var top=Array.from(list.children).map(function(li){return li.querySelector(':scope > a,:scope > button');});\n      var index=top.indexOf(event.target);if(index<0||mobile.matches)return;\n      var next=index;\n      if(event.key==='ArrowRight')next=(index+1)%top.length;else if(event.key==='ArrowLeft')next=(index+top.length-1)%top.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=top.length-1;else return;\n      event.preventDefault();closeGroups();top[next].focus();\n    });\n    document.addEventListener('pointerdown',function(event){if(!header.contains(event.target))closeMobile();});\n    document.addEventListener('focusin',function(event){if(!header.contains(event.target))closeGroups();});\n    var lastMobile=mobile.matches;\n    window.addEventListener('resize',function(){if(mobile.matches!==lastMobile){lastMobile=mobile.matches;closeMobile();}});\n  });\n})();\n"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "menu-label",
+      "login-url",
+      "login-label",
+      "contact-url",
+      "contact-label"
+    ],
+    "properties": {
+      "items": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "depth": {
+              "maximum": 2,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "key": {
+              "maxLength": 63,
+              "minLength": 2,
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "link",
+                "group"
+              ],
+              "maxLength": 16,
+              "type": "string"
+            },
+            "label": {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            "presentation": {
+              "enum": [
+                "default",
+                "featured",
+                "mega",
+                "mega-side"
+              ],
+              "maxLength": 16,
+              "type": "string"
+            },
+            "target": {
+              "enum": [
+                "_self",
+                "_blank"
+              ],
+              "maxLength": 16,
+              "type": "string"
+            },
+            "url": {
+              "maxLength": 2048,
+              "minLength": 0,
+              "type": "string"
+            }
+          },
+          "required": [
+            "key",
+            "label",
+            "url",
+            "kind",
+            "target",
+            "depth",
+            "enabled",
+            "presentation"
+          ],
+          "type": "object"
+        },
+        "maxItems": 100,
+        "minItems": 1,
+        "type": "array"
+      },
+      "menu-label": {
+        "maxLength": 80,
+        "minLength": 1,
+        "type": "string"
+      },
+      "login-url": {
+        "type": "string",
+        "title": "Adresa prijave",
+        "maxLength": 2048
+      },
+      "login-label": {
+        "type": "string",
+        "title": "Oznaka prijave",
+        "maxLength": 80
+      },
+      "contact-url": {
+        "type": "string",
+        "title": "Kontakt stranica",
+        "maxLength": 2048
+      },
+      "contact-label": {
+        "type": "string",
+        "title": "Poziv na razgovor",
+        "maxLength": 80
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "structuredRenderer": {
+    "type": "navigation-tree-v1",
+    "settingsKey": "items",
+    "maxDepth": 3,
+    "linkItemTemplate": "<li class=\"es-nav-item\" data-wf-menu-key=\"{{item:key}}\" data-wf-menu-depth=\"{{item:depth}}\" data-wf-menu-presentation=\"{{item:presentation}}\" data-wf-menu-has-children=\"{{item:has-children}}\"><a class=\"es-nav-link\" href=\"{{item:url}}\" target=\"{{item:target}}\" rel=\"{{item:rel}}\">{{item:label}}</a>{{item:children}}</li>",
+    "groupItemTemplate": "<li class=\"es-nav-item\" data-wf-menu-key=\"{{item:key}}\" data-wf-menu-depth=\"{{item:depth}}\" data-wf-menu-presentation=\"{{item:presentation}}\" data-wf-menu-has-children=\"{{item:has-children}}\"><button class=\"es-nav-group-button\" type=\"button\" aria-haspopup=\"true\">{{item:label}}</button>{{item:children}}</li>",
+    "childrenTemplate": "<ul class=\"es-nav-children\">{{navigation:items}}</ul>"
+  }
+}
