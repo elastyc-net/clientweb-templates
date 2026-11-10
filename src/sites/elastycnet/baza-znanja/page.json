@@ -1,0 +1,108 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageKey": "tree-baza-znanja-2",
+  "layoutKey": "main-layout",
+  "route": "/elastyc-ai/resenja/podrska/baza-znanja",
+  "locale": "sr",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "permissions": [],
+    "visibility": "public"
+  },
+  "metadata": {
+    "title": "Baza znanja — znanje koje ostaje u firmi | Elastyc",
+    "description": "Organizujte iskustvo ljudi, dokumente i procedure. Razvijajte zajedničko znanje kroz rad, uz opcioni AI predlog i proveru tima."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "kb-sales-hero",
+        "componentKey": "kb-sales-hero",
+        "settings": {
+          "title": "Znanje koje ostaje u firmi. ",
+          "title-accent": "I razvija se sa njom.",
+          "lead": "Ispričajte kako radite. Dodajte dokument. Organizujte znanje koje već imate — i dopunjavajte ga iskustvima iz svakodnevnog rada."
+        }
+      },
+      {
+        "instanceKey": "kb-sales-problem",
+        "componentKey": "kb-sales-problem",
+        "settings": {
+          "title": "Firma zna mnogo.",
+          "title-second": "Ali koliko toga ostaje firmi?",
+          "lead": "Važni odgovori su u glavama iskusnih ljudi, porukama i dokumentima. Kada znanje nije organizovano, posao zavisi od pojedinaca."
+        }
+      },
+      {
+        "instanceKey": "kb-sales-workflow",
+        "componentKey": "kb-sales-workflow",
+        "settings": {
+          "title": "Prvo organizujte znanje.",
+          "title-second": "Zatim učite iz svakodnevnog rada.",
+          "lead": "Ne morate da krećete od prazne stranice. Iskustvo ljudi i postojeći materijali su osnova, a AI podrška može da pomogne da dobiju jasan oblik."
+        }
+      },
+      {
+        "instanceKey": "kb-sales-scenarios",
+        "componentKey": "kb-sales-scenarios",
+        "settings": {
+          "title": "Od odluke rukovodioca",
+          "title-second": "do oslonca za ceo tim.",
+          "lead": "Podrška, uvođenje zaposlenih i operativa koriste istu osnovu: znanje koje ne zavisi od toga ko je danas tu."
+        }
+      },
+      {
+        "instanceKey": "kb-sales-trust",
+        "componentKey": "kb-sales-trust",
+        "settings": {
+          "title": "Tamo gde vaš tim",
+          "title-second": "već radi.",
+          "lead": "Baza znanja je deo Elastyc poslovnog okruženja. To je osnova za povezivanje dokumentacije i iskustva sa procesima koje vaš tim svakodnevno obavlja."
+        }
+      },
+      {
+        "instanceKey": "kb-sales-faq",
+        "componentKey": "kb-sales-faq",
+        "settings": {
+          "title": "Jasno od",
+          "title-second": "prvog koraka.",
+          "lead": "Počnite od oblasti u kojoj posao najviše zavisi od znanja pojedinaca.",
+          "items": [
+            {
+              "question": "Da li moramo da počnemo od prazne stranice?",
+              "answer": "Ne. Krenite od postojećih beležaka, tekstova, linkova, fajlova i slika. Podržan je i eksplicitan uvoz Markdown sadržaja iz povezanog Git repozitorijuma. Uvezeni sadržaj je snimak iz tog trenutka; osvežava se novim uvozom."
+            },
+            {
+              "question": "Ko može da pristupi sadržaju?",
+              "answer": "Baza znanja koristi postojeće Elastyc provere pristupa i ovlašćenja. Način pristupa i uređivanja usklađuje se sa podešavanjima vašeg poslovnog okruženja."
+            },
+            {
+              "question": "Šta kada se procedura promeni?",
+              "answer": "Uredite članak i sačuvajte novi tekst. Istorija sadržaja omogućava pregled, tekstualno poređenje i vraćanje sadržaja ranije verzije. Tim i dalje odlučuje kada uputstvo treba pregledati i dopuniti."
+            },
+            {
+              "question": "Da li je AI obavezan deo baze znanja?",
+              "answer": "Nije. Članke i izvore možete da uređujete ručno. AI pisac je odvojena, opciono povezana mogućnost, čija dostupnost zavisi od konkretne postavke. Baza znanja sama po sebi ne podrazumeva AI pretragu celog poslovanja."
+            }
+          ]
+        }
+      },
+      {
+        "instanceKey": "kb-sales-cta",
+        "componentKey": "kb-sales-cta",
+        "settings": {
+          "title": "Šta vaša firma zna,",
+          "title-second": "a ne sme da izgubi?",
+          "lead": "Počnite od znanja koje drži vaš posao u pokretu.",
+          "lead-second": "Pogledajte kako ono može da postane oslonac celom timu."
+        }
+      }
+    ]
+  },
+  "sourceTemplateKey": "landing-page",
+  "legacyPageId": "A1081"
+}

@@ -1,0 +1,64 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-sales-cta",
+  "label": "Baza znanja · 07 · Poziv na pregled",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"kb-sales\" data-kb-sales-section=\"cta\"><section class=\"cta-section\" aria-labelledby=\"kb-sales-cta-title\"><div class=\"container cta-inner\"><div class=\"cta-decoration\" aria-hidden=\"true\"><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-book\"/></svg><span></span><span></span></div><span class=\"eyebrow\">ORGANIZUJTE DANAS. RAZVIJAJTE KROZ RAD.</span><h2 id=\"kb-sales-cta-title\">{{setting:title}}<br>{{setting:title-second}}</h2><p>{{setting:lead}}<br>{{setting:lead-second}}</p><button class=\"button button-mint\" data-open-demo>Pogledajte primer za svoj tim <svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-arrow\"/></svg></button><span class=\"cta-footnote\">Interaktivni pregled · bez zakazivanja i slanja podataka</span></div></section><dialog id=\"kb-sales-demo-dialog\" class=\"kb-sales-demo-dialog\" aria-labelledby=\"kb-sales-demo-title\"><div class=\"dialog-header\"><div><span class=\"eyebrow\">VAŠ TIM, VAŠ NAČIN RADA</span><h2 id=\"kb-sales-demo-title\">Od kog primera biste počeli?</h2></div><button class=\"icon-button\" id=\"kb-sales-close-demo\" aria-label=\"Zatvori primer\"><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-x\"/></svg></button></div><p class=\"dialog-intro\">Izaberite oblast i pogledajte kako jedno uputstvo može da izgleda u vašoj bazi znanja.</p><div class=\"dialog-options\" role=\"group\" aria-label=\"Oblast primera\"><button data-demo-scenario=\"0\" aria-pressed=\"true\">Korisnička podrška</button><button data-demo-scenario=\"1\" aria-pressed=\"false\">Uvođenje zaposlenih</button><button data-demo-scenario=\"2\" aria-pressed=\"false\">Svakodnevna operativa</button></div><div id=\"kb-sales-dialog-article\" class=\"kb-sales-dialog-article\" aria-live=\"polite\"></div><div class=\"dialog-footer\"><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-shield\"/></svg><p>Ovo je lokalni interaktivni primer. Izbor ne šalje zahtev i ne zakazuje sastanak.</p><button id=\"kb-sales-finish-demo\">Zatvori pregled <svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-arrow\"/></svg></button></div></dialog></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "title-second",
+      "lead",
+      "lead-second"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Naslov"
+      },
+      "title-second": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Drugi red naslova"
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Uvodni tekst"
+      },
+      "lead-second": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Dopunski tekst"
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

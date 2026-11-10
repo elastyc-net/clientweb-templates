@@ -1,0 +1,16 @@
+{
+  "siteKey": "elastycnet",
+  "rootPageKey": "tree-resenja",
+  "operations": [
+    {
+      "type": "tree.create",
+      "ref": "kb-sales",
+      "parent": "A1021",
+      "title": "Baza znanja",
+      "description": "Organizujte znanje firme i razvijajte ga kroz svakodnevni rad. Prodajna prezentacija poslovnog rešenja.",
+      "route": "/elastyc-ai/resenja/podrska/baza-znanja",
+      "templateKey": "landing-page"
+    }
+  ],
+  "requestId": "c23af99c50d1460d850d76f38ebd30fe"
+}

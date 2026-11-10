@@ -1,0 +1,66 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-sales-trust",
+  "label": "Baza znanja · 05 · Znanje u Elastycu",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"kb-sales\" data-kb-sales-section=\"trust\"><section class=\"trust-section section-pad\" aria-labelledby=\"kb-sales-trust-title\"><div class=\"container trust-layout\"><div class=\"trust-copy\"><span class=\"eyebrow\">ZNANJE U KONTEKSTU POSLOVANJA</span><h2 id=\"kb-sales-trust-title\">{{setting:title}}<br>{{setting:title-second}}</h2><p>{{setting:lead}}</p><div class=\"ecosystem\" aria-label=\"Baza znanja kao deo Elastyc okruženja\"><div class=\"eco-center\"><span class=\"eco-wordmark\">{{setting:brand-name}}</span></div><span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-users\"/></svg>Tim</span><span class=\"eco-active\"><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-book\"/></svg>Znanje</span><span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-layers\"/></svg>Procesi</span><span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-file\"/></svg>Dokumenti</span></div></div><div class=\"trust-features\">\n  <div><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-layers\"/></svg><div><h3>Struktura koja ima smisla</h3><p>Kategorije i podstranice organizuju znanje prema načinu rada vašeg tima.</p></div></div>\n  <div><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-link\"/></svg><div><h3>Jasno poreklo informacija</h3><p>Izvori ostaju uz članak, pa imate kontekst iz kog je uputstvo nastalo.</p></div></div>\n  <div><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-history\"/></svg><div><h3>Pregled istorije sadržaja</h3><p>Pregledajte i uporedite verzije. Vratite tekst prethodne verzije kada je potrebno.</p></div></div>\n  <div><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-shield\"/></svg><div><h3>Pristup prema ovlašćenjima</h3><p>Postojeće Elastyc provere pristupa važe i u namenskom workspace-u baze znanja.</p></div></div>\n</div></div></section></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "title-second",
+      "lead"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Naslov"
+      },
+      "title-second": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Drugi red naslova"
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Uvodni tekst"
+      },
+      "brand-name": {
+        "type": "string",
+        "title": "Naziv brenda",
+        "maxLength": 100
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "themeBindings": {
+    "brand-name": "brand.name"
+  }
+}

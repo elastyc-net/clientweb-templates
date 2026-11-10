@@ -1,0 +1,58 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-sales-problem",
+  "label": "Baza znanja · 02 · Znanje u firmi",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"kb-sales\" data-kb-sales-section=\"problem\"><section id=\"kb-sales-zasto\" class=\"problem-section section-pad\" aria-labelledby=\"kb-sales-problem-title\"><div class=\"container\"><div class=\"section-heading split-heading\"><div><span class=\"eyebrow\">PREPOZNAJETE LI OVAJ RADNI DAN?</span><h2 id=\"kb-sales-problem-title\">{{setting:title}}<br>{{setting:title-second}}</h2></div><p>{{setting:lead}}</p></div><div class=\"problem-grid\">\n  <div class=\"problem-item\"><span class=\"problem-index\">01 / PONAVLJANJE</span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-chat\"/></svg><h3>Isto pitanje.<br> Ponovo isti razgovor.</h3><p>Iskusni ljudi stalno prenose isto znanje usmeno, umesto da ono postane dostupno celom timu.</p></div>\n  <div class=\"problem-item\"><span class=\"problem-index\">02 / ČEKANJE</span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-users\"/></svg><h3>Novi kolega čeka<br> da neko bude slobodan.</h3><p>Uvođenje u posao zavisi od toga ko danas ima vremena da pomogne.</p></div>\n  <div class=\"problem-item\"><span class=\"problem-index\">03 / TRAŽENJE</span><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-folder\"/></svg><h3>Dokument postoji.<br> Ali koji je pravi?</h3><p>Uputstva su rasuta po folderima, prepiskama i različitim verzijama fajlova.</p></div>\n</div><div class=\"problem-resolution\"><span class=\"resolution-arrow\"><svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-arrow\"/></svg></span><p>Elastyc Baza znanja pretvara pojedinačne odgovore u <strong>zajedničko znanje firme.</strong></p></div></div></section></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "title-second",
+      "lead"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Naslov"
+      },
+      "title-second": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Drugi red naslova"
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Uvodni tekst"
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

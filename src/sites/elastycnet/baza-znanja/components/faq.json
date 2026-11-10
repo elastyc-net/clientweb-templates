@@ -1,0 +1,84 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-sales-faq",
+  "label": "Baza znanja · 06 · Česta pitanja",
+  "category": "marketing",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"kb-sales\" data-kb-sales-section=\"faq\"><section class=\"faq-section section-pad\" aria-labelledby=\"kb-sales-faq-title\"><div class=\"container faq-layout\"><div><span class=\"eyebrow\">JOŠ NEKOLIKO ODGOVORA</span><h2 id=\"kb-sales-faq-title\">{{setting:title}}<br>{{setting:title-second}}</h2><p>{{setting:lead}}</p></div><div class=\"faq-list\">{{each:items}}<details><summary>{{item:question}}<svg class=\"icon\" aria-hidden=\"true\"><use href=\"#kb-sales-i-chevron\"/></svg></summary><p>{{item:answer}}</p></details>{{/each:items}}</div></div></section></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "title-second",
+      "lead",
+      "items"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Naslov"
+      },
+      "title-second": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Drugi red naslova"
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 300,
+        "title": "Uvodni tekst"
+      },
+      "items": {
+        "type": "array",
+        "title": "Pitanja i odgovori",
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "question",
+            "answer"
+          ],
+          "properties": {
+            "question": {
+              "type": "string",
+              "maxLength": 200,
+              "title": "Pitanje"
+            },
+            "answer": {
+              "type": "string",
+              "maxLength": 1400,
+              "title": "Odgovor"
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 900,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

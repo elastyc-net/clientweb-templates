@@ -1,0 +1,116 @@
+{
+  "contractVersion": 1,
+  "formatVersion": 2,
+  "globalSectionKey": "site-navigation",
+  "instance": {
+    "componentKey": "navigation-menu",
+    "instanceKey": "global-navigation",
+    "settings": {
+      "items": [
+        {
+          "depth": 0,
+          "enabled": true,
+          "key": "home",
+          "kind": "link",
+          "label": "Početna",
+          "presentation": "default",
+          "target": "_self",
+          "url": "/"
+        },
+        {
+          "depth": 0,
+          "enabled": true,
+          "key": "products",
+          "kind": "link",
+          "label": "Proizvodi",
+          "presentation": "default",
+          "target": "_self",
+          "url": "/proizvodi"
+        },
+        {
+          "depth": 0,
+          "enabled": true,
+          "key": "solutions",
+          "kind": "group",
+          "label": "Rešenja",
+          "presentation": "mega",
+          "target": "_self",
+          "url": ""
+        },
+        {
+          "depth": 1,
+          "enabled": true,
+          "key": "solutions-apps",
+          "kind": "group",
+          "label": "Aplikacije",
+          "presentation": "default",
+          "target": "_self",
+          "url": ""
+        },
+        {
+          "depth": 2,
+          "enabled": true,
+          "key": "solutions-b2c",
+          "kind": "link",
+          "label": "B2C aplikacije",
+          "presentation": "featured",
+          "target": "_self",
+          "url": "/landing-page"
+        },
+        {
+          "depth": 1,
+          "enabled": true,
+          "key": "solutions-portals",
+          "kind": "group",
+          "label": "Portali",
+          "presentation": "default",
+          "target": "_self",
+          "url": ""
+        },
+        {
+          "depth": 2,
+          "enabled": true,
+          "key": "solutions-b2b",
+          "kind": "link",
+          "label": "B2B portali",
+          "presentation": "default",
+          "target": "_self",
+          "url": "/resenja/b2b"
+        },
+        {
+          "depth": 1,
+          "enabled": true,
+          "key": "solutions-support",
+          "kind": "link",
+          "label": "Podrška",
+          "presentation": "default",
+          "target": "_self",
+          "url": "/elastyc-ai/resenja/podrska"
+        },
+        {
+          "depth": 2,
+          "enabled": true,
+          "key": "solutions-knowledge-base",
+          "kind": "link",
+          "label": "Baza znanja",
+          "presentation": "featured",
+          "target": "_self",
+          "url": "/elastyc-ai/resenja/podrska/baza-znanja"
+        },
+        {
+          "depth": 0,
+          "enabled": true,
+          "key": "contact",
+          "kind": "link",
+          "label": "Kontakt",
+          "presentation": "default",
+          "target": "_self",
+          "url": "/kontakt"
+        }
+      ],
+      "menu-label": "Meni"
+    }
+  },
+  "label": "Glavni meni",
+  "role": "navigation"
+}

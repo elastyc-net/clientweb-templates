@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-10",
+  "siteKey": "elastycnet",
+  "tenant": "https://elastyc.net",
+  "status": "draft-only",
+  "pageKey": "tree-baza-znanja-2",
+  "nodeId": "A1081",
+  "parentId": "A1021",
+  "route": "/elastyc-ai/resenja/podrska/baza-znanja",
+  "editorUrl": "https://elastyc.net/webfront-admin.php?page=tree-baza-znanja-2",
+  "pageDraftRevision": 2,
+  "componentRevisions": {
+    "kb-sales-cta": 1,
+    "kb-sales-faq": 1,
+    "kb-sales-hero": 2,
+    "kb-sales-problem": 1,
+    "kb-sales-scenarios": 1,
+    "kb-sales-trust": 2,
+    "kb-sales-workflow": 1
+  },
+  "navigationRevision": 2,
+  "existingDefinitionsUnchanged": 104,
+  "existingTreeNodesUnchanged": 64,
+  "candidateBuilt": false,
+  "productionPublished": false,
+  "channelsUnchanged": true,
+  "candidateRelease": "r-20261006164113-21367dad-d00680221a71",
+  "productionRelease": null,
+  "snapshotHash": "1014dc8929778d2c7f54471cacbeaf9e8e773bbed72bf317962da19f6bc10cfc"
+}
