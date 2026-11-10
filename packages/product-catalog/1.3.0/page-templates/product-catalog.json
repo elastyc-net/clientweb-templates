@@ -1,0 +1,63 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "product-catalog",
+  "label": "Katalog proizvoda",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Katalog proizvoda",
+    "description": "Zajednička lista proizvoda."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "catalog-main",
+        "componentKey": "product-list",
+        "settings": {
+          "title": "Proizvodi",
+          "layout": "grid",
+          "columns-desktop": 4,
+          "columns-tablet": 2,
+          "columns-mobile": 1,
+          "show-brand": true,
+          "show-category": true,
+          "show-stock": true,
+          "image-ratio": "1/1",
+          "show-price": true,
+          "show-regular-price": true,
+          "show-discount-badge": true,
+          "detail-url": "/proizvod",
+          "show-catalog-search": false,
+          "show-category-select": false,
+          "price-filter-mode": "slider-popover",
+          "show-tag-badges": true,
+          "badge-tags": "Akcija,Novo",
+          "badge-position": "top-start",
+          "show-list-description": true,
+          "filters-collapsed": true,
+          "open-filters": "",
+          "stock-display": "availability",
+          "show-delivery-estimate": true,
+          "delivery-days-fallback": 0,
+          "category-navigation-context": true
+        },
+        "providerInput": {
+          "category": "all",
+          "page": 1,
+          "limit": 24,
+          "sort": "default",
+          "filters": [],
+          "attributes": []
+        }
+      }
+    ]
+  }
+}

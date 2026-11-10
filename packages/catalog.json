@@ -126,6 +126,12 @@
       "version": "1.2.0",
       "manifest": "product-catalog/1.2.0/manifest.json",
       "sha256": "bd2c3623edf993aae8455450e86eaa5a2dea760ac381806c6058ea62dcb94947"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.3.0",
+      "manifest": "product-catalog/1.3.0/manifest.json",
+      "sha256": "2889d3b148bfe4823d4fab87bb6baa3d5f948ab282c74500b1b6a9ed4ba009c3"
     }
   ]
 }
