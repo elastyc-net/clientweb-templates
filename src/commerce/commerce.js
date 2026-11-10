@@ -3,6 +3,17 @@
   if (global.ElastycCommerce) { global.ElastycCommerce.scan(); return; }
   var state = null, csrf = "", endpoint = "", queue = Promise.resolve(), quote = null;
   var items = new Map(), viewRoots = [], busy = false, channel = null;
+  function themeContrast(host) {
+    var raw = global.getComputedStyle(host).getPropertyValue("--wf-color-primary").trim();
+    if (/^#[a-f0-9]{3}$/i.test(raw)) raw = "#" + raw.slice(1).split("").map(function (x) { return x + x; }).join("");
+    if (!/^#[a-f0-9]{6}$/i.test(raw)) return;
+    var rgb = [1, 3, 5].map(function (offset) {
+      var v = parseInt(raw.slice(offset, offset + 2), 16) / 255;
+      return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    var luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+    document.documentElement.style.setProperty("--wf-shop-on-accent", luminance > 0.179 ? "#111111" : "#ffffff");
+  }
   function node(tag, cls, text) {
     var el = document.createElement(tag); if (cls) el.className = cls;
     if (text !== undefined) el.textContent = text; return el;
@@ -305,6 +316,7 @@
     document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { if (viewRoots.indexOf(root) < 0) viewRoots.push(root); });
     if (endpoint) { render(); return; }
     var host = document.querySelector("[data-wf-commerce-url]"); if (!host) { viewRoots.forEach(function (root) { root.textContent = "Za proveru korpe i formi otvorite direktan Candidate pregled."; }); return; }
+    themeContrast(host);
     if (global.parent !== global && host.dataset.wfCatalogBridge === "true") { viewRoots.forEach(function (root) { root.textContent = "Za interaktivnu proveru korpe otvorite direktan Candidate pregled."; }); return; }
     endpoint = host.dataset.wfCommerceUrl;
     request("state", {}, false).then(function () {
