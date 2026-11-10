@@ -1,0 +1,59 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "1.3.2",
+  "label": "Katalog proizvoda",
+  "description": "Navigacija kategorija, stabilni filteri i format cene, kompaktan raspon sa ručnim unosom, raspoloživost i ERP rok isporuke. Format aktivnog raspona i podrška svim režimima ručnog unosa. Kompaktan rok isporuke bez promene visine kartice.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "e220c57a5dbef5adaa86f967beb214233cd6f04fcb9effedf1603944429f637f"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "845d1d44de94b25b0b9a37a48676abd1102c6c1cb3fbf588c2ebd7ec110ccc99"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "f666f9b12b3842cf225daec8fd209003aa68bd4efcbccf5a9dd54d976d322230"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "5d71b2fa4060af63f88d81352b05563718a5aff615d2c00304ca7bab913fd4d2"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "cdb62d885d069a03e2583f5108b7868db81df98ddf77b2f537c47415d508ec49"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-offers",
+      "path": "providers/catalog-offers.json",
+      "sha256": "a155b2709a970bde945b68f94b9312947e6db66b6018372641f193a651f9a450"
+    }
+  ]
+}
