@@ -123,9 +123,9 @@ validate the actual checksummed source using its planner, graph and renderer.
 FAQ, image Hero, product catalog and `repository-components`. Export it with
 `node tools/library-catalog.mjs --export-starter ../instance-template/webfront/Package/Library`.
 The exported catalog contains one exact version per package, with disjoint item
-ownership and satisfied dependencies. It currently installs 31 component
-contracts (all 24 engine repository components and seven additional designs),
-five package receipts and no customer pages or tenant integration data.
+ownership and satisfied dependencies. It currently installs 54 component
+contracts, including the shared catalog and six commerce components,
+seven package receipts and no customer pages or tenant integration data.
 
 `repository-components@1.0.0` preserves the existing 22 remaining engine
 component definitions and their three declarative provider contracts. It adds

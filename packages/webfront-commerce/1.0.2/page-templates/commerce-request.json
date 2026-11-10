@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-request",
+  "label": "Upit za ponudu",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Upit za ponudu",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-request-main",
+        "componentKey": "commerce-request",
+        "settings": {
+          "title": "Upit za ponudu"
+        }
+      }
+    ]
+  }
+}

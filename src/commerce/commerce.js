@@ -300,6 +300,10 @@
     document.querySelectorAll("[data-wf-favorites-link]").forEach(function (el) { el.hidden = !state.favoritesEnabled; });
     document.querySelectorAll("[data-wf-favorites-link]").forEach(function (el) { el.href = linkTo(state.paths.favorites); });
     document.querySelectorAll("[data-wf-cart-link]").forEach(function (el) { el.href = linkTo(state.paths.cart); });
+    document.querySelectorAll("a[href]").forEach(function (el) {
+      var url; try { url = new URL(el.getAttribute("href"), global.location.href); } catch (error) { return; }
+      if (url.origin === global.location.origin && url.pathname === state.paths.account && !url.search && !url.hash) el.href = linkTo(state.paths.account);
+    });
     document.querySelectorAll(".wf-instance").forEach(function (host) { mount(host, []); });
     viewRoots.forEach(function (root) {
       // Preserve form fields, focus and a reviewed quote during unrelated state updates.

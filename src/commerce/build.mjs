@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
-for(const release of ['packages/product-catalog/2.0.1/manifest.json','packages/webfront-commerce/1.0.1/manifest.json']){if(spawnSync('git',['ls-files','--error-unmatch',release],{cwd:root,stdio:'ignore'}).status===0)throw new Error('Immutable release is tracked. Bump the version and target paths before building: '+release);}
+for(const release of ['packages/product-catalog/2.0.2/manifest.json','packages/webfront-commerce/1.0.2/manifest.json']){if(spawnSync('git',['ls-files','--error-unmatch',release],{cwd:root,stdio:'ignore'}).status===0)throw new Error('Immutable release is tracked. Bump the version and target paths before building: '+release);}
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const write=(p,value)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),JSON.stringify(value,null,2)+'\n');};
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
@@ -38,14 +38,14 @@ for(const [key,label] of Object.entries({shell:'Korpa i favoriti',cart:'Korpa',c
   component.settingsSchema={type:'object',additionalProperties:false,required:['title'],properties:{title:properties.title}};
   component.settingsDefaults={title:label};
  }
- const relative='components/'+componentKey+'.json';write('packages/webfront-commerce/1.0.1/'+relative,component);commerceItems.push({itemType:'component',itemKey:componentKey,path:relative});
+ const relative='components/'+componentKey+'.json';write('packages/webfront-commerce/1.0.2/'+relative,component);commerceItems.push({itemType:'component',itemKey:componentKey,path:relative});
  if(key!=='shell'){
  const template={formatVersion:2,contractVersion:1,pageTemplateKey:componentKey,label,layoutKey:'starter-layout',targets:['web','mobile'],access:{visibility:'public',permissions:[]},metadataDefaults:{title:label,description:''},regions:{main:[{instanceKey:componentKey+'-main',componentKey,settings:{title:label}}]}};
- const relative='page-templates/'+componentKey+'.json';write('packages/webfront-commerce/1.0.1/'+relative,template);commerceItems.push({itemType:'page-template',itemKey:componentKey,path:relative});
+ const relative='page-templates/'+componentKey+'.json';write('packages/webfront-commerce/1.0.2/'+relative,template);commerceItems.push({itemType:'page-template',itemKey:componentKey,path:relative});
  }
 }
 function manifest(key,version,label,description,dependencies,items){const base='packages/'+key+'/'+version;items=items.map(item=>({...item,sha256:sha(base+'/'+item.path)}));const value={formatVersion:1,packageKey:key,version,label,description,distribution:'optional',minimumContractVersion:1,dependencies,items};write(base+'/manifest.json',value);return{packageKey:key,version,manifest:key+'/'+version+'/manifest.json',sha256:sha(base+'/manifest.json')};}
-const commerce=manifest('webfront-commerce','1.0.1','Korpa, favoriti i poručivanje','Novi serverski tokovi gosta i naloga, korpa, direktan upit i narudžbina.',[{packageKey:'starter-site',minimumVersion:'1.0.0'}],commerceItems);
+const commerce=manifest('webfront-commerce','1.0.2','Korpa, favoriti i poručivanje','Novi serverski tokovi gosta i naloga, korpa, direktan upit i narudžbina.',[{packageKey:'starter-site',minimumVersion:'1.0.0'}],commerceItems);
 const old=read('packages/product-catalog/1.3.2/manifest.json');
 for(const item of old.items){
  const definition=read('packages/product-catalog/1.3.2/'+item.path);
@@ -68,8 +68,8 @@ for(const item of old.items){
    p['commerce-known']={type:'boolean'};
    p.variants={type:'array',maxItems:100,items:{type:'object',additionalProperties:false,required:['id','label'],properties:{id:{type:'string',minLength:1,maxLength:80},label:{type:'string',maxLength:200}}}};
  }
- write('packages/product-catalog/2.0.1/'+item.path,definition);
+ write('packages/product-catalog/2.0.2/'+item.path,definition);
 }
-const catalog=manifest('product-catalog','2.0.1','Katalog proizvoda','Postojeći stabilni katalog sa opcionom novom korpom, direktnim upitima i serverskim favoritima.',[{packageKey:'starter-site',minimumVersion:'1.0.0'},{packageKey:'webfront-commerce',minimumVersion:'1.0.1'}],old.items.map(({sha256,...item})=>item));
-const releases=read('packages/catalog.json');releases.packages=releases.packages.filter(x=>!(x.packageKey==='product-catalog'&&x.version==='2.0.1')&&!(x.packageKey==='webfront-commerce'&&x.version==='1.0.1'));releases.packages.push(commerce,catalog);write('packages/catalog.json',releases);
+const catalog=manifest('product-catalog','2.0.2','Katalog proizvoda','Postojeći stabilni katalog sa opcionom novom korpom, direktnim upitima i serverskim favoritima.',[{packageKey:'starter-site',minimumVersion:'1.0.0'},{packageKey:'webfront-commerce',minimumVersion:'1.0.2'}],old.items.map(({sha256,...item})=>item));
+const releases=read('packages/catalog.json');releases.packages=releases.packages.filter(x=>!(x.packageKey==='product-catalog'&&x.version==='2.0.2')&&!(x.packageKey==='webfront-commerce'&&x.version==='1.0.2'));releases.packages.push(commerce,catalog);write('packages/catalog.json',releases);
 console.log(JSON.stringify({commerce,catalog}));
