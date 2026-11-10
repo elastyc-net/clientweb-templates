@@ -180,6 +180,18 @@
       "version": "2.0.2",
       "manifest": "product-catalog/2.0.2/manifest.json",
       "sha256": "8a46a59c9e3cf38d80bbad27c0e75290986eea2e266c88d120d3cb4737816d3e"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.0.3",
+      "manifest": "webfront-commerce/1.0.3/manifest.json",
+      "sha256": "3b53cc3a18eccce43066fc3981681e1e5681be91c2e997f257fde14d5fef13db"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.0.3",
+      "manifest": "product-catalog/2.0.3/manifest.json",
+      "sha256": "30fe2f2264997a5e7ef801e5288e77ca9fc44b5e705edf9f24c46a6922c28966"
     }
   ]
 }
