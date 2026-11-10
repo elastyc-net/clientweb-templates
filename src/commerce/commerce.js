@@ -219,6 +219,10 @@
     });
   }
   function renderCheckout(root, inquiry) {
+    var rollbackTest = state.testMode === "rollback";
+    if (rollbackTest && state.authenticated) {
+      root.appendChild(node("p", "wf-shop-preview", "Za ograničeni test odjavite kupca. CMS prijava ostaje aktivna.")); return;
+    }
     if (!inquiry && !state.lines.length) { renderCart(root); return; }
     if (!inquiry && !state.authenticated && !state.guestCheckout) {
       root.appendChild(node("p", "", "Prijavite se da nastavite poručivanje.")); var login = node("a", "wf-shop-btn", "Prijava"); login.href = linkTo(state.paths.account); root.appendChild(login); return;
@@ -226,8 +230,9 @@
     if (inquiry) {
       var params = new URLSearchParams(global.location.search); var productId = params.get("productId") || "";
       if (!productId) { root.appendChild(node("p", "wf-shop-error", "Izaberite proizvod za upit.")); return; }
-      root.appendChild(node("p", "wf-shop-help", "Upit za artikal " + productId + ". Odgovor ćemo poslati na vaš email."));
+      root.appendChild(node("p", "wf-shop-help", "Upit za artikal " + productId + (rollbackTest ? "." : ". Odgovor ćemo poslati na vaš email.")));
     }
+    if (rollbackTest) root.appendChild(node("p", "wf-shop-preview", "Ograničeni test: koristi označene test podatke, proverava zaštitu i vraća poslovni upis. Nema slanja kupcu."));
     var form = node("form", "wf-shop-form");
     field(form, "Ime", "firstName", "text", true, "given-name"); field(form, "Prezime", "lastName", "text", true, "family-name");
     field(form, "Email", "email", "email", true, "email"); field(form, "Telefon (opciono)", "phone", "tel", false, "tel");
@@ -244,8 +249,16 @@
       optionField(form, "Način plaćanja", "payment", state.paymentOptions);
     }
     field(form, "Napomena (opciono)", "note", "textarea", false);
+    if (rollbackTest) {
+      var testValues = {firstName:"Webfront",lastName:"TEST",email:"commerce-test@example.invalid",phone:"",street:"Test",number:"1",postalCode:"11000",city:"Test",note:"[WEBFRONT TEST " + state.testRunId + "]"};
+      Object.keys(testValues).forEach(function (name) {
+        var input = form.elements.namedItem(name);
+        if (input) { input.value = testValues[name]; input.readOnly = true; input.autocomplete = "off"; }
+      });
+    }
     var errorBox = node("p", "wf-shop-error"); errorBox.setAttribute("role", "alert"); form.appendChild(errorBox);
     var review = node("div", "wf-shop-review"), submit = node("button", "wf-shop-btn", "Proveri i prikaži pregled"); submit.type = "submit"; form.appendChild(submit);
+    var widgetId = null;
     form.addEventListener("input", function () { quote = null; review.replaceChildren(); submit.hidden = false; });
     form.addEventListener("submit", function (event) {
       event.preventDefault(); if (!form.reportValidity()) return;
@@ -257,19 +270,23 @@
         quote = result.quote; review.replaceChildren(); submit.hidden = true;
         review.appendChild(node("h2", "", inquiry ? "Pregled upita" : "Pregled porudžbine"));
         cartRows(review, false, quote.lines); if (!inquiry) totals(review, quote.totals);
-        if (quote.preview) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
-        var confirm = button(inquiry ? "Pošalji upit za ponudu" : "Potvrdi porudžbinu", function () {
+        if (quote.preview && !rollbackTest) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
+        var confirm = button(rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : "Potvrdi porudžbinu"), function () {
           if (!quote) return; confirm.disabled = true;
           return mutate("submit", { quoteId: quote.id, protectionToken: selected(form, "cf-turnstile-response") }, function (result) {
-            root.replaceChildren(); root.appendChild(node("h2", "", result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
-            root.appendChild(node("p", "", result.receipt.preview ? "Ovo je pregled. Stvarna poslovna dokumenta nisu kreirana." : "Vaš broj: " + result.receipt.caseKey));
-          }).catch(function (error) { confirm.disabled = false; errorBox.textContent = error.message; });
+            var test = result.receipt.test;
+            root.replaceChildren(); root.appendChild(node("h2", "", test && test.rolledBack ? "Stvarni test je prošao" : result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
+            root.appendChild(node("p", "", test && test.rolledBack ? "Zaštita je potvrđena. Provereni su predmet, dokument, stavke i veza. Test upis je vraćen." : result.receipt.preview ? "Ovo je pregled. Stvarna poslovna dokumenta nisu kreirana." : "Vaš broj: " + result.receipt.caseKey));
+          }).catch(function (error) {
+            confirm.disabled = false; errorBox.textContent = error.message;
+            if (widgetId !== null && global.turnstile) global.turnstile.reset(widgetId);
+          });
         }); review.appendChild(confirm);
       }).catch(function (error) { errorBox.textContent = error.message; }).finally(function () { submit.disabled = false; });
     }); root.appendChild(form); root.appendChild(review);
-    if (state.protection && state.protection.provider === "turnstile" && !state.preview) {
+    if (state.protection && state.protection.provider === "turnstile" && (!state.preview || rollbackTest)) {
       var challenge = node("div"); form.insertBefore(challenge, submit);
-      function challengeRender() { if (global.turnstile) global.turnstile.render(challenge, { sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout" }); }
+      function challengeRender() { if (global.turnstile) widgetId = global.turnstile.render(challenge, { sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout" }); }
       if (global.turnstile) challengeRender(); else { var script = node("script"); script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; script.onload = challengeRender; script.async = true; document.head.appendChild(script); }
     }
   }

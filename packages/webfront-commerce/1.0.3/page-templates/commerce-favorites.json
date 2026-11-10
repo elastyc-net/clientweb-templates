@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-favorites",
+  "label": "Favoriti",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Favoriti",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-favorites-main",
+        "componentKey": "commerce-favorites",
+        "settings": {
+          "title": "Favoriti"
+        }
+      }
+    ]
+  }
+}
