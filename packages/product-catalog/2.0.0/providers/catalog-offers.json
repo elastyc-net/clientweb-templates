@@ -1,0 +1,153 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "providerKey": "catalog-offers",
+  "label": "Aktuelne cene, popusti i zalihe",
+  "kind": "query",
+  "dataScope": "visitor",
+  "handler": "catalog.products.offers",
+  "inputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "ids": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1
+        }
+      }
+    },
+    "required": [
+      "ids"
+    ]
+  },
+  "outputSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "type": "string",
+              "maxLength": 80,
+              "minLength": 1
+            },
+            "price-known": {
+              "type": "boolean"
+            },
+            "price": {
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "regular-price": {
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "discount-percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "nullable": true
+            },
+            "discount-active": {
+              "type": "boolean"
+            },
+            "currency": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "stock-known": {
+              "type": "boolean"
+            },
+            "stock": {
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "delivery-days-known": {
+              "type": "boolean"
+            },
+            "delivery-days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3650,
+              "nullable": true
+            },
+            "ordering-mode": {
+              "type": "string",
+              "maxLength": 80
+            },
+            "unit": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "commerce-known": {
+              "type": "boolean"
+            },
+            "variants": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "id",
+            "price-known",
+            "price",
+            "regular-price",
+            "discount-percent",
+            "discount-active",
+            "currency",
+            "stock-known",
+            "stock",
+            "delivery-days-known",
+            "delivery-days"
+          ]
+        }
+      },
+      "checked-at": {
+        "type": "string",
+        "maxLength": 40
+      }
+    },
+    "required": [
+      "items",
+      "checked-at"
+    ]
+  },
+  "timeoutMs": 30000,
+  "endpoint": {
+    "exposure": "browser",
+    "method": "GET",
+    "authentication": "optional",
+    "csrf": false
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "2.0.0",
+  "label": "Katalog proizvoda",
+  "description": "Postojeći stabilni katalog sa opcionom novom korpom, direktnim upitima i serverskim favoritima.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "663b9671f467dda8fdf3a5290e4fdbba7abc445d90032b27793c6c5e5303f4c3"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "0ecf90afaacc625b48cdfcc77ea0b23f9739c9101046c6d8184a8ca2baacbefd"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "f6448a47042187009297171a1279bcf548cc09fd5ab5c5d30c784f95e4dc145e"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "0fabe132873eb30e10f962a398cece7cbc3646b422a95faf7f41805a283ff035"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "5d71b2fa4060af63f88d81352b05563718a5aff615d2c00304ca7bab913fd4d2"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "cdb62d885d069a03e2583f5108b7868db81df98ddf77b2f537c47415d508ec49"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-offers",
+      "path": "providers/catalog-offers.json",
+      "sha256": "7a876fc032b57fb8d120b701492c8b86119efe7f1380b42e9b548edef5467512"
+    }
+  ]
+}

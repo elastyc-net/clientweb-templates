@@ -15,7 +15,7 @@
     },
     {
       "packageKey": "product-catalog",
-      "version": "1.3.2"
+      "version": "2.0.0"
     },
     {
       "packageKey": "repository-components",
@@ -24,6 +24,10 @@
     {
       "packageKey": "reference-chrome",
       "version": "1.0.3"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.0.0"
     }
   ]
 }
