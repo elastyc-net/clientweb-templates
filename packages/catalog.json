@@ -120,6 +120,12 @@
       "version": "1.1.0",
       "manifest": "product-catalog/1.1.0/manifest.json",
       "sha256": "e5b1a41b08083d030620de5612f73b935b2a5ed30fb77d33aa427614aa5ad61c"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "1.2.0",
+      "manifest": "product-catalog/1.2.0/manifest.json",
+      "sha256": "bd2c3623edf993aae8455450e86eaa5a2dea760ac381806c6058ea62dcb94947"
     }
   ]
 }

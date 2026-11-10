@@ -140,6 +140,13 @@ explicit bootstrap pins when promoting the new baseline. The engine regression
 and latest package component with the actual initializer, and fails on omission
 or drift. Do not edit previously released manifest/payload bytes.
 
+`product-catalog@1.2.0` preserves initial server-rendered catalog/detail nodes
+while live offers update only price, discount and stock. It adds a price slider
+with precise inputs, optional catalog toolbar controls, image-corner discount/tag
+badges and SEO excerpts in list view. Defaults belong to the shared component;
+tenant pages retain their own settings through an explicit Draft library upgrade.
+The richer list contract requires the `catalog-presentation-v1` engine capability.
+
 `starter-site@1.1.0` keeps the original page templates and global instances,
 adds opt-in logo-based header/footer components (three header layouts and two
 footer layouts), and removes the starter shell's blanket image height override.

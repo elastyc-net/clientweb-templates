@@ -1,0 +1,59 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "1.2.0",
+  "label": "Katalog proizvoda",
+  "description": "Stabilan početni prikaz, precizan raspon cene, oznake proizvoda, kompaktne kontrole i opis u listi.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "5019241890fb7009c4e433d6127071dd9fc41af663fb9cad719053fc5fb30ce6"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "11831c664aaa839e350c74d5913ac66fc75013e2be9e6fe6deb4698860fa5222"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "f666f9b12b3842cf225daec8fd209003aa68bd4efcbccf5a9dd54d976d322230"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "9bf3b601023b1088e6bbc7753af8c48d072b0108c37934d54c5ec59fa156ab8d"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "b01fbbb5eb0df04ccff6306add2b905860d7db862108d7b675efcd78774d6710"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-offers",
+      "path": "providers/catalog-offers.json",
+      "sha256": "c318e9efe4740a1bc2b28df343d7f67b6a23297654ebd2094027ab349302fc79"
+    }
+  ]
+}
