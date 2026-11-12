@@ -198,6 +198,12 @@
       "version": "1.0.0",
       "manifest": "help-desk/1.0.0/manifest.json",
       "sha256": "ec0483d63c0b4e8a0fbfee393c267998d7066145be1ed9b02c12cfed0c4a29fd"
+    },
+    {
+      "packageKey": "help-desk",
+      "version": "1.1.0",
+      "manifest": "help-desk/1.1.0/manifest.json",
+      "sha256": "442e9bb0d421a05c92d34124cbc0792f51b74c214e6a4212a982f1db2f750ba3"
     }
   ]
 }

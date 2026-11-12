@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.1.0",
+  "label": "Help Desk",
+  "description": "Kartice zahteva, NoSQL statusni filter, razgovor i mesto za standardnu formu predmeta.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "41d646ab5bd2158f20f1098769d6a7a286dbe2d3628850557e742d416e00a6fc"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "b792bcbb82af7e0b40f6cf1daa629c1f73233cac3ecb944a038b9383fe710c4a"
+    }
+  ]
+}
