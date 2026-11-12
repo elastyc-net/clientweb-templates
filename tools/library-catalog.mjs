@@ -7,7 +7,8 @@ import {fileURLToPath} from 'node:url';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../packages');
 const args=process.argv.slice(2);
-if(args.length && !(args.length===2 && ['--export','--export-starter','--bundle'].includes(args[0])))throw new Error('Usage: node tools/library-catalog.mjs [--export-starter directory | --export directory | --bundle file]');
+const exportPackage=args[0]==='--export-package'&&args.length===3;
+if(args.length && !exportPackage && !(args.length===2 && ['--export','--export-starter','--bundle'].includes(args[0])))throw new Error('Usage: node tools/library-catalog.mjs [--export-starter directory | --export directory | --bundle file | --export-package key@version directory]');
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const files=new Map();
 function read(relative,hash){
@@ -37,9 +38,9 @@ for(const entry of catalog.packages){
     const definition=read(path.posix.join(path.posix.dirname(entry.manifest),item.path),item.sha256);
     if(definition.formatVersion!==2||definition.contractVersion!==1)throw new Error('Unsupported contract '+key);
     if(item.itemType==='provider'){
-      const handlers={'catalog-products':['catalog.products.list','catalog.products.list.v2'],'catalog-product':['catalog.products.detail','catalog.products.detail.v2'],'catalog-offers':['catalog.products.offers'],'kb-article':'kb.article','kb-children':'kb.children','finance-summary':'finance.summary.read'};
-      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||![].concat(handlers[item.itemKey]).includes(definition.handler)||definition.kind!=='query'||definition.dataScope!==(item.itemKey==='finance-summary'?'permission':item.itemKey==='catalog-offers'?'visitor':'tenant'))throw new Error('Unsupported query contract '+key);
-      const reviewed={'catalog-offers':['7a876fc032b57fb8d120b701492c8b86119efe7f1380b42e9b548edef5467512','a155b2709a970bde945b68f94b9312947e6db66b6018372641f193a651f9a450','c318e9efe4740a1bc2b28df343d7f67b6a23297654ebd2094027ab349302fc79'],'catalog-products':['f6448a47042187009297171a1279bcf548cc09fd5ab5c5d30c784f95e4dc145e','29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','8b8dad94472374d278631e8993d7010aa191321ba11deae9c9759290172c7159','f666f9b12b3842cf225daec8fd209003aa68bd4efcbccf5a9dd54d976d322230'],'catalog-product':['0fabe132873eb30e10f962a398cece7cbc3646b422a95faf7f41805a283ff035','4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998','5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69'],'kb-article':'1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491','kb-children':'00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883','finance-summary':'23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066'};
+      const handlers={'help-desk-cases':'helpdesk.cases.read','catalog-products':['catalog.products.list','catalog.products.list.v2'],'catalog-product':['catalog.products.detail','catalog.products.detail.v2'],'catalog-offers':['catalog.products.offers'],'kb-article':'kb.article','kb-children':'kb.children','finance-summary':'finance.summary.read'};
+      if(!handlers[item.itemKey]||definition.providerKey!==item.itemKey||![].concat(handlers[item.itemKey]).includes(definition.handler)||definition.kind!=='query'||definition.dataScope!==(item.itemKey==='help-desk-cases'?'user':item.itemKey==='finance-summary'?'permission':item.itemKey==='catalog-offers'?'visitor':'tenant'))throw new Error('Unsupported query contract '+key);
+      const reviewed={'help-desk-cases':'9879694752903302044b91b471013e44a8ba043ba44f5c07ddbded6563e9afcb','catalog-offers':['7a876fc032b57fb8d120b701492c8b86119efe7f1380b42e9b548edef5467512','a155b2709a970bde945b68f94b9312947e6db66b6018372641f193a651f9a450','c318e9efe4740a1bc2b28df343d7f67b6a23297654ebd2094027ab349302fc79'],'catalog-products':['f6448a47042187009297171a1279bcf548cc09fd5ab5c5d30c784f95e4dc145e','29947e7ff167f35c82c5b6fcd797b6dd21353d6bbf6d4177e96a641b35211c70','8b8dad94472374d278631e8993d7010aa191321ba11deae9c9759290172c7159','f666f9b12b3842cf225daec8fd209003aa68bd4efcbccf5a9dd54d976d322230'],'catalog-product':['0fabe132873eb30e10f962a398cece7cbc3646b422a95faf7f41805a283ff035','4cdf42552087a74e0c9b2129052de366aeba5d106b491ed20ea76c5826f3d998','5e063ba6379f816a44fc555d3cefa3e7caa40c58af0e3c61b2509ed480e0cc69'],'kb-article':'1ed91d794426c2df1793887fa8da686b8645cbd0b7e83bbe6f2cdd2400526491','kb-children':'00e7e2532e8c9ab97843a955800a01d08a210d80b64c63812548ce8e1bad0883','finance-summary':'23f8c986c90a7e13b94aeb21020fbae8f86298f51b94ce440a3cf73b2f444066'};
       if(![].concat(reviewed[item.itemKey]).includes(item.sha256))throw new Error('Unreviewed provider bytes '+key);
       // Engine LibraryProviderContracts independently pins the canonical JSON definition.
     }
@@ -52,7 +53,7 @@ if(args[0]==='--bundle'){
   const staged=JSON.parse(fs.readFileSync(path.join(root,'staged-bundle.json'),'utf8'));
   if(staged.formatVersion!==1||JSON.stringify(staged.files)!==JSON.stringify(payload.files))throw new Error('Staging bundle is stale; regenerate with --bundle packages/staged-bundle.json');
 }
-if(['--export','--export-starter'].includes(args[0])){
+if(exportPackage||['--export','--export-starter'].includes(args[0])){
   const exported=new Map(files);
   if(args[0]==='--export-starter'){
     const pins=JSON.parse(fs.readFileSync(path.join(root,'bootstrap.json'),'utf8'));
@@ -83,7 +84,14 @@ if(['--export','--export-starter'].includes(args[0])){
     for(const file of exported.keys())if(!keep.has(file))exported.delete(file);
     exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:selected},null,2)+'\n'));
   }
-  const destination=path.resolve(args[1]);
+  if(exportPackage){
+    const entry=catalog.packages.find(candidate=>candidate.packageKey+'@'+candidate.version===args[1]);
+    if(!entry)throw new Error('Package release is missing: '+args[1]);
+    const prefix=path.posix.dirname(entry.manifest)+'/';
+    for(const file of exported.keys())if(!file.startsWith(prefix))exported.delete(file);
+    exported.set('catalog.json',Buffer.from(JSON.stringify({formatVersion:1,packages:[entry]},null,2)+'\n'));
+  }
+  const destination=path.resolve(args[exportPackage?2:1]);
   // The catalog pins the bootstrap. Verified immutable payloads from earlier engine
   // releases must remain on disk so a code upgrade does not silently remove them.
   if(fs.existsSync(destination)){

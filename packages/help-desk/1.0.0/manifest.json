@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.0.0",
+  "label": "Help Desk",
+  "description": "Lista zahteva sa NoSQL statusnim filterom i razgovor za prijavljene klijente.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "9879694752903302044b91b471013e44a8ba043ba44f5c07ddbded6563e9afcb"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "2d67e23365ddbc5a6b8ca6b895b9cd35d0797154ff7c0d013e9fdd4e961dfd7b"
+    }
+  ]
+}
