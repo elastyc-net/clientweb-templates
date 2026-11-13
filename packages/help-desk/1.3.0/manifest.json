@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.0",
+  "label": "Help Desk",
+  "description": "Razgovor u visini ekrana, zajednički CaseMessenger i provera poruka i priloga na namenskom Candidate predmetu.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "908cab5e8f445a803a2bc095511ea6ed77e4cf250d5bfb43d4d9611067ee19ac"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "eaee8b6804a5b51626e452e5825cfc62f1d7539f968f832e6c32215c69cdffe4"
+    }
+  ]
+}
