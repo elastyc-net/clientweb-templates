@@ -1,0 +1,18 @@
+{
+  "formatVersion": 1,
+  "packageKey": "kb-reading-layout",
+  "version": "1.0.0",
+  "label": "Baza znanja — stablo i članak",
+  "description": "Zajednički prikaz Baze znanja sa stablom kategorija, belom površinom za čitanje i sklopivim sadržajem. Podržava lokalne KB predmete i sačuvane prevode u privatnom Candidate-u.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "kb-reading-layout",
+      "path": "components/kb-reading-layout.json",
+      "sha256": "4db848f5a4e82990559ae7ba4d851d1134925e5146d771a4554db3e692d351a8"
+    }
+  ]
+}
