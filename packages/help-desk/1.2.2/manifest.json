@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.2.2",
+  "label": "Help Desk",
+  "description": "Čitljivije kartice pune širine i jasniji filteri po statusu i tipu zahteva.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "908cab5e8f445a803a2bc095511ea6ed77e4cf250d5bfb43d4d9611067ee19ac"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "daa215fefee2c14da515f6632dee8763c695ed9d9d8d4de534bbe3b01426c149"
+    }
+  ]
+}

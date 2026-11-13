@@ -222,6 +222,12 @@
       "version": "1.0.0",
       "manifest": "kb-reading-layout/1.0.0/manifest.json",
       "sha256": "c3c9c38989f12f5c8c4fde838b0c1a40d733d6e7358e62f655bbe45f1b650a74"
+    },
+    {
+      "packageKey": "help-desk",
+      "version": "1.2.2",
+      "manifest": "help-desk/1.2.2/manifest.json",
+      "sha256": "e1a1bf4498fabe21b23d26a932d95e7d92c6e10de74c5a41162ec4a1da117dc6"
     }
   ]
 }
