@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.2.1",
+  "label": "Help Desk",
+  "description": "Filteri po statusu i tipu zahteva, pregled opisa i kartice pune širine.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "908cab5e8f445a803a2bc095511ea6ed77e4cf250d5bfb43d4d9611067ee19ac"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "da52c9db19a5b6d7dd269e634d692c8f42d0b0432c3edb5a542ceebc238eb725"
+    }
+  ]
+}
