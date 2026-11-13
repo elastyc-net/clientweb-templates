@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-reading-layout",
+  "label": "Baza znanja — stablo i članak",
+  "category": "knowledge",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<section><p>Pregled Baze znanja je dostupan u privatnom Candidate-u.</p></section>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "article": {"type": "string", "title": "Broj KB predmeta", "maxLength": 11},
+      "article-node": {"type": "string", "title": "Čvor članka", "maxLength": 30},
+      "category-node": {"type": "string", "title": "Čvor kategorije", "maxLength": 30},
+      "site-origin": {"type": "string", "title": "HTTPS domen sajta", "maxLength": 240},
+      "intro": {"type": "string", "title": "Uvod u kategoriju", "maxLength": 500}
+    },
+    "required": []
+  },
+  "localizedSettings": ["intro"],
+  "providerKey": null,
+  "cache": {"scope": "none", "ttlSeconds": 0, "varyBy": []},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"},
+  "slots": []
+}
