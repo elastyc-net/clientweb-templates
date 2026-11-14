@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.2",
+  "label": "Help Desk",
+  "description": "Kompaktne mobilne kontrole, pretraga zahteva i panel filtera sa prevlačenjem.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "3081baed4e37c5be1015da1ae00f3e7e631da8cd4019fb4a4f46837444948725"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "5aad6ebf99040c54fb86390c6bd2d678415e402fadd693b79738b6fc599c8ebe"
+    }
+  ]
+}
