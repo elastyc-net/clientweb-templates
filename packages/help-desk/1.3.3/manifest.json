@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.3",
+  "label": "Help Desk",
+  "description": "Prikaz predmeta preko celog mobilnog ekrana i zajednički unos priloga i glasovnih poruka u Help Desk pilotu.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "3081baed4e37c5be1015da1ae00f3e7e631da8cd4019fb4a4f46837444948725"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "2cfc0aa14b3fd1e73a1eca51574055555d50cec6bf6858da241c349d5f7b19de"
+    }
+  ]
+}
