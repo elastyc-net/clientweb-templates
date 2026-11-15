@@ -79,6 +79,7 @@
     }
     return {
       config: base + '/incKomponente/auth/config.php',
+      profile: base + '/incKomponente/auth/profile.php',
       login: base + '/incKomponente/auth/login.php',
       proceed: base + '/incKomponente/auth/continue.php',
       start: base + '/incKomponente/auth/start.php',
@@ -477,9 +478,39 @@
     }));
   }
 
+  function loadAccountProfile(mount) {
+    var panel = el('div', { 'aria-live': 'polite' });
+    panel.appendChild(el('p', { className: 'efa-lead', text: translate('Učitavanje podataka naloga…', 'Loading account details…') }));
+    mount.root.appendChild(panel);
+    var controller = mount.controller;
+    fetchJson(mount.ep.profile, mount, {}).then(function (data) {
+      if (mount.controller !== controller || !panel.isConnected) return;
+      panel.textContent = '';
+      if (!data.ok || !data.profile) {
+        panel.appendChild(el('p', { className: 'efa-lead', text: translate('Podaci naloga trenutno nisu dostupni.', 'Account details are currently unavailable.') }));
+        return;
+      }
+      var fields = [
+        [translate('Ime', 'Name'), 'displayName'],
+        [translate('Korisničko ime', 'Username'), 'username'],
+        [translate('Firma', 'Company'), 'company'],
+        [translate('B2B grupa', 'B2B group'), 'userGroup']
+      ];
+      var list = el('dl', { className: 'efa-profile' });
+      fields.forEach(function (field) {
+        list.appendChild(el('dt', { text: field[0] }));
+        list.appendChild(el('dd', { text: text(data.profile[field[1]]) || '—' }));
+      });
+      panel.appendChild(list);
+    }).catch(function (error) {
+      if (error.name !== 'AbortError') throw error;
+    });
+  }
+
   function paintSession(mount, user, query) {
     clear(mount);
     heading(mount, text(user.displayName).trim() || translate('Moj nalog', 'My account'), query.status === 'linked' ? translate('Nalog je povezan.', 'Account linked.') : translate('Prijavljeni ste.', 'You are signed in.'));
+    loadAccountProfile(mount);
     var providers = providerList(mount.config);
     var linked = mount.config.linkedProviders || [];
     providers.forEach(function (id) {
