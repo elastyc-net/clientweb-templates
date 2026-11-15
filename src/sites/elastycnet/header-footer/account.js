@@ -26,14 +26,16 @@
       guest: account.querySelector('[data-es-account-guest]'),
       menu: account.querySelector('[data-es-account-menu]'),
       summary: account.querySelector('summary'),
+      name: account.querySelector('[data-es-account-label]'),
+      status: account.querySelector('[data-es-account-status]'),
       signOut: account.querySelector('[data-es-account-out]'),
       error: account.querySelector('[data-es-account-error]')
     };
     view.guest.textContent = labels.guest;
     if (candidate) view.guest.href = candidatePage('/prijava', english);
     else if (english) view.guest.href = '/prijava?portal_locale=en';
-    account.querySelector('[data-es-account-label]').textContent = labels.account;
-    account.querySelector('[data-es-account-status]').textContent = labels.signedIn;
+    if (!view.name.textContent.trim()) view.name.textContent = labels.account;
+    view.status.textContent = labels.signedIn;
     view.signOut.textContent = labels.signOut;
     return view;
   });
@@ -120,6 +122,19 @@
   let sessionCheck = 0;
   let signingOut = false;
   let accountGroup = null;
+  let accountUser = null;
+
+  function accountRole(user) {
+    const role = user?.userGroup?.trim();
+    if (!role) {
+      if (user?.userType === 'U') return english ? 'Employee' : 'Zaposleni';
+      if (user?.userType === 'C') return english ? 'Customer' : 'Klijent';
+      return labels.signedIn;
+    }
+    if (english && groupKey(role) === 'b2b korisnik') return 'B2B customer';
+    if (english && groupKey(role) === 'b2b odgovorna osoba') return 'B2B account contact';
+    return role;
+  }
 
   function renderSession(signedIn) {
     for (const action of guestActions) action.hidden = signedIn;
@@ -127,6 +142,9 @@
       const focusInAccount = view.menu.contains(document.activeElement);
       view.guest.hidden = signedIn;
       view.menu.hidden = !signedIn;
+      view.name.textContent = accountUser?.displayName?.trim() || labels.account;
+      view.name.title = view.name.textContent;
+      view.status.textContent = accountRole(accountUser);
       renderGroup(view.menu, signedIn ? accountGroup : null);
       if (!signedIn) {
         view.menu.open = false;
@@ -140,6 +158,7 @@
     const check = ++sessionCheck;
     let signedIn = views.some(view => !view.menu.hidden);
     let currentGroup = accountGroup;
+    let currentUser = accountUser;
     try {
       const response = await fetch('/incKomponente/auth/config.php', {
         credentials: 'same-origin',
@@ -150,6 +169,7 @@
         const session = await response.json();
         if (session.ok === true) {
           signedIn = !!session.user;
+          currentUser = session.user || null;
           currentGroup = session.user?.userType === 'C' ? groups.get(groupKey(session.user.userGroup)) || null : null;
         }
       }
@@ -158,6 +178,7 @@
     }
     if (check === sessionCheck && !signingOut) {
       accountGroup = currentGroup;
+      accountUser = currentUser;
       renderSession(signedIn);
     }
   }
@@ -179,6 +200,7 @@
       });
       if (!response.ok || (await response.json()).ok !== true) throw new Error('Sign-out failed');
       accountGroup = null;
+      accountUser = null;
       renderSession(false);
       window.location.replace(english ? '/en' : '/');
       return;
