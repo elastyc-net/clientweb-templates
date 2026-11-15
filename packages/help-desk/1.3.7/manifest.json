@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.7",
+  "label": "Help Desk",
+  "description": "Stabilan prikaz detalja zahteva dok se učitavaju razgovor i stilovi Messengera.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "f024a3b5c5010d755e6f8a4d64d569fdfdc5b641f7b38cb7901aa87f438fbae7"
+    }
+  ]
+}
