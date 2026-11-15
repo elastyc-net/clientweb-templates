@@ -9,6 +9,10 @@ for (const name of (await readdir(path.join(directory, 'components'))).filter(na
   const definition = JSON.parse(await readFile(filename, 'utf8'));
   definition.htmlContent = (await readFile(filename.replace(/\.json$/, '.html'), 'utf8')).trim();
   if (definition.componentKey === 'elastyc-site-navigation') definition.scripts[0].content = await readFile(path.join(directory, 'navigation.js'), 'utf8');
+  if (definition.componentKey === 'elastyc-site-actions') {
+    definition.scripts[0].content = await readFile(path.join(directory, 'account.js'), 'utf8');
+    definition.styles[0].content = await readFile(path.join(directory, 'account.css'), 'utf8');
+  }
   if (definition.componentKey === 'elastyc-site-footer') definition.styles[0].content = await readFile(path.join(directory, 'footer.css'), 'utf8');
   await writeFile(filename, `${JSON.stringify(definition, null, 2)}\n`);
 }
