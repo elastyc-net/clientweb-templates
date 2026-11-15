@@ -252,7 +252,7 @@
         try { url = new URL(res.next); } catch (error) {}
         if (res.ok && url && url.protocol === 'https:' && !url.username && !url.password
           && url.pathname === '/incKomponente/auth/authorize.php'
-          && /^\\?handle=[a-f0-9]{64}$/.test(url.search) && !url.hash) {
+          && /^[?]handle=[a-f0-9]{64}$/.test(url.search) && !url.hash) {
           global.location.assign(url.href);
         } else {
           showError(mount, res.error || 'unavailable');
