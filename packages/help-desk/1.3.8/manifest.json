@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.8",
+  "label": "Help Desk",
+  "description": "Odgovori prijavljenih klijenata na dostupnim otvorenim predmetima uz standardni Sendmail tok.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "15e85d69e7828460e8418c1fa3cad5729205764659db06073ca399abc98f8b96"
+    }
+  ]
+}
