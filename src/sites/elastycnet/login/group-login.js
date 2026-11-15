@@ -269,7 +269,7 @@
 
   function renderGoogleButton(mount, button, challenge, intent) {
     var controller = mount.controller;
-    var slot = el('div', {});
+    var slot = el('div', { className: 'efa-google-slot' });
     button.replaceWith(slot);
     var script = global.document.getElementById('elastyc-google-identity');
     function render() {
@@ -296,7 +296,30 @@
           });
         }
       });
-      google.renderButton(slot, { type: 'standard', theme: 'outline', text: intent === 'login' ? 'signin_with' : 'continue_with', locale: english ? 'en' : 'sr' });
+      var lastWidth;
+      function renderAtCurrentWidth() {
+        var width = Math.min(slot.clientWidth, 400);
+        if (!width || width === lastWidth) return;
+        lastWidth = width;
+        slot.replaceChildren();
+        google.renderButton(slot, {
+          type: 'standard', theme: 'outline', size: 'large', shape: 'rectangular', logo_alignment: 'left',
+          width: String(width), text: intent === 'login' ? 'signin_with' : 'continue_with', locale: english ? 'en' : 'sr'
+        });
+      }
+      renderAtCurrentWidth();
+      if (typeof ResizeObserver === 'function') {
+        var observer = new ResizeObserver(function () {
+          if (slot.isConnected) renderAtCurrentWidth();
+          else disconnect();
+        });
+        function disconnect() {
+          observer.disconnect();
+          controller.signal.removeEventListener('abort', disconnect);
+        }
+        controller.signal.addEventListener('abort', disconnect, { once: true });
+        observer.observe(slot);
+      }
     }
     if (global.google && global.google.accounts && global.google.accounts.id) {
       render();
