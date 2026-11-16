@@ -45,6 +45,8 @@
     unlinked: translate('Prijavite se na postojeći Elastyc nalog i povežite ovaj način prijave u odeljku Moj nalog.', 'Sign in to your existing Elastyc account, then link this sign-in method in your account.'),
     organization: translate('Ova organizacija nije na listi dozvoljenih za prijavu.', 'This organization is not allowed to sign in.'),
     reauthenticate: translate('Odjavite se, prijavite se ponovo i zatim povežite nalog.', 'Sign out, sign in again, and then link your account.'),
+    'unlink-reauthenticate': translate('Prijavite se ponovo, pa odvežite nalog u roku od pet minuta.', 'Sign in again, then unlink the account within five minutes.'),
+    'last-sign-in-method': translate('Najpre povežite drugi dostupan način prijave ili podesite lozinku ako je prijava lozinkom dozvoljena.', 'First connect another available sign-in method or set a password if password sign-in is allowed.'),
     'rate-limit': translate('Previše pokušaja. Pokušajte ponovo kasnije.', 'Too many attempts. Try again later.'),
     'password-disabled': translate('Prijava lozinkom je isključena.', 'Password sign-in is disabled.'),
     'signed-in': translate('Već ste prijavljeni. Načinom prijave upravljate u odeljku Moj nalog.', 'You are already signed in. Manage your sign-in methods in your account.'),
@@ -85,6 +87,7 @@
       proceed: base + '/incKomponente/auth/continue.php',
       start: base + '/incKomponente/auth/start.php',
       finish: base + '/incKomponente/auth/finish.php',
+      unlink: base + '/incKomponente/auth/unlink.php',
       recoveryRequest: base + '/incKomponente/auth/recovery-request.php',
       recoveryConfirm: base + '/incKomponente/auth/recovery-confirm.php',
       resetRequest: base + '/incKomponente/auth/reset-request.php',
@@ -532,20 +535,58 @@
     });
   }
 
+  function unlinkProvider(mount, connections, id, name) {
+    if (!global.confirm(translate('Odveži ' + name + ' od Elastyc naloga?', 'Unlink ' + name + ' from your Elastyc account?'))) return;
+    mount.root.querySelector('.efa-error').hidden = true;
+    var controller = mount.controller;
+    setBusy(mount, true);
+    fetchJson(mount.ep.unlink, mount, { provider: id }).then(function (data) {
+      if (mount.controller !== controller || !connections.isConnected) return;
+      setBusy(mount, false);
+      if (!data.ok || !Array.isArray(data.linkedProviders)) {
+        showError(mount, data.error === 'reauthenticate' ? 'unlink-reauthenticate' : data.error || 'unavailable');
+        return;
+      }
+      mount.config.linkedProviders = data.linkedProviders;
+      var updated = accountConnections(mount);
+      if (updated) {
+        updated.open = true;
+        connections.replaceWith(updated);
+        updated.querySelector('summary').focus();
+      } else {
+        connections.remove();
+        mount.root.querySelector('.efa-account-actions button').focus();
+      }
+    }).catch(function (error) {
+      if (error.name !== 'AbortError') throw error;
+    });
+  }
+
   function accountConnections(mount) {
-    var providers = providerList(mount.config);
+    var linked = Array.isArray(mount.config.linkedProviders) ? mount.config.linkedProviders : [];
+    var providers = providerList({ providers: providerList(mount.config).concat(linked) });
     if (!providers.length) return null;
-    var linked = mount.config.linkedProviders || [];
     var connections = el('details', { className: 'efa-connections' }, [
       el('summary', { text: translate('Povezani nalozi', 'Linked accounts') })
     ]);
     var list = el('ul', { className: 'efa-connections-list' });
     providers.forEach(function (id) {
       var name = id === 'google' ? 'Google' : 'Microsoft';
-      var content = linked.indexOf(id) === -1 ? [providerButton(mount, id, 'link')] : [
-        el('span', { text: name }),
-        el('span', { className: 'efa-connection-status', text: translate('Povezan', 'Linked') })
-      ];
+      var content;
+      if (linked.indexOf(id) !== -1) {
+        var actions = el('span', { className: 'efa-connection-actions' }, [
+          el('span', { className: 'efa-connection-status', text: translate('Povezan', 'Linked') })
+        ]);
+        if (mount.config.unlink === true) {
+          var unlink = linkButton(translate('Odveži', 'Unlink'), function () { unlinkProvider(mount, connections, id, name); });
+          unlink.classList.add('efa-unlink');
+          unlink.setAttribute('aria-label', translate('Odveži ' + name, 'Unlink ' + name));
+          actions.appendChild(unlink);
+        }
+        content = [el('span', { text: name }), actions];
+      } else {
+        content = [providerButton(mount, id, 'link')];
+      }
       list.appendChild(el('li', {}, content));
     });
     connections.appendChild(list);
