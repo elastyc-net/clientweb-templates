@@ -13,6 +13,8 @@
     && query.get('channel') === 'candidate' && query.get('wf_path') === '/prijava');
   if (global.parent !== global || !isLoginPage || !host || host.hasAttribute('data-efa-preview')) return;
 
+  var layout = host.closest('.wf-login-layout');
+  var layoutHeading = layout.getAttribute('aria-labelledby');
   var english = query.get('portal_locale') === 'en'
     || global.document.documentElement.lang.toLowerCase().startsWith('en');
 
@@ -21,7 +23,6 @@
   }
 
   if (english) {
-    var layout = host.closest('.wf-login-layout');
     layout.lang = 'en';
     layout.querySelector('#wf-login-title').textContent = 'Sign in to Elastyc';
     layout.querySelector('.wf-login-layout__brand p').textContent = 'Business processes, communication, and AI.';
@@ -202,6 +203,8 @@
   function clear(mount) {
     var root = mount.root;
     while (root.firstChild) root.removeChild(root.firstChild);
+    layout.classList.remove('wf-login-layout--account');
+    layout.setAttribute('aria-labelledby', layoutHeading);
   }
 
   function showError(mount, code) {
@@ -501,57 +504,79 @@
     }));
   }
 
-  function loadAccountProfile(mount) {
-    var panel = el('div', { 'aria-live': 'polite' });
-    panel.appendChild(el('p', { className: 'efa-lead', text: translate('Učitavanje podataka naloga…', 'Loading account details…') }));
-    mount.root.appendChild(panel);
+  function setAccountName(title, avatar, name) {
+    title.textContent = name || translate('Moj nalog', 'My account');
+    var words = name.split(/\s+/).filter(Boolean);
+    var initials = words.length > 1 ? [words[0], words[words.length - 1]] : words;
+    avatar.textContent = initials.map(function (word) { return Array.from(word)[0]; }).join('').toUpperCase();
+    avatar.hidden = !avatar.textContent;
+  }
+
+  function loadAccountProfile(mount, title, avatar, company, message) {
     var controller = mount.controller;
     fetchJson(mount.ep.profile, mount, {}).then(function (data) {
-      if (mount.controller !== controller || !panel.isConnected) return;
-      panel.textContent = '';
+      if (mount.controller !== controller || !title.isConnected) return;
       if (!data.ok || !data.profile) {
-        panel.appendChild(el('p', { className: 'efa-lead', text: translate('Podaci naloga trenutno nisu dostupni.', 'Account details are currently unavailable.') }));
+        message.hidden = false;
         return;
       }
-      var fields = [
-        [translate('Ime', 'Name'), 'displayName'],
-        [translate('Korisničko ime', 'Username'), 'username'],
-        [translate('Firma', 'Company'), 'company'],
-        [translate('B2B grupa', 'B2B group'), 'userGroup']
-      ];
-      var list = el('dl', { className: 'efa-profile' });
-      fields.forEach(function (field) {
-        list.appendChild(el('dt', { text: field[0] }));
-        list.appendChild(el('dd', { text: text(data.profile[field[1]]) || '—' }));
-      });
-      panel.appendChild(list);
+      var name = text(data.profile.displayName).trim() || text(data.profile.username).trim();
+      if (name) setAccountName(title, avatar, name);
+      var companyName = text(data.profile.company).trim();
+      if (companyName && companyName.replace(/\s+/g, ' ').toLowerCase() !== 'anonimni kupac') {
+        company.textContent = companyName;
+        company.hidden = false;
+      }
     }).catch(function (error) {
       if (error.name !== 'AbortError') throw error;
     });
   }
 
+  function accountConnections(mount) {
+    var providers = providerList(mount.config);
+    if (!providers.length) return null;
+    var linked = mount.config.linkedProviders || [];
+    var connections = el('details', { className: 'efa-connections' }, [
+      el('summary', { text: translate('Povezani nalozi', 'Linked accounts') })
+    ]);
+    var list = el('ul', { className: 'efa-connections-list' });
+    providers.forEach(function (id) {
+      var name = id === 'google' ? 'Google' : 'Microsoft';
+      var content = linked.indexOf(id) === -1 ? [providerButton(mount, id, 'link')] : [
+        el('span', { text: name }),
+        el('span', { className: 'efa-connection-status', text: translate('Povezan', 'Linked') })
+      ];
+      list.appendChild(el('li', {}, content));
+    });
+    connections.appendChild(list);
+    return connections;
+  }
+
   function paintSession(mount, user, query) {
     clear(mount);
-    heading(mount, text(user.displayName).trim() || translate('Moj nalog', 'My account'), query.status === 'linked' ? translate('Nalog je povezan.', 'Account linked.') : translate('Prijavljeni ste.', 'You are signed in.'));
-    loadAccountProfile(mount);
-    var providers = providerList(mount.config);
-    var linked = mount.config.linkedProviders || [];
-    providers.forEach(function (id) {
-      if (linked.indexOf(id) === -1) {
-        mount.root.appendChild(providerButton(mount, id, 'link'));
-      } else {
-        var name = id === 'google' ? 'Google' : 'Microsoft';
-        mount.root.appendChild(el('p', { className: 'efa-lead', text: translate(name + ' nalog je povezan.', name + ' account linked.') }));
-      }
+    layout.classList.add('wf-login-layout--account');
+    var title = el('h1', { className: 'efa-account-name', id: mount.idBase + '-account-name' });
+    layout.setAttribute('aria-labelledby', title.id);
+    var avatar = el('span', { className: 'efa-account-avatar', 'aria-hidden': 'true' });
+    var company = el('p', { className: 'efa-account-company', hidden: true });
+    setAccountName(title, avatar, text(user.displayName).trim() || text(user.username).trim());
+    var identity = el('div', { className: 'efa-account-identity' }, [
+      avatar, el('div', { className: 'efa-account-description', 'aria-live': 'polite' }, [title, company])
+    ]);
+    var message = el('p', {
+      className: 'efa-lead', role: 'status', hidden: true,
+      text: translate('Podaci naloga trenutno nisu dostupni.', 'Account details are currently unavailable.')
     });
+    mount.root.appendChild(identity);
+    heading(mount, '', query.status === 'linked' ? translate('Nalog je povezan.', 'Account linked.') : '');
+    mount.root.appendChild(message);
     var proceed = el('button', {
       className: 'efa-primary',
       type: 'button',
-      text: groupDestination(user) ? translate('Nastavi na početnu stranu', 'Continue to your portal') : user.userType === 'U' ? translate('Nastavi u Elastyc', 'Continue to Elastyc') : translate('Idi na naslovnu', 'Go to the homepage')
+      text: groupDestination(user) ? translate('Nastavi na početnu stranu', 'Continue to your portal') : user.userType === 'U' ? translate('Nastavi u Elastyc', 'Continue to Elastyc') : translate('Na početnu', 'Go to homepage')
     });
     proceed.addEventListener('click', function () { continueLogin(mount, user); });
-    mount.root.appendChild(proceed);
-    mount.root.appendChild(linkButton(translate('Odjavi se', 'Sign out'), function () {
+    var signOut = linkButton(translate('Odjavi se', 'Sign out'), function () {
       setBusy(mount, true);
       fetchJson(mount.ep.logout, mount, {}).then(function (res) {
         setBusy(mount, false);
@@ -560,7 +585,11 @@
           boot(mount);
         } else showError(mount, res.error);
       });
-    }));
+    });
+    mount.root.appendChild(el('div', { className: 'efa-account-actions' }, [proceed, signOut]));
+    var connections = accountConnections(mount);
+    if (connections) mount.root.appendChild(connections);
+    loadAccountProfile(mount, title, avatar, company, message);
     if (query.status === 'error') showError(mount, query.code);
   }
 
@@ -650,6 +679,7 @@
   function destroyMount(mount) {
     if (!mount) return;
     if (mount.controller) mount.controller.abort();
+    clear(mount);
     if (mount.root && mount.root.parentNode) mount.root.parentNode.removeChild(mount.root);
     mount.host.removeAttribute('aria-busy');
     mount.host.removeAttribute('data-elastyc-front-auth');
