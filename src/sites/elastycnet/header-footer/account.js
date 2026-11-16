@@ -20,6 +20,7 @@
   const labels = english
     ? { guest: 'Sign in', account: 'My account', signedIn: 'You’re signed in.', signOut: 'Sign out', error: 'Could not sign out. Try again.' }
     : { guest: 'Prijavi se', account: 'Moj nalog', signedIn: 'Prijavljeni ste.', signOut: 'Odjavi se', error: 'Odjava nije uspela. Pokušajte ponovo.' };
+  const accountUrl = candidate ? candidatePage('/prijava', english) : english ? '/prijava?portal_locale=en' : '/prijava';
 
   const views = accounts.map(account => {
     const view = {
@@ -32,8 +33,7 @@
       error: account.querySelector('[data-es-account-error]')
     };
     view.guest.textContent = labels.guest;
-    if (candidate) view.guest.href = candidatePage('/prijava', english);
-    else if (english) view.guest.href = '/prijava?portal_locale=en';
+    view.guest.href = accountUrl;
     if (!view.name.textContent.trim()) view.name.textContent = labels.account;
     view.status.textContent = labels.signedIn;
     view.signOut.textContent = labels.signOut;
@@ -88,13 +88,13 @@
     return link;
   }
 
-  function renderGroup(menu, group) {
+  function renderGroup(menu, group, signedIn) {
     const panel = menu.querySelector('.es-account-panel');
     panel.querySelector('.es-account-pages')?.remove();
-    if (!group) return;
+    if (!signedIn) return;
 
-    const featured = pageFor(group.featured, group);
-    const links = [group.link1, group.link2, group.link3, group.link4].map(choice => pageFor(choice, group));
+    const featured = group ? pageFor(group.featured, group) : null;
+    const links = group ? [group.link1, group.link2, group.link3, group.link4].map(choice => pageFor(choice, group)) : [];
     const used = new Set(featured ? [featured.path] : []);
     const content = document.createElement('div');
     content.className = 'es-account-pages';
@@ -115,7 +115,12 @@
       content.append(pageLink(page, '', 'es-account-page'));
       used.add(page.path);
     }
-    if (content.childElementCount) panel.insertBefore(content, panel.querySelector('[data-es-account-out]'));
+    const accountLink = document.createElement('a');
+    accountLink.href = accountUrl;
+    accountLink.className = 'es-account-page';
+    accountLink.textContent = labels.account;
+    content.append(accountLink);
+    panel.insertBefore(content, panel.querySelector('[data-es-account-out]'));
   }
 
   const guestActions = headers.flatMap(header => Array.from(header.querySelectorAll('[data-es-guest-only]')));
@@ -145,7 +150,7 @@
       view.name.textContent = accountUser?.displayName?.trim() || labels.account;
       view.name.title = view.name.textContent;
       view.status.textContent = accountRole(accountUser);
-      renderGroup(view.menu, signedIn ? accountGroup : null);
+      renderGroup(view.menu, accountGroup, signedIn);
       if (!signedIn) {
         view.menu.open = false;
         if (focusInAccount) view.guest.focus();
