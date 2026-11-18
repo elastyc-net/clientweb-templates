@@ -1,6 +1,11 @@
 # Megapod — Kontakt, Reference i društvene mreže
 
-Sačuvano u tenant CMS Draft 18. novembra 2026. Nema Build Candidate niti Publish.
+Sačuvano u tenant CMS Draft 18. novembra 2026. i zatim, na izričit zahtev korisnika,
+objavljeno normalnim CMS Build Candidate → provera → Publish tokom.
+Javno izdanje: `r-20261118193604-d52bc9f4-5b821eea6ad2`.
+Stari sajt ostaje na `/`; novi `/megapod`, `/kontakt` i `/reference` dostupni su
+bez prijave, uz HTTP i HTML `noindex,nofollow,noarchive`.
+SEO indeksiranje i završni prelazak glavne adrese nisu uključeni.
 
 - `tree-kontakt`, `/kontakt`, legacy A238: tri salona i magacin, proverljivi
   telefoni, radno vreme, mape na otvaranje, pravac do lokacije i email upit.
@@ -47,7 +52,9 @@ Sačuvano je kroz postojeći `SqlsrvWebfrontRepository::saveDraftItem`, uz prove
 kompletnog grafa, očekivani snapshot i revizije. Backup samo pogođenih postojećih
 dokumenata je u privatnom serverskom folderu
 `W:/webfront-code-state/megapodnew2/contact-references-20261118/before.json`.
-Ostali Draft dokumenti i oba release kanala potvrđeno su ostali identični.
+Ostali Draft dokumenti i oba release kanala ostali su identični tokom Save faze.
+Naknadna odobrena objava promenila je Candidate/Production na gore navedeno
+provereno izdanje, bez novog Draft upisa ili promene stare početne stranice.
 
 ## Provere
 

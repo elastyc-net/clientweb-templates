@@ -40,22 +40,11 @@
     }
   ],
   "snapshotHashAfter": "21e9843cf8edcc5576c2c886906a75a2057baedb5dbb50fa279909e6911c86ce",
-  "channelsUnchanged": true,
-  "channels": [
-    {
-      "channel_name": "candidate",
-      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
-    },
-    {
-      "channel_name": "production",
-      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
-    }
-  ],
   "unrelatedItemsUnchanged": true,
-  "status": "saved-draft-only",
+  "status": "published-public-noindex",
   "savedOn": "2026-11-18",
-  "buildPerformed": false,
-  "publishPerformed": false,
+  "buildPerformed": true,
+  "publishPerformed": true,
   "validation": {
     "nativeDefinitionValidator": true,
     "nativeCompositionGraphValidator": true,
@@ -69,5 +58,46 @@
     "correctZmajPhoneLinks": true,
     "instagramFacebookSvgIcons": true,
     "noMobileHorizontalOverflow": true
-  }
+  },
+  "publication": {
+    "releaseId": "r-20261118193604-d52bc9f4-5b821eea6ad2",
+    "previousProductionReleaseId": "r-20261118183540-8a4f1931-4346bd5b8635",
+    "date": "2026-11-18",
+    "method": "authenticated-cms-build-verify-publish",
+    "draftSnapshotHash": "21e9843cf8edcc5576c2c886906a75a2057baedb5dbb50fa279909e6911c86ce",
+    "publicRoutes": [
+      "https://megapod.rs/megapod",
+      "https://megapod.rs/kontakt",
+      "https://megapod.rs/reference"
+    ],
+    "anonymousHttp200": true,
+    "httpRobots": "noindex, nofollow, noarchive",
+    "htmlRobots": "noindex,nofollow,noarchive",
+    "legacyRootPreserved": true,
+    "rootCutoverPerformed": false,
+    "seoIndexingEnabled": false,
+    "candidateReferenceSearchVerified": true,
+    "candidateProjectCount": 89
+  },
+  "channelsUnchangedDuringSave": true,
+  "channelsAfterSaveBeforePublication": [
+    {
+      "channel_name": "candidate",
+      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
+    },
+    {
+      "channel_name": "production",
+      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
+    }
+  ],
+  "channels": [
+    {
+      "channel_name": "candidate",
+      "release_key": "r-20261118193604-d52bc9f4-5b821eea6ad2"
+    },
+    {
+      "channel_name": "production",
+      "release_key": "r-20261118193604-d52bc9f4-5b821eea6ad2"
+    }
+  ]
 }
