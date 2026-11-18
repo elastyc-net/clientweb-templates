@@ -1,0 +1,135 @@
+{
+  "validated": true,
+  "snapshotHash": "21e9843cf8edcc5576c2c886906a75a2057baedb5dbb50fa279909e6911c86ce",
+  "writes": 5,
+  "saved": [
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-o-nama",
+      "draftRevision": 1,
+      "concurrencyToken": "0x00000000002442B4"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-usluge",
+      "draftRevision": 1,
+      "concurrencyToken": "0x00000000002442B5"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-header",
+      "draftRevision": 7,
+      "concurrencyToken": "0x00000000002442B6"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-footer",
+      "draftRevision": 6,
+      "concurrencyToken": "0x00000000002442B7"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-megapod",
+      "draftRevision": 5,
+      "concurrencyToken": "0x00000000002442B8"
+    }
+  ],
+  "snapshotHashAfter": "47bccc710c17776d1b765eb504950048ee5e153ac09fbe36c28fe2fc21d4016f",
+  "unrelatedItemsUnchanged": true,
+  "backup": "W:/webfront-code-state/megapodnew2/about-services-home-20261118/before.json",
+  "status": "published-public-noindex",
+  "channelsUnchangedDuringSave": true,
+  "channelsBeforeBuild": [
+    {
+      "channel_name": "candidate",
+      "release_key": "r-20261118193604-d52bc9f4-5b821eea6ad2"
+    },
+    {
+      "channel_name": "production",
+      "release_key": "r-20261118193604-d52bc9f4-5b821eea6ad2"
+    }
+  ],
+  "publication": {
+    "method": "Native CMS Build Candidate, reviewed Candidate, then Publish",
+    "releaseId": "r-20261118200102-4d7ed1c0-b7f9c418ef46",
+    "verifiedWithoutCookies": true,
+    "routes": [
+      {
+        "route": "/o-nama",
+        "status": 200,
+        "release": "r-20261118200102-4d7ed1c0-b7f9c418ef46",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "robotsMeta": [
+          "noindex,nofollow,noarchive"
+        ],
+        "title": "O nama — prodaja i ugradnja podnih obloga | Megapod"
+      },
+      {
+        "route": "/usluge",
+        "status": 200,
+        "release": "r-20261118200102-4d7ed1c0-b7f9c418ef46",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "robotsMeta": [
+          "noindex,nofollow,noarchive"
+        ],
+        "title": "Usluge — ugradnja, krojenje, opšivanje i dostava | Megapod"
+      },
+      {
+        "route": "/megapod",
+        "status": 200,
+        "release": "r-20261118200102-4d7ed1c0-b7f9c418ef46",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "robotsMeta": [
+          "noindex,nofollow,noarchive"
+        ],
+        "title": "Home — Megapod"
+      },
+      {
+        "route": "/reference",
+        "status": 200,
+        "release": "r-20261118200102-4d7ed1c0-b7f9c418ef46",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "robotsMeta": [
+          "noindex,nofollow,noarchive"
+        ],
+        "title": "Reference — izvedeni projekti | Megapod"
+      },
+      {
+        "route": "/",
+        "status": 200,
+        "release": null,
+        "robotsHeader": null,
+        "robotsMeta": [],
+        "title": "Megapod"
+      }
+    ],
+    "rootRemainsLegacy": true,
+    "seoIndexingEnabled": false
+  },
+  "verification": {
+    "nativeDefinitionValidation": true,
+    "compositionGraphValidation": true,
+    "savedDefinitionsMatchPreparedWrites": true,
+    "nativeRenderPages": [
+      "tree-o-nama",
+      "tree-usluge",
+      "tree-megapod"
+    ],
+    "responsiveWidthsAllPages": [
+      360,
+      768,
+      1280
+    ],
+    "additionalVisualWidthHomeAndServices": 390,
+    "horizontalOverflow": false,
+    "candidateServiceAnchorVerified": "#krojenje",
+    "candidateNativeFaqOpenVerified": true,
+    "referenceDatasetUnchanged": true,
+    "publicHomeReferenceLinkOpenedProject": "26S01004391"
+  }
+}
