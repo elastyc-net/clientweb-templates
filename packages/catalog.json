@@ -306,6 +306,30 @@
       "version": "2.0.4",
       "manifest": "product-catalog/2.0.4/manifest.json",
       "sha256": "3d1f99549e6ba7269c7a3122a7e96887026293a34b5435c9359c17f2556f7ca0"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.2",
+      "manifest": "repository-components/1.0.2/manifest.json",
+      "sha256": "b5cbeec1ebd5ee81ce4b624d82a36dfacb933306b257134bb7045fc2ef48ef06"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.3",
+      "manifest": "repository-components/1.0.3/manifest.json",
+      "sha256": "c272e8c2af13f424ac4a54d05da5257365bfc08e9339dd8e845569c63b98b1a2"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.4",
+      "manifest": "repository-components/1.0.4/manifest.json",
+      "sha256": "bc8a0263eb76f31bed1d870265beff442e9dfce66a7c2ca81f4ee8e5999e3124"
+    },
+    {
+      "packageKey": "repository-components",
+      "version": "1.0.5",
+      "manifest": "repository-components/1.0.5/manifest.json",
+      "sha256": "587a0708e8ec6100f0dc2fd4d776766dbb1ae4d3ac8d0e071937e441fc120ad2"
     }
   ]
 }

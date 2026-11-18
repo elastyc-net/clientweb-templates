@@ -1,0 +1,35 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "custom-html",
+  "label": "Custom HTML / CSS / JS",
+  "category": "custom",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "customHtml": true,
+  "htmlContent": "<div></div>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [],
+    "properties": {}
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

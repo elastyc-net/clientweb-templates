@@ -199,3 +199,9 @@ guest-cart merge. Old in-flight responses and queued mutations cannot cross an
 identity change. The existing 1.0.3 and 2.0.3 releases remain immutable; upgrade
 review continues to preserve local component customizations. Existing catalog
 markup and pricing/stock updates retain their stable rendering behavior.
+
+The 2026-11-18 engine upgrade retains repository-components 1.0.2–1.0.5 from
+the already installed, verified Gallery engine `925023a29e78`. Their bytes and
+hashes are unchanged. Bootstrap keeps the existing Acquisition setup/copy in
+1.0.5, alongside the new commerce versions; an upgrade must not silently drop
+these installed contracts or their runtime helpers.

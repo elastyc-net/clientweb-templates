@@ -1,0 +1,26 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "dashboard-widget",
+  "label": "Finansijski pregled",
+  "category": "analytics",
+  "renderMode": "server-data",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<section class=\"wf-kpi\"><h1>{{setting:title}}</h1><strong>{{data:total}} {{data:currency}}</strong></section>",
+  "styles": [
+    {"name": "dashboard.css", "content": ".wf-kpi{padding:1rem;border:1px solid currentColor;border-radius:.75rem}.wf-kpi strong{font-size:2rem}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title"],
+    "properties": {
+      "title": {"type": "string", "minLength": 1, "maxLength": 160}
+    }
+  },
+  "providerKey": "finance-summary",
+  "cache": {"scope": "private", "ttlSeconds": 60, "varyBy": ["tenant", "user", "permissions", "provider-input", "release"]},
+  "access": {"visibility": "permission", "permissions": ["finance.view"]},
+  "seo": {"mode": "none"}
+}

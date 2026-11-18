@@ -1,0 +1,162 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "layout-grid",
+  "label": "Kolone / Grid",
+  "category": "layout",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "slots": [
+    "content"
+  ],
+  "htmlContent": "<div class=\"wf-layout wf-layout-grid\" data-width=\"{{setting:width}}\" data-gap=\"{{setting:gap}}\" data-padding=\"{{setting:padding}}\" data-background=\"{{setting:background}}\" data-align=\"{{setting:align}}\" data-radius=\"{{setting:radius}}\" data-height=\"{{setting:height}}\" data-columns=\"{{setting:columns}}\" data-ratio=\"{{setting:ratio}}\" data-tablet-columns=\"{{setting:tablet-columns}}\" data-mobile-columns=\"{{setting:mobile-columns}}\">{{slot:content}}</div>",
+  "styles": [
+    {
+      "name": "layout.css",
+      "content": ".wf-layout,.wf-layout>.wf-slot,.wf-layout>.wf-slot>.wf-instance{min-width:0;box-sizing:border-box}.wf-layout{width:100%;margin-inline:auto}.wf-layout[data-width=\"container\"]{max-width:var(--wf-container-max-width,1280px)}.wf-layout[data-width=\"narrow\"]{max-width:52rem}.wf-layout[data-padding=\"small\"]{padding:12px}.wf-layout[data-padding=\"medium\"]{padding:24px}.wf-layout[data-padding=\"large\"]{padding:48px}.wf-layout[data-background=\"surface\"]{background:var(--wf-color-surface)}.wf-layout[data-background=\"background\"]{background:var(--wf-color-background)}.wf-layout[data-background=\"primary\"]{background:var(--wf-color-primary)}.wf-layout[data-background=\"secondary\"]{background:var(--wf-color-secondary)}.wf-layout[data-radius=\"small\"]{border-radius:var(--wf-radius,8px)}.wf-layout[data-radius=\"large\"]{border-radius:24px}.wf-layout>.wf-slot{gap:24px}.wf-layout[data-gap=\"none\"]>.wf-slot{gap:0}.wf-layout[data-gap=\"small\"]>.wf-slot{gap:12px}.wf-layout[data-gap=\"large\"]>.wf-slot{gap:48px}.wf-layout-grid>.wf-slot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.wf-layout-grid[data-columns=\"1\"]>.wf-slot{grid-template-columns:minmax(0,1fr)}.wf-layout-grid[data-columns=\"3\"]>.wf-slot{grid-template-columns:repeat(3,minmax(0,1fr))}.wf-layout-grid[data-columns=\"4\"]>.wf-slot{grid-template-columns:repeat(4,minmax(0,1fr))}.wf-layout-grid[data-columns=\"2\"][data-ratio=\"2-1\"]>.wf-slot{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}.wf-layout-grid[data-columns=\"2\"][data-ratio=\"1-2\"]>.wf-slot{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}.wf-layout-grid[data-columns=\"2\"][data-ratio=\"3-2\"]>.wf-slot{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}.wf-layout-grid[data-columns=\"2\"][data-ratio=\"2-3\"]>.wf-slot{grid-template-columns:minmax(0,2fr) minmax(0,3fr)}.wf-layout-container>.wf-slot{display:flex;flex-direction:column}.wf-layout-stack{display:flex;flex-direction:column;height:100%}.wf-layout-stack>.wf-slot{display:flex;flex-direction:column;flex:1}.wf-layout[data-align=\"start\"]>.wf-slot{align-items:start}.wf-layout[data-align=\"center\"]>.wf-slot{align-items:center}.wf-layout[data-align=\"end\"]>.wf-slot{align-items:end}.wf-layout-stack[data-distribute=\"between\"]>.wf-slot{justify-content:space-between}.wf-layout-stack[data-distribute=\"center\"]>.wf-slot{justify-content:center}.wf-layout-stack[data-distribute=\"end\"]>.wf-slot{justify-content:flex-end}.wf-layout-stack[data-distribute=\"equal\"]>.wf-slot>.wf-instance{flex:1}.wf-layout[data-height=\"medium\"]{min-height:400px}.wf-layout[data-height=\"large\"]{min-height:560px}.wf-layout[data-height=\"screen\"]{min-height:80vh}@media(max-width:1024px){.wf-layout-grid>.wf-slot{grid-template-columns:repeat(2,minmax(0,1fr))!important}.wf-layout-grid[data-tablet-columns=\"1\"]>.wf-slot{grid-template-columns:minmax(0,1fr)!important}.wf-layout-grid[data-tablet-columns=\"3\"]>.wf-slot{grid-template-columns:repeat(3,minmax(0,1fr))!important}}@media(max-width:640px){.wf-layout-grid>.wf-slot{grid-template-columns:minmax(0,1fr)!important}.wf-layout-grid[data-mobile-columns=\"2\"]>.wf-slot{grid-template-columns:repeat(2,minmax(0,1fr))!important}.wf-layout[data-padding=\"large\"]{padding:24px}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "width",
+      "gap",
+      "padding",
+      "background",
+      "align",
+      "radius",
+      "height",
+      "columns",
+      "ratio",
+      "tablet-columns",
+      "mobile-columns"
+    ],
+    "properties": {
+      "width": {
+        "type": "string",
+        "enum": [
+          "full",
+          "container",
+          "narrow"
+        ],
+        "maxLength": 24
+      },
+      "gap": {
+        "type": "string",
+        "enum": [
+          "medium",
+          "none",
+          "small",
+          "large"
+        ],
+        "maxLength": 24
+      },
+      "padding": {
+        "type": "string",
+        "enum": [
+          "none",
+          "small",
+          "medium",
+          "large"
+        ],
+        "maxLength": 24
+      },
+      "background": {
+        "type": "string",
+        "enum": [
+          "inherit",
+          "background",
+          "surface",
+          "primary",
+          "secondary"
+        ],
+        "maxLength": 24
+      },
+      "align": {
+        "type": "string",
+        "enum": [
+          "stretch",
+          "start",
+          "center",
+          "end"
+        ],
+        "maxLength": 24
+      },
+      "radius": {
+        "type": "string",
+        "enum": [
+          "none",
+          "small",
+          "large"
+        ],
+        "maxLength": 24
+      },
+      "height": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "medium",
+          "large",
+          "screen"
+        ],
+        "maxLength": 24
+      },
+      "columns": {
+        "type": "string",
+        "enum": [
+          "2",
+          "1",
+          "3",
+          "4"
+        ],
+        "maxLength": 24
+      },
+      "ratio": {
+        "type": "string",
+        "enum": [
+          "1-1",
+          "2-1",
+          "1-2",
+          "3-2",
+          "2-3"
+        ],
+        "maxLength": 24
+      },
+      "tablet-columns": {
+        "type": "string",
+        "enum": [
+          "2",
+          "1",
+          "3"
+        ],
+        "maxLength": 24
+      },
+      "mobile-columns": {
+        "type": "string",
+        "enum": [
+          "1",
+          "2"
+        ],
+        "maxLength": 24
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

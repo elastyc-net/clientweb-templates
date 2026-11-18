@@ -1,0 +1,52 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "kb-article",
+  "label": "Članak baze znanja",
+  "category": "content",
+  "renderMode": "client-data",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"wf-kb wf:px-6 wf:py-10\"><form data-kb-search class=\"wf:mx-auto wf:mb-6 wf:max-w-6xl\"><input type=\"search\" data-kb-q placeholder=\"Pretraga\" class=\"wf:w-full wf:rounded-lg wf:border wf:border-slate-300 wf:px-3 wf:py-2 wf:text-sm\"></form><div class=\"wf:mx-auto wf:grid wf:max-w-6xl wf:gap-10 wf:lg:grid-cols-4\"><article class=\"wf:lg:col-span-3\" data-kb-article><p class=\"wf:mt-4 wf:text-base wf:leading-7\" data-kb-status>Učitavanje…</p></article><aside class=\"wf:lg:col-span-1\"><nav class=\"wf:sticky wf:top-24 wf:max-h-[calc(100vh-7rem)] wf:overflow-y-auto\" aria-label=\"{{setting:title}}\" data-kb-nav><p class=\"wf:text-sm wf:font-bold wf:uppercase wf:tracking-widest\">{{setting:title}}</p></nav></aside></div><span class=\"wf:hidden wf:text-3xl wf:font-bold wf:tracking-tight wf:mt-10 wf:scroll-mt-24 wf:text-2xl wf:mt-6 wf:text-xl wf:font-semibold wf:text-base wf:leading-7 wf:list-disc wf:space-y-2 wf:pl-6 wf:list-decimal wf:border-l-4 wf:border-slate-300 wf:underline wf:w-full wf:rounded-xl wf:my-8 wf:rounded wf:bg-slate-100 wf:px-1 wf:max-w-3xl wf:block wf:rounded-lg wf:px-3 wf:py-2 wf:pl-6 wf:bg-slate-100 wf:list-none wf:pl-0 wf:no-underline wf:text-slate-600 wf:text-slate-900 wf:font-semibold wf:hover:bg-slate-50 wf:mx-auto wf:h-auto wf:mb-6 wf:max-w-6xl wf:w-full wf:border wf:border-slate-300 wf:text-sm wf:space-y-3 wf:text-lg\"></span></section>",
+  "styles": [],
+  "scripts": [
+    {
+      "name": "kb-article.js",
+      "content": "(function(){\nvar ACTIVE=['wf:bg-slate-100','wf:font-semibold','wf:text-slate-900'];\nvar IDLE=['wf:text-slate-600'];\nfunction decode(value){if(!value)return null;try{var text=decodeURIComponent(Array.prototype.map.call(atob(value.replace(/-/g,'+').replace(/_/g,'/')),function(c){return '%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);}).join(''));return JSON.parse(text);}catch(e){return null;}}\nfunction encode(value){var bytes=unescape(encodeURIComponent(JSON.stringify(value)));return btoa(bytes).replace(/\\+/g,'-').replace(/\\//g,'_').replace(/=+$/,'');}\nfunction setActive(links,link){links.forEach(function(item){var on=item===link;ACTIVE.forEach(function(c){item.classList.toggle(c,on);});IDLE.forEach(function(c){item.classList.toggle(c,!on);});if(on){item.setAttribute('aria-current','true');}else{item.removeAttribute('aria-current');}});}\nfunction pageHref(child){var route=child&&child.route?String(child.route):'';if(route.charAt(0)==='/')return route;var slug=typeof child==='string'?child:(child&&child.slug)||'';return '/baza/'+String(slug).split('/').map(function(part){return encodeURIComponent(part);}).join('/');}\ndocument.querySelectorAll('.wf-instance[data-wf-component=\"kb-article\"]').forEach(function(host){\nif(host.dataset.kbReady==='true')return;\nhost.dataset.kbReady='true';\nvar article=host.querySelector('[data-kb-article]');\nvar nav=host.querySelector('[data-kb-nav]');\nvar status=host.querySelector('[data-kb-status]');\nvar form=host.querySelector('[data-kb-search]');\nvar query=host.querySelector('[data-kb-q]');\nif(!article||!nav)return;\nfunction clearNav(){var old=nav.querySelector('ul');if(old)old.remove();}\nfunction paintMenu(data){\narticle.innerHTML='';\nclearNav();\nvar title=document.createElement('h1');\ntitle.className='wf:text-3xl wf:font-bold wf:tracking-tight';\ntitle.textContent=data.title||'Baza znanja';\narticle.appendChild(title);\nif(data.intro){var intro=document.createElement('p');intro.className='wf:mt-4 wf:text-base wf:leading-7';intro.textContent=data.intro;article.appendChild(intro);}\nvar list=document.createElement('ul');\nlist.className='wf:mt-6 wf:list-none wf:space-y-2 wf:pl-0';\n(data.children||[]).forEach(function(child){\nvar item=document.createElement('li');\nvar link=document.createElement('a');\nlink.href=pageHref(child);\nlink.className='wf:block wf:rounded-lg wf:px-3 wf:py-2 wf:text-base wf:no-underline wf:text-slate-900 wf:hover:bg-slate-50';\nlink.textContent=child.title||child.slug;\nitem.appendChild(link);\nlist.appendChild(item);\n});\nif(!(data.children||[]).length){var empty=document.createElement('p');empty.className='wf:mt-4 wf:text-base wf:leading-7';empty.textContent='Nema stranica.';article.appendChild(empty);}\narticle.appendChild(list);\n}\nfunction paintArticle(data){\narticle.innerHTML='';\nclearNav();\nif(!data||!data.found||!data.html){var empty=document.createElement('p');empty.className='wf:mt-4 wf:text-base wf:leading-7';empty.textContent='Uputstvo još nije objavljeno.';article.appendChild(empty);return;}\narticle.innerHTML=data.html||'';\nvar heads=Array.prototype.filter.call(article.querySelectorAll('h2,h3'),function(head){return !!head.id;});\nif(!heads.length)return;\nvar list=document.createElement('ul');\nlist.className='wf:mt-4 wf:list-none wf:pl-0 wf:space-y-1';\nvar links=[];\nvar lock=0;\nheads.forEach(function(head){\nvar item=document.createElement('li');\nvar link=document.createElement('a');\nlink.href='#'+head.id;\nlink.className='wf:block wf:rounded-lg wf:px-3 wf:py-2 wf:text-sm wf:no-underline wf:hover:bg-slate-50 wf:text-slate-600'+(head.tagName==='H3'?' wf:pl-6':'');\nlink.textContent=head.textContent;\nlink.addEventListener('click',function(event){event.preventDefault();lock=Date.now()+900;setActive(links,link);head.scrollIntoView({behavior:'smooth',block:'start'});if(window.history&&history.replaceState){history.replaceState(null,'','#'+head.id);}});\nitem.appendChild(link);list.appendChild(item);links.push(link);\n});\nnav.appendChild(list);\nvar ticking=false;\nfunction sync(){ticking=false;if(Date.now()<lock)return;var offset=140;var current=heads[0];for(var i=0;i<heads.length;i++){if(heads[i].getBoundingClientRect().top-offset<=0){current=heads[i];}else{break;}}if(window.innerHeight+window.pageYOffset>=document.documentElement.scrollHeight-2){current=heads[heads.length-1];}var link=links[heads.indexOf(current)];if(link&&link.getAttribute('aria-current')!=='true'){setActive(links,link);if(link.scrollIntoView&&nav.scrollHeight>nav.clientHeight){link.scrollIntoView({block:'nearest'});}}}\nwindow.addEventListener('scroll',function(){if(!ticking){ticking=true;window.requestAnimationFrame(sync);}},{passive:true});\nwindow.addEventListener('resize',sync);\nvar target=window.location.hash?document.getElementById(decodeURIComponent(window.location.hash.slice(1))):null;\nif(target&&heads.indexOf(target)>=0){target.scrollIntoView({block:'start'});}\nsync();\n}\nfunction paint(data){\nif(data&&data.kind==='folder'){paintMenu(data);return;}\npaintArticle(data);\n}\nfunction load(){\nvar path=(window.location.pathname||'/').replace(/\\/+$/,'')||'/';\nvar extra=path.indexOf('/baza/')===0?decodeURIComponent(path.slice(6)):'';\nvar input=decode(host.dataset.wfProviderInput)||{};\nvar term=query?String(query.value||'').trim():'';\nif(extra){input.slug=extra;delete input.frontpage;}else if(!input.frontpage||input.frontpage==='node'){if(!input.slug)input.slug='';}\nif(!extra&&!term){var preview=decode(host.dataset.wfProviderPreview);if(preview){paint(preview);return;}}\nvar term=query?String(query.value||'').trim():'';\nif(term){input.q=term;}else{delete input.q;}\nvar url=host.dataset.wfProviderUrl;\nif(!url){if(status)status.textContent='Uputstvo još nije objavljeno.';return;}\nvar targetUrl=new URL(url,window.location.href);\ntargetUrl.searchParams.set('wf_input',encode(input));\nfetch(targetUrl.toString(),{credentials:'same-origin',headers:{Accept:'application/json'}}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.json();}).then(function(payload){paint(payload&&payload.data?payload.data:payload);}).catch(function(){if(status)status.textContent='Uputstvo trenutno nije dostupno.';});\n}\nif(form){form.addEventListener('submit',function(event){event.preventDefault();load();});}\nload();\n});\n})();"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    }
+  },
+  "providerKey": "kb-article",
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 60,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "provider-input",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

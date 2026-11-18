@@ -1,0 +1,92 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "media-text",
+  "label": "Tekst i slika",
+  "category": "content",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section data-wf-design-root data-wf-design-surface class=\"wf-media-text wf:px-6 wf:py-16\" data-image-position=\"{{setting:image-position}}\"><div class=\"wf-media-text__inner wf:mx-auto wf:grid wf:max-w-6xl wf:items-center wf:gap-10\"><div data-wf-design-content class=\"wf-media-text__copy\"><p class=\"wf-media-text__eyebrow wf:text-sm wf:font-bold wf:uppercase wf:tracking-widest\">{{setting:eyebrow}}</p><h2 class=\"wf:mt-3 wf:text-3xl wf:font-bold wf:tracking-tight\">{{setting:title}}</h2><p class=\"wf:mt-5 wf:text-lg\">{{setting:body}}</p></div><figure class=\"wf-media-text__figure wf:overflow-hidden wf:rounded-2xl wf:shadow-xl\"><img class=\"wf:h-full wf:w-full wf:object-cover\" src=\"{{setting:image-url}}\" alt=\"{{setting:image-alt}}\" loading=\"lazy\"></figure></div></section>",
+  "styles": [
+    {
+      "name": "media-text.css",
+      "content": ".wf-media-text{color:#172033}.wf-media-text__inner{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.wf-media-text__eyebrow{color:#0f766e}.wf-media-text__copy p:last-child{color:#526071;line-height:1.75}.wf-media-text__figure{margin:0;aspect-ratio:4/3;background:#e7edf3}.wf-media-text[data-image-position=\"left\"] .wf-media-text__figure{order:-1}@media(max-width:760px){.wf-media-text__inner{grid-template-columns:1fr}.wf-media-text__figure{order:-1}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "eyebrow",
+      "title",
+      "body",
+      "image-url",
+      "image-alt",
+      "image-position"
+    ],
+    "properties": {
+      "eyebrow": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      },
+      "body": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1200
+      },
+      "image-url": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 2048,
+        "format": "safe-url"
+      },
+      "image-alt": {
+        "type": "string",
+        "maxLength": 240
+      },
+      "image-position": {
+        "type": "string",
+        "enum": [
+          "right",
+          "left"
+        ],
+        "maxLength": 16
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "designControls": [
+    "height",
+    "minHeight",
+    "padding",
+    "contentAlign",
+    "textAlign",
+    "background",
+    "radius"
+  ]
+}

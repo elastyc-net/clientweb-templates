@@ -1,0 +1,41 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "faq-list",
+  "label": "Česta pitanja",
+  "category": "content",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<section class=\"wf-faq wf:px-6 wf:py-16\"><div class=\"wf:mx-auto wf:max-w-4xl\"><header class=\"wf:text-center\"><h2 class=\"wf:text-3xl wf:font-bold wf:tracking-tight\">{{setting:title}}</h2><p class=\"wf:mx-auto wf:mt-4 wf:max-w-2xl wf:text-lg\">{{setting:lead}}</p></header><div class=\"wf-faq__list wf:mt-10\">{{each:items}}<details class=\"wf-faq__item wf:rounded-xl wf:px-5 wf:py-4\"><summary class=\"wf:font-bold\">{{item:question}}</summary><p class=\"wf:mt-3\">{{item:answer}}</p></details>{{/each:items}}</div></div></section>",
+  "styles": [
+    {"name": "faq-list.css", "content": ".wf-faq{color:#172033}.wf-faq header p,.wf-faq__item p{color:#526071;line-height:1.7}.wf-faq__item{border:1px solid #dfe5ec;background:#fff}.wf-faq__item+.wf-faq__item{margin-top:.75rem}.wf-faq__item summary{cursor:pointer;list-style:none}.wf-faq__item summary::-webkit-details-marker{display:none}.wf-faq__item summary:after{content:\"+\";float:right;color:#0f766e;font-size:1.25rem}.wf-faq__item[open] summary:after{content:\"−\"}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title", "lead", "items"],
+    "properties": {
+      "title": {"type": "string", "minLength": 1, "maxLength": 160},
+      "lead": {"type": "string", "maxLength": 500},
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 30,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["question", "answer"],
+          "properties": {
+            "question": {"type": "string", "minLength": 1, "maxLength": 240},
+            "answer": {"type": "string", "minLength": 1, "maxLength": 1200}
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {"scope": "public", "ttlSeconds": 3600, "varyBy": ["tenant", "locale", "release"]},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

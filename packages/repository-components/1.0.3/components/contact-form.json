@@ -1,0 +1,32 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "contact-form",
+  "label": "Kontakt forma",
+  "category": "forms",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<section class=\"wf-contact-form wf:px-6 wf:py-16\"><div class=\"wf-contact-form__inner wf:mx-auto wf:grid wf:max-w-6xl wf:gap-10 wf:rounded-3xl wf:p-10\"><div><h2 class=\"wf:text-3xl wf:font-bold wf:tracking-tight\">{{setting:title}}</h2><p class=\"wf:mt-4 wf:text-lg\">{{setting:lead}}</p></div><form class=\"wf-contact-form__form wf:grid wf:gap-5\" action=\"{{setting:action-url}}\" method=\"post\" data-wf-form=\"contact\"><label class=\"wf:grid wf:gap-2 wf:font-bold\">{{setting:name-label}}<input class=\"wf:rounded-xl wf:px-4 wf:py-3\" name=\"name\" type=\"text\" autocomplete=\"name\" required></label><label class=\"wf:grid wf:gap-2 wf:font-bold\">{{setting:email-label}}<input class=\"wf:rounded-xl wf:px-4 wf:py-3\" name=\"email\" type=\"email\" autocomplete=\"email\" required></label><label class=\"wf:grid wf:gap-2 wf:font-bold\">{{setting:message-label}}<textarea class=\"wf:rounded-xl wf:px-4 wf:py-3\" name=\"message\" rows=\"5\" required></textarea></label><button class=\"wf-contact-form__button wf:rounded-xl wf:px-6 wf:py-3 wf:font-bold wf:transition-colors wf:duration-200\" type=\"submit\">{{setting:submit-label}}</button></form></div></section>",
+  "styles": [
+    {"name": "contact-form.css", "content": ".wf-contact-form{color:#172033}.wf-contact-form__inner{grid-template-columns:minmax(0,.8fr) minmax(20rem,1.2fr);background:#f1f5f9}.wf-contact-form__inner>div>p{color:#526071;line-height:1.7}.wf-contact-form__form input,.wf-contact-form__form textarea{border:1px solid #ccd6e2;background:#fff;color:#172033;font:inherit}.wf-contact-form__form input:focus,.wf-contact-form__form textarea:focus{border-color:#0f766e;outline:2px solid rgba(15,118,110,.14)}.wf-contact-form__button{border:0;background:#0f766e;color:#fff;cursor:pointer}.wf-contact-form__button:hover,.wf-contact-form__button:focus-visible{background:#115e59;outline:none}@media(max-width:760px){.wf-contact-form__inner{grid-template-columns:1fr;padding:2rem}}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["title", "lead", "action-url", "name-label", "email-label", "message-label", "submit-label"],
+    "properties": {
+      "title": {"type": "string", "minLength": 1, "maxLength": 160},
+      "lead": {"type": "string", "maxLength": 600},
+      "action-url": {"type": "string", "minLength": 1, "maxLength": 2048, "format": "safe-url"},
+      "name-label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "email-label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "message-label": {"type": "string", "minLength": 1, "maxLength": 80},
+      "submit-label": {"type": "string", "minLength": 1, "maxLength": 80}
+    }
+  },
+  "providerKey": null,
+  "cache": {"scope": "public", "ttlSeconds": 3600, "varyBy": ["tenant", "locale", "release"]},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

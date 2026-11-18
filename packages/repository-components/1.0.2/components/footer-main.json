@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "footer-main",
+  "label": "Glavno podnozje",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": ["web", "mobile"],
+  "htmlContent": "<footer class=\"wf-footer\">&copy; {{setting:year}} {{setting:copyright}}</footer>",
+  "styles": [
+    {"name": "footer.css", "content": ".wf-footer{padding:calc(var(--wf-space-unit)*8) calc(var(--wf-space-unit)*4);border-top:1px solid var(--wf-color-border);background:var(--wf-color-surface);color:var(--wf-color-muted);font-family:var(--wf-font-body);text-align:center}.wf-footer a{color:var(--wf-color-primary);border-radius:var(--wf-radius)}.wf-footer a:hover,.wf-footer a:focus-visible{color:var(--wf-color-accent)}"}
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["copyright", "year"],
+    "properties": {
+      "copyright": {"type": "string", "minLength": 1, "maxLength": 120},
+      "year": {"type": "integer", "minimum": 2020, "maximum": 2200}
+    }
+  },
+  "themeBindings": {
+    "copyright": "brand.name"
+  },
+  "providerKey": null,
+  "cache": {"scope": "public", "ttlSeconds": 3600, "varyBy": ["tenant", "locale", "release"]},
+  "access": {"visibility": "public", "permissions": []},
+  "seo": {"mode": "none"}
+}

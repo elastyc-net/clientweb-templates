@@ -1,0 +1,72 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "live-chat",
+  "label": "Live chat",
+  "category": "forms",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"wf-live-chat wf:fixed wf:bottom-5 wf:z-50\" data-wf-live-chat data-position=\"{{setting:position}}\" data-title=\"{{setting:title}}\" data-greeting=\"{{setting:greeting}}\" data-offline=\"{{setting:offline}}\" hidden><section class=\"wf-live-chat__panel\" data-wf-chat-panel hidden><header class=\"wf-live-chat__bar\"><strong data-wf-chat-heading></strong><button type=\"button\" data-wf-chat-close>Zatvori</button></header><p class=\"wf-live-chat__status\" data-wf-chat-status></p><p class=\"wf-live-chat__expected\" data-wf-chat-expected></p><div class=\"wf-live-chat__log\" data-wf-chat-log></div><form class=\"wf-live-chat__form\" data-wf-chat-form><div data-wf-chat-identity hidden><input data-wf-chat-name type=\"text\" name=\"name\" maxlength=\"120\" autocomplete=\"name\" placeholder=\"Ime\"><input data-wf-chat-email type=\"email\" name=\"email\" maxlength=\"200\" autocomplete=\"email\" placeholder=\"Email\"></div><textarea data-wf-chat-text name=\"message\" rows=\"3\" maxlength=\"4000\" placeholder=\"Poruka\"></textarea><input data-wf-chat-file type=\"file\" name=\"file\"><button type=\"submit\">Pošalji</button></form></section><button class=\"wf-live-chat__open\" type=\"button\" data-wf-chat-open aria-expanded=\"false\">{{setting:title}}</button></div>",
+  "styles": [
+    {
+      "name": "live-chat.css",
+      "content": ".wf-live-chat{position:fixed;z-index:80;right:1.25rem;bottom:1.25rem;font-family:var(--wf-font-body);color:var(--wf-color-text)}\n.wf-live-chat[data-position=\"left\"]{right:auto;left:1.25rem}\n.wf-live-chat[hidden]{display:none}\n.wf-live-chat__open{min-height:48px;border:1px solid var(--wf-color-border);border-radius:999px;background:var(--wf-color-primary);color:#fff;font:inherit;font-weight:var(--wf-heading-weight);padding:.7rem 1.1rem;cursor:pointer;box-shadow:0 10px 24px rgba(15,23,42,.18)}\n.wf-live-chat__panel{display:flex;flex-direction:column;width:min(22rem,calc(100vw - 2rem));height:min(34rem,calc(100vh - 7rem));margin-bottom:.6rem;border:1px solid var(--wf-color-border);border-radius:var(--wf-radius);background:var(--wf-color-surface);box-shadow:0 18px 40px rgba(15,23,42,.18);overflow:hidden}\n.wf-live-chat__panel[hidden]{display:none}\n.wf-live-chat__bar{display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:.75rem .9rem;background:var(--wf-color-primary);color:#fff}\n.wf-live-chat__bar button{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer}\n.wf-live-chat__status,.wf-live-chat__expected{margin:0;padding:.55rem .9rem 0;color:var(--wf-color-muted);font-size:.82rem}\n.wf-live-chat__log{flex:1;overflow:auto;display:flex;flex-direction:column;gap:.45rem;padding:.8rem .9rem}\n.wf-live-chat__msg{max-width:85%;padding:.55rem .7rem;border-radius:var(--wf-radius);background:var(--wf-color-background)}\n.wf-live-chat__msg p{margin:0;white-space:pre-wrap}\n.wf-live-chat__msg.is-mine{align-self:flex-end;background:color-mix(in srgb,var(--wf-color-primary) 16%,var(--wf-color-surface))}\n.wf-live-chat__msg a{display:inline-block;margin-top:.35rem;color:var(--wf-color-primary)}\n.wf-live-chat__form{display:grid;gap:.45rem;padding:.75rem .9rem .9rem;border-top:1px solid var(--wf-color-border)}\n.wf-live-chat__form input,.wf-live-chat__form textarea{width:100%;border:1px solid var(--wf-color-border);border-radius:var(--wf-radius);background:var(--wf-color-background);color:inherit;font:inherit;padding:.55rem .7rem}\n.wf-live-chat__form button{min-height:42px;border:0;border-radius:var(--wf-radius);background:var(--wf-color-primary);color:#fff;font:inherit;font-weight:var(--wf-heading-weight);cursor:pointer}\n.wf-live-chat[data-live=\"true\"] .wf-live-chat__open:before{content:\"\";display:inline-block;width:.55rem;height:.55rem;margin-right:.45rem;border-radius:50%;background:#86efac;vertical-align:middle}\n"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "live-chat.js",
+      "content": "(function () {\n  var root = document.querySelector('[data-wf-live-chat]');\n  if (!root || root.getAttribute('data-wf-ready') === 'true') {\n    return;\n  }\n  root.setAttribute('data-wf-ready', 'true');\n  var endpoint = '/incKomponente/webchat.php';\n  var storeKey = 'wfLiveChatToken';\n  var openBtn = root.querySelector('[data-wf-chat-open]');\n  var panel = root.querySelector('[data-wf-chat-panel]');\n  var closeBtn = root.querySelector('[data-wf-chat-close]');\n  var log = root.querySelector('[data-wf-chat-log]');\n  var form = root.querySelector('[data-wf-chat-form]');\n  var status = root.querySelector('[data-wf-chat-status]');\n  var expected = root.querySelector('[data-wf-chat-expected]');\n  var nameInput = root.querySelector('[data-wf-chat-name]');\n  var emailInput = root.querySelector('[data-wf-chat-email]');\n  var textInput = root.querySelector('[data-wf-chat-text]');\n  var fileInput = root.querySelector('[data-wf-chat-file]');\n  var identity = root.querySelector('[data-wf-chat-identity]');\n  var heading = root.querySelector('[data-wf-chat-heading]');\n  var timer = 0;\n  var cursor = 0;\n  var threadReady = false;\n  var state = { enabled: false, uploads: false, askIdentity: false, loggedIn: false };\n  if (heading) {\n    heading.textContent = root.getAttribute('data-title') || 'Razgovor';\n  }\n\n  function token() {\n    try {\n      return localStorage.getItem(storeKey) || '';\n    } catch (error) {\n      return '';\n    }\n  }\n\n  function saveToken(value) {\n    try {\n      if (value) {\n        localStorage.setItem(storeKey, value);\n      } else {\n        localStorage.removeItem(storeKey);\n      }\n    } catch (error) {\n      return;\n    }\n  }\n\n  function paintStatus(data) {\n    var greeting = root.getAttribute('data-greeting') || '';\n    var offline = root.getAttribute('data-offline') || '';\n    var text = data && data.message ? data.message : (data && data.live ? greeting : offline);\n    if (status) {\n      status.textContent = text || '';\n    }\n    if (expected) {\n      expected.textContent = data && data.expected ? data.expected : '';\n    }\n    root.setAttribute('data-live', data && data.live ? 'true' : 'false');\n  }\n\n  function addMessage(message) {\n    if (!log || !message || log.querySelector('[data-id=\"' + message.id + '\"]')) {\n      return;\n    }\n    var item = document.createElement('div');\n    item.className = 'wf-live-chat__msg' + (message.mine ? ' is-mine' : '');\n    item.setAttribute('data-id', String(message.id));\n    var body = document.createElement('p');\n    body.textContent = message.text || '';\n    item.appendChild(body);\n    if (message.file && message.file.url) {\n      var link = document.createElement('a');\n      link.href = message.file.url;\n      link.target = '_blank';\n      link.rel = 'noopener';\n      link.textContent = message.file.name || 'Prilog';\n      item.appendChild(link);\n    }\n    log.appendChild(item);\n    log.scrollTop = log.scrollHeight;\n  }\n\n  function applyThread(data) {\n    if (!data) {\n      return;\n    }\n    if (data.reset) {\n      saveToken('');\n      cursor = 0;\n      if (log) {\n        log.textContent = '';\n      }\n    }\n    if (data.token) {\n      saveToken(data.token);\n    }\n    if (typeof data.cursor === 'number') {\n      cursor = data.cursor;\n    }\n    (data.messages || []).forEach(addMessage);\n    paintStatus(data);\n    if (data.closed && status) {\n      status.textContent = 'Razgovor je zatvoren. Nova poruka otvara novi.';\n    }\n  }\n\n  function applyConfig(data) {\n    state = data || state;\n    if (!data || data.enabled === false) {\n      root.setAttribute('hidden', 'hidden');\n      return;\n    }\n    root.removeAttribute('hidden');\n    if (identity) {\n      identity.hidden = !!data.loggedIn || !data.askIdentity;\n    }\n    if (fileInput) {\n      fileInput.hidden = !data.uploads;\n      if (data.types && data.types.length) {\n        fileInput.accept = data.types.map(function (ext) { return '.' + ext; }).join(',');\n      }\n    }\n    paintStatus(data);\n    applyThread(data);\n  }\n\n  function request(action, extra) {\n    var url = endpoint + '?action=' + encodeURIComponent(action) + (extra && extra.query ? extra.query : '');\n    var options = { credentials: 'same-origin', headers: { 'Accept': 'application/json' } };\n    if (extra && extra.body) {\n      options.method = 'POST';\n      options.body = extra.body;\n      if (!(extra.body instanceof FormData)) {\n        options.headers['Content-Type'] = 'application/json';\n      }\n    }\n    return fetch(url, options).then(function (response) {\n      return response.json().catch(function () { return { ok: false }; });\n    });\n  }\n\n  function refresh() {\n    var current = token();\n    var action = 'poll';\n    var query = endpoint + '?action=' + action + '&cursor=' + encodeURIComponent(String(cursor));\n    if (current) {\n      query += '&token=' + encodeURIComponent(current);\n    }\n    return fetch(query, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })\n      .then(function (response) { return response.json(); })\n      .then(applyThread)\n      .catch(function () { return null; });\n  }\n\n  function startPoll() {\n    stopPoll();\n    timer = window.setInterval(refresh, 3000);\n  }\n\n  function stopPoll() {\n    if (timer) {\n      window.clearInterval(timer);\n      timer = 0;\n    }\n  }\n\n  function setOpen(isOpen) {\n    if (!panel || !openBtn) {\n      return;\n    }\n    panel.hidden = !isOpen;\n    openBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');\n    if (isOpen) {\n      var ready = threadReady ? Promise.resolve() : request('open', { query: token() ? '&token=' + encodeURIComponent(token()) : '' }).then(function (data) {\n        threadReady = true;\n        applyThread(data);\n      });\n      ready.then(function () {\n        refresh();\n        startPoll();\n        if (textInput) {\n          textInput.focus();\n        }\n      });\n    } else {\n      stopPoll();\n    }\n  }\n\n  if (openBtn) {\n    openBtn.addEventListener('click', function () { setOpen(panel.hidden); });\n  }\n  if (closeBtn) {\n    closeBtn.addEventListener('click', function () { setOpen(false); });\n  }\n  if (form) {\n    form.addEventListener('submit', function (event) {\n      event.preventDefault();\n      var data = new FormData();\n      data.append('action', 'send');\n      data.append('token', token());\n      data.append('text', textInput ? textInput.value : '');\n      data.append('name', nameInput ? nameInput.value : '');\n      data.append('email', emailInput ? emailInput.value : '');\n      if (fileInput && fileInput.files && fileInput.files[0]) {\n        data.append('file', fileInput.files[0]);\n      }\n      request('send', { body: data }).then(function (payload) {\n        if (!payload || payload.ok === false) {\n          if (status) {\n            status.textContent = payload && payload.error ? payload.error : 'Poruka nije poslata.';\n          }\n          return;\n        }\n        if (textInput) {\n          textInput.value = '';\n        }\n        if (fileInput) {\n          fileInput.value = '';\n        }\n        if (log) {\n          log.textContent = '';\n        }\n        cursor = 0;\n        applyThread(payload);\n      }).catch(function () {\n        if (status) {\n          status.textContent = 'Poruka nije poslata.';\n        }\n      });\n    });\n  }\n\n  request('duty').then(applyConfig).catch(function () {\n    root.setAttribute('hidden', 'hidden');\n  });\n})();\n"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title",
+      "greeting",
+      "position",
+      "offline"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "greeting": {
+        "type": "string",
+        "maxLength": 400
+      },
+      "offline": {
+        "type": "string",
+        "maxLength": 400
+      },
+      "position": {
+        "type": "string",
+        "minLength": 4,
+        "maxLength": 5,
+        "enum": [
+          "right",
+          "left"
+        ]
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}
