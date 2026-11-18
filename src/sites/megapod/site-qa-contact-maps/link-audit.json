@@ -1,0 +1,148 @@
+{
+  "checkedAtUtc": "2026-11-18T20:49:45Z",
+  "internalUrlsChecked": 2062,
+  "statusCounts": {
+    "200": 2062
+  },
+  "routes": {
+    "/favoriti": 1,
+    "/itisoni": 8,
+    "/katalog": 148,
+    "/kontakt": 1,
+    "/korpa": 1,
+    "/megapod": 1,
+    "/nalog": 1,
+    "/o-nama": 1,
+    "/parketi": 7,
+    "/porudzbina": 1,
+    "/reference": 1,
+    "/upit-za-ponudu": 1,
+    "/usluge": 1,
+    "/": 1,
+    "/index.php": 4,
+    "/proizvod": 1884
+  },
+  "anchorReferences": 107,
+  "missingAnchors": [],
+  "externalChecks": [
+    {
+      "url": "https://rs.visa.com/pay-with-visa/security-and-assistance/protected-everywhere.html",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://rs.visa.com/pay-with-visa/security-and-assistance/protected-everywhere.html",
+      "error": null,
+      "title": [
+        "Bezbednost | Visa"
+      ]
+    },
+    {
+      "url": "https://www.allsecure.rs/",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.allsecure.rs/",
+      "error": null,
+      "title": [
+        "AllSecure | Website Maintenance"
+      ]
+    },
+    {
+      "url": "https://www.bancaintesa.rs/",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.bancaintesa.rs/",
+      "error": null,
+      "title": [
+        " Početna strana - Stanovnistvo"
+      ]
+    },
+    {
+      "url": "https://www.facebook.com/megapod.rs/",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.facebook.com/megapod.rs/",
+      "error": null,
+      "title": [
+        "Megapod | Belgrade "
+      ]
+    },
+    {
+      "url": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Karadjordjeva+63+Beograd&dir_action=navigate",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Karadjordjeva+63+Beograd&dir_action=navigate",
+      "error": null,
+      "title": [
+        " Google мапе "
+      ]
+    },
+    {
+      "url": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Patrijarha+Dimitrija+14+Beograd&dir_action=navigate",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Patrijarha+Dimitrija+14+Beograd&dir_action=navigate",
+      "error": null,
+      "title": [
+        " Google мапе "
+      ]
+    },
+    {
+      "url": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Showroom+Zmaj+Beograd&dir_action=navigate",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.google.com/maps/dir/?api=1&destination=Megapod+Showroom+Zmaj+Beograd&dir_action=navigate",
+      "error": null,
+      "title": [
+        " Google мапе "
+      ]
+    },
+    {
+      "url": "https://www.google.com/maps/dir/?api=1&destination=Pastroviceva+1+Beograd&dir_action=navigate",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.google.com/maps/dir/?api=1&destination=Pastroviceva+1+Beograd&dir_action=navigate",
+      "error": null,
+      "title": [
+        " Google мапе "
+      ]
+    },
+    {
+      "url": "https://www.instagram.com/_megapod/",
+      "kind": "external",
+      "status": 200,
+      "finalUrl": "https://www.instagram.com/_megapod/",
+      "error": null,
+      "title": [
+        "Megapod (&#064;_megapod) • Instagram photos and videos"
+      ]
+    },
+    {
+      "url": "https://www.mastercard.com/rs/consumer/credit-cards.html",
+      "kind": "external",
+      "status": 403,
+      "finalUrl": "https://www.mastercard.com/rs/consumer/credit-cards.html",
+      "error": null,
+      "title": [
+        "Access Denied"
+      ],
+      "resolution": "Replaced with the verified current identity-authentication page; browser confirmed the old destination was Page not found."
+    }
+  ],
+  "mainPageAssetsChecked": 154,
+  "getFallbacks": [
+    {
+      "url": "https://megapod.rs/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+      "status": 200
+    },
+    {
+      "url": "https://megapod.rs/page.php?wf_action=tool-script&audience=visitor",
+      "status": 200
+    }
+  ],
+  "remainingAssetFailures": [],
+  "originalMastercardBrowserResult": "Page not found",
+  "replacementMastercard": "https://www.mastercard.com/rs/sr/biznis/cybersecurity-fraud-prevention/identity/authentication.html",
+  "replacementMastercardBrowserTitle": "AUTENTIFIKACIJA IDENTITETA",
+  "allSecureStatus": "Official URL responds 200 with scheduled-maintenance notice; external service unchanged.",
+  "auditSha256": "fe52b1ab6b8a25794ae68921e6f027858326c52ff311f8be63402382cee0668c",
+  "scope": "Anonymous GET requests on reachable new-site URLs, with linked legacy destinations checked but not recursively crawled; no form submissions."
+}
