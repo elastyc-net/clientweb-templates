@@ -45,7 +45,9 @@
     unlinked: translate('Prijavite se na postojeći Elastyc nalog i povežite ovaj način prijave u odeljku Moj nalog.', 'Sign in to your existing Elastyc account, then link this sign-in method in your account.'),
     organization: translate('Ova organizacija nije na listi dozvoljenih za prijavu.', 'This organization is not allowed to sign in.'),
     reauthenticate: translate('Odjavite se, prijavite se ponovo i zatim povežite nalog.', 'Sign out, sign in again, and then link your account.'),
-    'unlink-reauthenticate': translate('Radi zaštite naloga, odvezivanje je dostupno prvih pet minuta nakon prijave. Kliknite „Odjavi se“, ponovo se prijavite i zatim odaberite „Odveži“.', 'To protect your account, unlinking is available during the first five minutes after sign-in. Select “Sign out”, sign in again, and then select “Unlink”.'),
+    'unlink-reauthenticate': translate('Radi zaštite naloga, ponovo potvrdite identitet. Posle prijave vratićemo vas na odvezivanje izabranog naloga.', 'To protect your account, confirm your identity again. After signing in, you will return to unlink the selected account.'),
+    'unlink-account-changed': translate('Prijavljeni ste na drugi Elastyc nalog. Za nastavak odvezivanja prijavite se na prvobitni nalog.', 'You signed in to a different Elastyc account. Sign in to the original account to continue unlinking.'),
+    'unlink-resume-unavailable': translate('Pregledač nije uspeo da sačuva nastavak odvezivanja. Odjavite se, ponovo se prijavite i otvorite Povezane naloge.', 'Your browser could not save the unlinking step. Sign out, sign in again, and open Linked accounts.'),
     'last-sign-in-method': translate('Najpre povežite drugi dostupan način prijave ili podesite lozinku ako je prijava lozinkom dozvoljena.', 'First connect another available sign-in method or set a password if password sign-in is allowed.'),
     'rate-limit': translate('Previše pokušaja. Pokušajte ponovo kasnije.', 'Too many attempts. Try again later.'),
     'password-disabled': translate('Prijava lozinkom je isključena.', 'Password sign-in is disabled.'),
@@ -63,6 +65,23 @@
   var resetIntent = null;
   var sequence = 0;
   var assetBase = '/common/Elastyc/FrontAuth/';
+  var unlinkIntentKey = 'elastyc.frontAuth.unlinkReauthentication';
+
+  function unlinkIntent() {
+    try {
+      var intent = JSON.parse(global.sessionStorage.getItem(unlinkIntentKey));
+      if (intent && typeof intent.userId === 'string' && intent.userId
+        && Object.prototype.hasOwnProperty.call(PROVIDERS, intent.provider)
+        && typeof intent.expiresAt === 'number' && intent.expiresAt > Date.now()
+        && intent.expiresAt <= Date.now() + 30 * 60 * 1000) return intent;
+      global.sessionStorage.removeItem(unlinkIntentKey);
+    } catch (error) {}
+    return null;
+  }
+
+  function clearUnlinkIntent() {
+    try { global.sessionStorage.removeItem(unlinkIntentKey); } catch (error) {}
+  }
 
   function text(value) {
     return value == null ? '' : String(value);
@@ -210,7 +229,7 @@
     layout.setAttribute('aria-labelledby', layoutHeading);
   }
 
-  function showError(mount, code) {
+  function showError(mount, code, provider) {
     if (!code) return;
     var box = mount.root.querySelector('.efa-error');
     if (!box) return;
@@ -218,6 +237,15 @@
     box.textContent = errorText(code);
     if (code === 'unlink-reauthenticate') {
       box.prepend(el('strong', { text: translate('Potrebna je ponovna prijava', 'Sign in again to continue') }));
+      if (mount.config && mount.config.user && Object.prototype.hasOwnProperty.call(PROVIDERS, provider)) {
+        var retry = el('button', {
+          className: 'efa-primary efa-reauthenticate', type: 'button',
+          text: translate('Prijavi se ponovo', 'Sign in again')
+        });
+        retry.addEventListener('click', function () { reauthenticateForUnlink(mount, provider); });
+        box.appendChild(retry);
+        retry.focus();
+      }
     }
   }
 
@@ -361,6 +389,8 @@
   function paintLogin(mount, data, notice, status) {
     clear(mount);
     var idBase = mount.idBase;
+    var intent = unlinkIntent();
+    if (intent && !status) status = translate('Prijavite se na isti Elastyc nalog da biste nastavili odvezivanje.', 'Sign in to the same Elastyc account to continue unlinking.');
     heading(mount, mount.options.title === false ? '' : translate('Prijava', 'Sign in'), status);
     var form = el('form', { className: 'efa-form', novalidate: true });
     var username = inputEl('text', 'username', 'username');
@@ -407,6 +437,10 @@
     }
     if (!providers.length && data.password === false) showError(mount, 'unavailable');
     if (notice) showError(mount, notice);
+    if (intent) mount.root.appendChild(linkButton(translate('Odustani od odvezivanja', 'Cancel unlinking'), function () {
+      clearUnlinkIntent();
+      paintLogin(mount, data, '');
+    }));
     if (mount.options.preview) {
       setBusy(mount, true);
       mount.host.removeAttribute('aria-busy');
@@ -547,7 +581,7 @@
       if (mount.controller !== controller || !connections.isConnected) return;
       setBusy(mount, false);
       if (!data.ok || !Array.isArray(data.linkedProviders)) {
-        showError(mount, data.error === 'reauthenticate' ? 'unlink-reauthenticate' : data.error || 'unavailable');
+        showError(mount, data.error === 'reauthenticate' ? 'unlink-reauthenticate' : data.error || 'unavailable', id);
         return;
       }
       mount.config.linkedProviders = data.linkedProviders;
@@ -584,6 +618,7 @@
           var unlink = linkButton(translate('Odveži', 'Unlink'), function () { unlinkProvider(mount, connections, id, name); });
           unlink.classList.add('efa-unlink');
           unlink.setAttribute('aria-label', translate('Odveži ' + name, 'Unlink ' + name));
+          unlink.setAttribute('data-efa-unlink-provider', id);
           actions.appendChild(unlink);
         }
         content = [el('span', { text: name }), actions];
@@ -598,6 +633,7 @@
 
   function paintSession(mount, user, query) {
     clear(mount);
+    mount.config.user = user;
     layout.classList.add('wf-login-layout--account');
     var title = el('h1', { className: 'efa-account-name', id: mount.idBase + '-account-name' });
     layout.setAttribute('aria-labelledby', title.id);
@@ -621,20 +657,59 @@
     });
     proceed.addEventListener('click', function () { continueLogin(mount, user); });
     var signOut = linkButton(translate('Odjavi se', 'Sign out'), function () {
-      setBusy(mount, true);
-      fetchJson(mount.ep.logout, mount, {}).then(function (res) {
-        setBusy(mount, false);
-        if (res.ok) {
-          authQuery = null;
-          boot(mount);
-        } else showError(mount, res.error);
-      });
+      clearUnlinkIntent();
+      signOutAccount(mount);
     });
     mount.root.appendChild(el('div', { className: 'efa-account-actions' }, [proceed, signOut]));
     var connections = accountConnections(mount);
     if (connections) mount.root.appendChild(connections);
     loadAccountProfile(mount, title, avatar, company, message);
     if (query.status === 'error') showError(mount, query.code);
+  }
+
+  function signOutAccount(mount) {
+    var controller = mount.controller;
+    setBusy(mount, true);
+    fetchJson(mount.ep.logout, mount, {}).then(function (res) {
+      if (mount.controller !== controller) return;
+      setBusy(mount, false);
+      if (res.ok) {
+        authQuery = null;
+        boot(mount);
+      } else {
+        clearUnlinkIntent();
+        showError(mount, res.error);
+      }
+    });
+  }
+
+  function reauthenticateForUnlink(mount, provider) {
+    var intent = { userId: text(mount.config.user.userid), provider: provider, expiresAt: Date.now() + 30 * 60 * 1000 };
+    try {
+      global.sessionStorage.setItem(unlinkIntentKey, JSON.stringify(intent));
+    } catch (error) {
+      showError(mount, 'unlink-resume-unavailable');
+      return;
+    }
+    signOutAccount(mount);
+  }
+
+  function resumeUnlink(mount, user, intent) {
+    clearUnlinkIntent();
+    if (intent.userId !== text(user.userid)) {
+      showError(mount, 'unlink-account-changed');
+      return;
+    }
+    var connections = mount.root.querySelector('.efa-connections');
+    if (!connections) return;
+    connections.open = true;
+    var unlink = connections.querySelector('[data-efa-unlink-provider="' + intent.provider + '"]');
+    var name = intent.provider === 'google' ? 'Google' : 'Microsoft';
+    var message = unlink
+      ? translate('Nastavite odvezivanje ' + name + ' naloga.', 'Continue unlinking your ' + name + ' account.')
+      : translate('Pregledajte Povezane naloge za nastavak.', 'Review Linked accounts to continue.');
+    mount.root.insertBefore(el('p', { className: 'efa-lead', role: 'status', text: message }), connections);
+    (unlink || connections.querySelector('summary')).focus();
   }
 
   function groupDestination(user) {
@@ -664,8 +739,15 @@
       mount.options.onSuccess(user);
       return;
     }
+    var intent = unlinkIntent();
+    if (intent && navigate) {
+      authQuery = { status: 'reauthenticated', code: '' };
+      boot(mount);
+      return;
+    }
     paintSession(mount, user, navigate ? {} : consumeAuthQuery());
-    if (navigate) continueLogin(mount, user);
+    if (intent) resumeUnlink(mount, user, intent);
+    else if (navigate) continueLogin(mount, user);
   }
 
   function recovery() {
