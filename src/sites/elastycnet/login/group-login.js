@@ -31,8 +31,12 @@
   viewObserver.observe(host, { attributes: true, attributeFilter: ['data-efa-view'] });
 
   function mount() {
+    function currentClient() {
+      var client = global.ElastycFrontAuth;
+      return client && typeof client.version === 'number' && client.version >= 12;
+    }
     function ready() {
-      if (!global.ElastycFrontAuth || global.ElastycFrontAuth.version !== 11) {
+      if (!currentClient()) {
         host.textContent = english ? 'Sign-in is currently unavailable.' : 'Prijava trenutno nije dostupna.';
         return;
       }
@@ -45,12 +49,12 @@
       style.href = styleUrl;
       global.document.head.appendChild(style);
     }
-    if (global.ElastycFrontAuth && global.ElastycFrontAuth.version === 11) {
+    if (currentClient()) {
       ready();
       return;
     }
     var script = global.document.createElement('script');
-    script.src = '/common/Elastyc/FrontAuth/front-auth.js?v=11';
+    script.src = '/common/Elastyc/FrontAuth/front-auth.js?v=12';
     script.onload = ready;
     script.onerror = function () {
       host.textContent = english ? 'Sign-in is currently unavailable.' : 'Prijava trenutno nije dostupna.';
