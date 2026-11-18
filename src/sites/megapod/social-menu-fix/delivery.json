@@ -1,0 +1,120 @@
+{
+  "validated": true,
+  "snapshotHash": "47bccc710c17776d1b765eb504950048ee5e153ac09fbe36c28fe2fc21d4016f",
+  "writes": 4,
+  "saved": [
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-footer",
+      "draftRevision": 7,
+      "concurrencyToken": "0x00000000002442BB"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-header",
+      "draftRevision": 8,
+      "concurrencyToken": "0x00000000002442BC"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-kontakt",
+      "draftRevision": 2,
+      "concurrencyToken": "0x00000000002442BD"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-megapod",
+      "draftRevision": 6,
+      "concurrencyToken": "0x00000000002442BE"
+    }
+  ],
+  "snapshotHashAfter": "eb7e12e3f9bf49de4437437ab0e866ff10bf98c1c3b2331841bc1ff93cd50cc6",
+  "unrelatedItemsUnchanged": true,
+  "backup": "W:/webfront-code-state/megapodnew2/social-menu-20261118/before.json",
+  "status": "published-public-noindex",
+  "channelsUnchangedDuringSave": true,
+  "channelsBeforeBuild": [
+    {
+      "channel_name": "candidate",
+      "release_key": "r-20261118200102-4d7ed1c0-b7f9c418ef46"
+    },
+    {
+      "channel_name": "production",
+      "release_key": "r-20261118200102-4d7ed1c0-b7f9c418ef46"
+    }
+  ],
+  "publication": {
+    "releaseId": "r-20261118202059-916c22dc-6c0cd21aac59",
+    "method": "Native CMS Build Candidate, verify exact Candidate, Publish",
+    "publicChecks": [
+      {
+        "route": "/megapod",
+        "status": 200,
+        "release": "r-20261118202059-916c22dc-6c0cd21aac59",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "instagramLinks": [
+          "https://www.instagram.com/_megapod/",
+          "https://www.instagram.com/_megapod/"
+        ]
+      },
+      {
+        "route": "/kontakt",
+        "status": 200,
+        "release": "r-20261118202059-916c22dc-6c0cd21aac59",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "instagramLinks": [
+          "https://www.instagram.com/_megapod/",
+          "https://www.instagram.com/_megapod/"
+        ]
+      },
+      {
+        "route": "/o-nama",
+        "status": 200,
+        "release": "r-20261118202059-916c22dc-6c0cd21aac59",
+        "robotsHeader": "noindex, nofollow, noarchive",
+        "instagramLinks": [
+          "https://www.instagram.com/_megapod/"
+        ]
+      },
+      {
+        "route": "/",
+        "status": 200,
+        "release": null,
+        "robotsHeader": null,
+        "instagramLinks": [
+          "https://www.instagram.com/_megapod_/?igsh=NGt5cWc5YmE5M3lj"
+        ]
+      }
+    ],
+    "rootRemainsLegacy": true,
+    "seoIndexingEnabled": false
+  },
+  "verification": {
+    "nativeDefinitionValidation": true,
+    "compositionGraphValidation": true,
+    "savedDefinitionsMatchPreparedWrites": true,
+    "onlyRequestedFourFieldsChanged": true,
+    "nativeRenderedPages": [
+      "tree-megapod",
+      "tree-kontakt"
+    ],
+    "profile": "https://www.instagram.com/_megapod/",
+    "profileIdentityConfirmed": [
+      "Megapod",
+      "Carpet & Flooring Store",
+      "Karađorđeva 63",
+      "megapod.rs"
+    ],
+    "publicHomeInstagramClickOpenedConfirmedProfile": true,
+    "menuDesktopClosedAndExpandedChecked": true,
+    "menuMobile390OpenExpandCloseChecked": true,
+    "chevronClosedTranslateY": -2,
+    "chevronExpandedTranslateY": 2,
+    "candidateReleaseMatchesPublished": true,
+    "publicHeaderScreenshotCaptured": true
+  }
+}

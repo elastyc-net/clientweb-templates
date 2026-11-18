@@ -1,0 +1,10 @@
+/* Center the painted chevron, accounting for its reversed shape when expanded. */
+.wfcr-header .mp-nav .wf-nav-group-label::after {
+  flex-shrink: 0;
+  align-self: center;
+  transform: translateY(-2px) rotate(45deg);
+}
+
+.wfcr-header .mp-nav .wf-nav-group-label[aria-expanded="true"]::after {
+  transform: translateY(2px) rotate(225deg);
+}
