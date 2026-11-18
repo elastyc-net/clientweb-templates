@@ -1,0 +1,107 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "release-notes",
+  "label": "Šta je novo",
+  "category": "account",
+  "renderMode": "client-data",
+  "targets": [
+    "web"
+  ],
+  "htmlContent": "<section class=\"wf-rn\" aria-label=\"{{setting:title}}\">\n  <div class=\"wf-rn-toolbar\">\n    <p class=\"wf-rn-kicker\"><a href=\"/help-desk-zahtevi\">{{setting:help-desk}}</a></p>\n    <h1 class=\"wf-rn-title\">{{setting:title}}</h1>\n    <p class=\"wf-rn-lead\">{{setting:lead}}</p>\n  </div>\n  <section data-rn-overview class=\"wf-rn-list-wrap\" data-rn-state=\"loading\">\n    <aside class=\"wf-rn-filters\" aria-label=\"{{setting:filters}}\">\n      <fieldset>\n        <legend>{{setting:types}}</legend>\n        <div data-rn-options=\"types\"></div>\n      </fieldset>\n      <fieldset>\n        <legend>{{setting:tags}}</legend>\n        <div data-rn-options=\"tags\"></div>\n      </fieldset>\n      <label class=\"wf-rn-search\">\n        <span>{{setting:search}}</span>\n        <input type=\"search\" data-rn-query maxlength=\"100\" autocomplete=\"off\">\n      </label>\n      <button type=\"button\" data-rn-clear hidden>{{setting:clear}}</button>\n    </aside>\n    <div class=\"wf-rn-results\">\n      <p data-rn-feedback role=\"status\" class=\"wf-rn-feedback\">{{setting:loading}}</p>\n      <p class=\"wf-rn-empty\" data-rn-empty hidden></p>\n      <ul class=\"wf-rn-cards\" data-rn-list aria-busy=\"true\"></ul>\n      <nav class=\"wf-rn-pages\" data-rn-pagination hidden>\n        <button type=\"button\" data-rn-previous>{{setting:previous}}</button>\n        <button type=\"button\" data-rn-next>{{setting:next}}</button>\n      </nav>\n    </div>\n  </section>\n  <article class=\"wf-rn-detail\" data-rn-detail hidden>\n    <button type=\"button\" data-rn-back>{{setting:back}}</button>\n    <div data-rn-article></div>\n  </article>\n</section>\n",
+  "styles": [
+    {
+      "name": "release-notes.css",
+      "content": ".wf-rn {\n  --rn-surface: var(--main-background1, var(--wf-color-surface, light-dark(#fff, #101a2b)));\n  --rn-raised: var(--main-background2, var(--wf-color-background, light-dark(#f3f6fa, #162235)));\n  --rn-text: var(--main-font-color, var(--wf-color-text, light-dark(#15253a, #e5edf8)));\n  --rn-muted: var(--main-font-color-light, var(--wf-color-muted, light-dark(#4e6075, #b3c3d7)));\n  --rn-line: var(--main-boder-color, var(--wf-color-border, light-dark(#d6dde6, #40516a)));\n  --rn-accent: var(--main-button-background, var(--wf-color-primary, light-dark(#167261, #25d9c5)));\n  box-sizing: border-box;\n  width: min(100%, 1080px);\n  margin-inline: auto;\n  padding: 28px clamp(16px, 3vw, 32px) 48px;\n  color: var(--rn-text);\n  font-size: 14px;\n}\n.wf-rn *, .wf-rn *::before, .wf-rn *::after { box-sizing: border-box; }\n.wf-rn [hidden] { display: none !important; }\n.wf-rn-kicker { margin: 0 0 8px; font-size: 12px; }\n.wf-rn-kicker a { color: var(--rn-accent); }\n.wf-rn-title { margin: 0 0 6px; font-size: 28px; line-height: 1.2; }\n.wf-rn-lead { margin: 0 0 20px; color: var(--rn-muted); }\n.wf-rn-list-wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start; }\n.wf-rn-filters { padding: 14px; border: 1px solid var(--rn-line); border-radius: 8px; background: var(--rn-surface); }\n.wf-rn-filters fieldset { margin: 0 0 14px; padding: 0; border: 0; }\n.wf-rn-filters legend { color: var(--rn-muted); font-size: 12px; font-weight: 650; }\n.wf-rn-option { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; align-items: center; min-height: 32px; }\n.wf-rn-search { display: grid; gap: 4px; margin-top: 8px; color: var(--rn-muted); font-size: 12px; }\n.wf-rn-search input, .wf-rn button {\n  min-height: 36px; padding: 6px 10px; border: 1px solid var(--rn-line); border-radius: 4px;\n  color: var(--rn-text); background: var(--rn-surface); font: inherit;\n}\n.wf-rn-cards { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }\n.wf-rn-card {\n  display: grid; gap: 6px; width: 100%; padding: 14px 16px; text-align: start;\n  border: 1px solid var(--rn-line); border-radius: 8px; background: var(--rn-surface); color: var(--rn-text); font: inherit;\n}\n.wf-rn-card:hover { border-color: var(--rn-accent); background: var(--rn-raised); }\n.wf-rn-meta, .wf-rn-feedback, .wf-rn-empty { color: var(--rn-muted); font-size: 12px; }\n.wf-rn-article { overflow-wrap: anywhere; }\n.wf-rn-article h2, .wf-rn-article h3 { margin: 1.2em 0 .4em; }\n.wf-rn-pages { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }\n@media (max-width: 720px) {\n  .wf-rn-list-wrap { grid-template-columns: 1fr; }\n  .wf-rn-title { font-size: 22px; }\n  .wf-rn button, .wf-rn-search input, .wf-rn-option { min-height: 44px; }\n}\n"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "release-notes.js",
+      "content": "(function () {\n    'use strict';\n    function decode(binding) {\n        const bytes = Uint8Array.from(atob(binding.replace(/-/g, '+').replace(/_/g, '/')), value => value.charCodeAt(0));\n        return JSON.parse(new TextDecoder().decode(bytes));\n    }\n    function encode(input) {\n        const bytes = new TextEncoder().encode(JSON.stringify(input));\n        return btoa(String.fromCharCode(...bytes)).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n    }\n    function text(tag, value, className) {\n        const node = document.createElement(tag);\n        node.textContent = value;\n        if (className) node.className = className;\n        return node;\n    }\n    function init(host) {\n        const section = host.querySelector('.wf-rn');\n        if (!section || section.dataset.rnReady) return;\n        section.dataset.rnReady = 'true';\n        const listWrap = section.querySelector('[data-rn-overview]');\n        const detail = section.querySelector('[data-rn-detail]');\n        const article = section.querySelector('[data-rn-article]');\n        const cards = section.querySelector('ul[data-rn-list]');\n        const feedback = section.querySelector('[data-rn-feedback]');\n        const empty = section.querySelector('[data-rn-empty]');\n        const pagination = section.querySelector('[data-rn-pagination]');\n        const previous = section.querySelector('[data-rn-previous]');\n        const next = section.querySelector('[data-rn-next]');\n        const back = section.querySelector('[data-rn-back]');\n        const clear = section.querySelector('[data-rn-clear]');\n        const search = section.querySelector('[data-rn-query]');\n        const groups = Object.fromEntries(Array.from(section.querySelectorAll('[data-rn-options]'), node => [node.dataset.rnOptions, node]));\n        const selected = { tags: new Set(), types: new Set() };\n        const previewBinding = host.dataset.wfProviderPreview;\n        const preview = Boolean(previewBinding || host.hasAttribute('data-wf-provider-preview-error') || window.parent !== window);\n        const sample = previewBinding ? decode(previewBinding) : null;\n        let page = 1;\n        let timer;\n        let request;\n        const english = document.documentElement.lang.toLowerCase().split('-')[0] === 'en';\n        const t = (sr, en) => english ? en : sr;\n        function load(input, signal) {\n            const url = new URL(host.dataset.wfProviderUrl, window.location.href);\n            url.searchParams.set('wf_input', encode(input));\n            return fetch(url, { credentials: 'same-origin', cache: 'no-store', referrerPolicy: 'no-referrer', signal })\n                .then(response => {\n                    if (!response.ok) throw new Error(String(response.status));\n                    return response.json();\n                })\n                .then(result => {\n                    if (!result.ok) throw new Error('Provider response');\n                    return result.data;\n                });\n        }\n        function paintOptions(key, entries) {\n            const group = groups[key];\n            if (!group) return;\n            const counts = new Map((entries || []).map(entry => [entry.label, entry.count]));\n            for (const value of selected[key]) if (!counts.has(value)) counts.set(value, 0);\n            const rows = Array.from(counts, ([label, count]) => {\n                const option = text('label', '', 'wf-rn-option');\n                const input = document.createElement('input');\n                input.type = 'checkbox';\n                input.value = label;\n                input.checked = selected[key].has(label);\n                option.append(input, text('span', label), text('span', String(count), 'wf-rn-meta'));\n                return option;\n            });\n            group.replaceChildren(...rows);\n        }\n        function showList() {\n            detail.hidden = true;\n            listWrap.hidden = false;\n        }\n        function paint(data) {\n            paintOptions('tags', data.tags);\n            paintOptions('types', data.types);\n            const active = selected.tags.size + selected.types.size;\n            clear.hidden = active === 0 && search.value.trim() === '';\n            empty.hidden = data.total !== 0;\n            empty.textContent = search.value.trim()\n                ? t('Nema beleški koje odgovaraju pretrazi.', 'No notes match your search.')\n                : t('Nema objavljenih beleški za izabrane filtere.', 'No published notes match the selected filters.');\n            page = data.page;\n            pagination.hidden = page === 1 && !data['has-next'];\n            previous.disabled = page === 1;\n            next.disabled = !data['has-next'];\n            feedback.textContent = data.total\n                ? data.total + (data.total === 1 ? t(' beleška', ' note') : t(' beleški', ' notes'))\n                : t('0 beleški', '0 notes');\n            cards.replaceChildren(...(data.items || []).map(item => {\n                const row = document.createElement('li');\n                const card = text('button', '', 'wf-rn-card');\n                card.type = 'button';\n                card.dataset.rnSlug = item.slug;\n                const meta = text('p', '', 'wf-rn-meta');\n                meta.textContent = [item.date, item.type, (item.tags || []).join(', ')].filter(Boolean).join(' · ');\n                card.append(meta, text('strong', item.title));\n                if (item.summary) card.append(text('span', item.summary, 'wf-rn-meta'));\n                card.addEventListener('click', () => openNote(item.slug, true));\n                row.append(card);\n                return row;\n            }));\n            listWrap.dataset.rnState = 'ready';\n        }\n        async function updateList() {\n            request?.abort();\n            request = new AbortController();\n            const { signal } = request;\n            cards.setAttribute('aria-busy', 'true');\n            try {\n                const input = { page };\n                const query = search.value.trim();\n                if (query) input.q = query;\n                if (selected.tags.size) input.tags = [...selected.tags];\n                if (selected.types.size) input.types = [...selected.types];\n                const data = preview ? (sample || { items: [], total: 0, page: 1, 'has-next': false, tags: [], types: [] }) : await load(input, signal);\n                if (!signal.aborted) paint(data);\n            } catch (error) {\n                if (signal.aborted) return;\n                listWrap.dataset.rnState = 'error';\n                feedback.textContent = t('Beleške trenutno nisu dostupne.', 'Notes are currently unavailable.');\n                cards.replaceChildren();\n            } finally {\n                cards.removeAttribute('aria-busy');\n            }\n        }\n        async function openNote(slug, push) {\n            request?.abort();\n            request = new AbortController();\n            const { signal } = request;\n            listWrap.hidden = true;\n            detail.hidden = false;\n            article.replaceChildren(text('p', t('Učitavanje…', 'Loading…'), 'wf-rn-feedback'));\n            if (push && window.parent === window) {\n                const url = new URL(window.location.href);\n                url.searchParams.set('slug', slug);\n                history.pushState({ ...history.state, wfReleaseNotes: slug }, '', url);\n            }\n            try {\n                const data = preview\n                    ? { item: (sample?.items || []).concat(sample?.item ? [sample.item] : []).find(row => row.slug === slug) }\n                    : await load({ slug }, signal);\n                const item = data.item;\n                if (!item?.slug) throw new Error('404');\n                const heading = text('h1', item.title, 'wf-rn-title');\n                const meta = text('p', [item.date, item.type, (item.tags || []).join(', ')].filter(Boolean).join(' · '), 'wf-rn-meta');\n                const body = document.createElement('div');\n                body.className = 'wf-rn-article';\n                body.innerHTML = item.html || '';\n                article.replaceChildren(heading, meta, body);\n                back.focus({ preventScroll: true });\n            } catch (error) {\n                article.replaceChildren(text('p', t('Beleška više nije dostupna.', 'This note is no longer available.')));\n            }\n        }\n        for (const [key, group] of Object.entries(groups)) {\n            group.addEventListener('change', event => {\n                const input = event.target;\n                if (input.type !== 'checkbox') return;\n                if (input.checked) selected[key].add(input.value);\n                else selected[key].delete(input.value);\n                page = 1;\n                updateList();\n            });\n        }\n        clear.addEventListener('click', () => {\n            selected.tags.clear();\n            selected.types.clear();\n            search.value = '';\n            page = 1;\n            updateList();\n        });\n        search.addEventListener('input', () => {\n            window.clearTimeout(timer);\n            page = 1;\n            timer = window.setTimeout(updateList, 220);\n        });\n        previous.addEventListener('click', () => { page--; updateList(); });\n        next.addEventListener('click', () => { page++; updateList(); });\n        back.addEventListener('click', () => {\n            if (window.parent === window && history.state?.wfReleaseNotes) history.back();\n            else {\n                const url = new URL(window.location.href);\n                url.searchParams.delete('slug');\n                history.replaceState(history.state, '', url);\n                showList();\n            }\n        });\n        if (window.parent === window) {\n            window.addEventListener('popstate', () => {\n                const slug = new URL(window.location.href).searchParams.get('slug');\n                if (slug) openNote(slug, false);\n                else showList();\n            });\n        }\n        const startSlug = new URL(window.location.href).searchParams.get('slug');\n        updateList();\n        if (startSlug) openNote(startSlug, false);\n    }\n    document.querySelectorAll('[data-wf-component=\"release-notes\"]').forEach(init);\n}());\n"
+    }
+  ],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "title"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "default": "Šta je novo"
+      },
+      "lead": {
+        "type": "string",
+        "maxLength": 200,
+        "default": "Završena poglavlja proizvoda, po datumu."
+      },
+      "help-desk": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Zahtevi"
+      },
+      "filters": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Filteri"
+      },
+      "types": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Tip"
+      },
+      "tags": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Tagovi"
+      },
+      "search": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Pretraga"
+      },
+      "clear": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Očisti filtere"
+      },
+      "loading": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Učitavanje…"
+      },
+      "back": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Nazad na listu"
+      },
+      "previous": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Prethodna"
+      },
+      "next": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Sledeća"
+      }
+    }
+  },
+  "providerKey": "release-notes-list",
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "authenticated",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

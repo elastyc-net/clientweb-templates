@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "release-notes",
+  "version": "1.0.0",
+  "label": "Šta je novo",
+  "description": "Lista i detalj objavljenih beleški o izdanju za prijavljene klijente.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "release-notes-list",
+      "path": "providers/release-notes-list.json",
+      "sha256": "5e427b6696e39d0058737692e6b941b028680a4c67b7a9b33b15af6d86184f60"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "release-notes",
+      "path": "components/release-notes.json",
+      "sha256": "67e9a986980cab15a967bc1edac1d0d9638b7232cee1625b678c04a376b7d126"
+    }
+  ]
+}

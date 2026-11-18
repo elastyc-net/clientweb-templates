@@ -330,6 +330,12 @@
       "version": "1.0.5",
       "manifest": "repository-components/1.0.5/manifest.json",
       "sha256": "587a0708e8ec6100f0dc2fd4d776766dbb1ae4d3ac8d0e071937e441fc120ad2"
+    },
+    {
+      "packageKey": "release-notes",
+      "version": "1.0.0",
+      "manifest": "release-notes/1.0.0/manifest.json",
+      "sha256": "ca82013178c263b1ff7f3eeb88a66477706b6eab8ebc891424c520f0b7b500ea"
     }
   ]
 }
