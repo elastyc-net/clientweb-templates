@@ -270,6 +270,7 @@
 
   function providerButton(mount, id, intent, token) {
     var provider = PROVIDERS[id];
+    var preparing = false;
     var button = el('button', {
       className: 'efa-provider efa-brand efa-brand-' + id,
       type: 'button'
@@ -277,10 +278,17 @@
       el('img', { src: assetBase + provider.asset, alt: '', width: 18, height: 18 }),
       el('span', { text: intent === 'login' ? provider.signIn : provider.link })
     ]);
-    function start() {
+    function start(automatic) {
+      if (preparing || !button.isConnected) return;
+      var controller = mount.controller;
+      preparing = true;
       setBusy(mount, true);
       fetchJson(mount.ep.start, mount, { provider: id, intent: intent, return: mount.returnUrl, recovery: token || '' }).then(function (res) {
+        preparing = false;
+        if (mount.controller !== controller) return;
         setBusy(mount, false);
+        if (!button.isConnected || controller.signal.aborted) return;
+        if (automatic && !res.ok) return;
         if (id === 'google' && res.ok && res.googleClientId && /^[a-f0-9]{64}$/.test(res.nonce)) {
           renderGoogleButton(mount, button, res, intent);
           return;
@@ -294,12 +302,24 @@
         } else {
           showError(mount, res.error || 'unavailable');
         }
+      }).catch(function (error) {
+        if (error.name !== 'AbortError') throw error;
       });
     }
-    button.addEventListener('click', start);
-    if (id === 'google' && intent === 'login' && mount.config && mount.config.googleClientId
+    button.addEventListener('click', function () { start(false); });
+    if (id === 'google' && (intent === 'login' || intent === 'link') && mount.config && mount.config.googleClientId
       && !mount.options.preview) {
-      global.queueMicrotask(function () { if (button.isConnected) start(); });
+      global.queueMicrotask(function () {
+        if (!button.isConnected) return;
+        if (intent === 'login') {
+          start(false);
+          return;
+        }
+        var connections = button.closest('.efa-connections');
+        if (!connections) return;
+        connections.addEventListener('toggle', function () { if (connections.open) start(true); });
+        if (connections.open) start(true);
+      });
     }
     return button;
   }
@@ -585,6 +605,8 @@
         return;
       }
       mount.config.linkedProviders = data.linkedProviders;
+      var resumeNotice = mount.root.querySelector('.efa-unlink-resume');
+      if (resumeNotice) resumeNotice.remove();
       var updated = accountConnections(mount);
       if (updated) {
         updated.open = true;
@@ -708,7 +730,7 @@
     var message = unlink
       ? translate('Nastavite odvezivanje ' + name + ' naloga.', 'Continue unlinking your ' + name + ' account.')
       : translate('Pregledajte Povezane naloge za nastavak.', 'Review Linked accounts to continue.');
-    mount.root.insertBefore(el('p', { className: 'efa-lead', role: 'status', text: message }), connections);
+    mount.root.insertBefore(el('p', { className: 'efa-lead efa-unlink-resume', role: 'status', text: message }), connections);
     (unlink || connections.querySelector('summary')).focus();
   }
 
