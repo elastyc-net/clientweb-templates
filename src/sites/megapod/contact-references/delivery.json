@@ -1,0 +1,73 @@
+{
+  "validated": true,
+  "snapshotHash": "f5a6971751d254e4085fa1f19a1d493a28075d30691786b782b02ec0b735db9e",
+  "writes": 5,
+  "saved": [
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-kontakt",
+      "draftRevision": 1,
+      "concurrencyToken": "0x00000000002442AD"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-reference",
+      "draftRevision": 1,
+      "concurrencyToken": "0x00000000002442AE"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-header",
+      "draftRevision": 6,
+      "concurrencyToken": "0x00000000002442AF"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "global-section",
+      "itemKey": "design-main-layout-footer",
+      "draftRevision": 5,
+      "concurrencyToken": "0x00000000002442B0"
+    },
+    {
+      "siteKey": "site-megapodnew2",
+      "itemType": "page",
+      "itemKey": "tree-megapod",
+      "draftRevision": 4,
+      "concurrencyToken": "0x00000000002442B1"
+    }
+  ],
+  "snapshotHashAfter": "21e9843cf8edcc5576c2c886906a75a2057baedb5dbb50fa279909e6911c86ce",
+  "channelsUnchanged": true,
+  "channels": [
+    {
+      "channel_name": "candidate",
+      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
+    },
+    {
+      "channel_name": "production",
+      "release_key": "r-20261118183540-8a4f1931-4346bd5b8635"
+    }
+  ],
+  "unrelatedItemsUnchanged": true,
+  "status": "saved-draft-only",
+  "savedOn": "2026-11-18",
+  "buildPerformed": false,
+  "publishPerformed": false,
+  "validation": {
+    "nativeDefinitionValidator": true,
+    "nativeCompositionGraphValidator": true,
+    "nativeDraftPreviewRenderer": true,
+    "allSavedWritesMatch": true,
+    "desktopAnd390pxBrowserQA": true,
+    "combinedFilters": true,
+    "searchWithoutDiacritics": true,
+    "loadMore": true,
+    "mapExpansion": true,
+    "correctZmajPhoneLinks": true,
+    "instagramFacebookSvgIcons": true,
+    "noMobileHorizontalOverflow": true
+  }
+}

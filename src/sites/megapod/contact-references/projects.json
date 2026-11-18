@@ -1,0 +1,714 @@
+[
+  {
+    "id": "26S01004388",
+    "name": "Ložionica",
+    "type": "Epoksidni podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_023510_86425.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004388"
+  },
+  {
+    "id": "20S01001340",
+    "name": "Medigroup Bolnica",
+    "type": "Linoleum",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_105859_60396.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001340"
+  },
+  {
+    "id": "26S01004391",
+    "name": "Bioskop Odeon",
+    "type": "Itisoni",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_024123_76133.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004391"
+  },
+  {
+    "id": "22S01002514",
+    "name": "Američka ambasada u Beogradu",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113526_69308.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=22S01002514"
+  },
+  {
+    "id": "20S01001353",
+    "name": "Selters banja Mladenovac",
+    "type": "Sportski podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113152_41952.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001353"
+  },
+  {
+    "id": "20S01001348",
+    "name": "Soko banja",
+    "type": "Sportski podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_110921_92556.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001348"
+  },
+  {
+    "id": "20S01001736",
+    "name": "Padel teren",
+    "type": "Sportski podovi",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113254_94974.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001736"
+  },
+  {
+    "id": "26S01003501",
+    "name": "Brose Pančevo guma",
+    "type": "Gumeni podovi",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_114208_28324.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003501"
+  },
+  {
+    "id": "26S01003542",
+    "name": "Privatni stan Kahrs SPC - herringbone",
+    "type": "LVT / SPC podovi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_025236_84296.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003542"
+  },
+  {
+    "id": "26S01007925",
+    "name": "BIG FASHION Beograd",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded11-06-2026_035655_51155.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01007925"
+  },
+  {
+    "id": "26S01003532",
+    "name": "Massimo tepisi privatan stan",
+    "type": "Tepisi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_115208_83713.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003532"
+  },
+  {
+    "id": "26S01003535",
+    "name": "Banca Intesa - Massimo custom tepih",
+    "type": "Tepisi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_121400_12847.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003535"
+  },
+  {
+    "id": "26S01007927",
+    "name": "JKP \"Beogradski vodovod i kanalizacija\"",
+    "type": "Epoksidni podovi",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded11-06-2026_040703_70795.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01007927"
+  },
+  {
+    "id": "26S01003504",
+    "name": "Wargamming LVT",
+    "type": "LVT / SPC podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_114451_84413.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003504"
+  },
+  {
+    "id": "26S01003622",
+    "name": "Privatan stan deking",
+    "type": "Deking",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_030756_69986.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003622"
+  },
+  {
+    "id": "26S01003487",
+    "name": "ZC Vranje",
+    "type": "PVC podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_114017_74672.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003487"
+  },
+  {
+    "id": "26S01003503",
+    "name": "Brose Pančevo otirači",
+    "type": "Otirači",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_114338_10640.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003503"
+  },
+  {
+    "id": "26S01003533",
+    "name": "Wargamming Itisoni",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_120819_78296.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003533"
+  },
+  {
+    "id": "26S01003541",
+    "name": "Torlak",
+    "type": "PVC podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_024553_82011.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003541"
+  },
+  {
+    "id": "26S01004394",
+    "name": "Askona West 65",
+    "type": "LVT / SPC podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_031354_84662.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004394"
+  },
+  {
+    "id": "26S01004397",
+    "name": "TC galerija",
+    "type": "Otirači",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_031956_85873.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004397"
+  },
+  {
+    "id": "26S01004402",
+    "name": "Teatar Vuk",
+    "type": "Gumeni podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_034103_40251.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004402"
+  },
+  {
+    "id": "26S01005948",
+    "name": "OŠ Mika Antić Novi Sad",
+    "type": "Veštačka trava",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded09-01-2026_050324_42064.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01005948"
+  },
+  {
+    "id": "26S01007928",
+    "name": "PolaPola Bar",
+    "type": "LVT / SPC podovi",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded11-06-2026_042223_87151.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01007928"
+  },
+  {
+    "id": "22S01004216",
+    "name": "Continental Automotive",
+    "type": "Itisoni",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113827_13457.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=22S01004216"
+  },
+  {
+    "id": "26S01003500",
+    "name": "Privredna komora Beograd",
+    "type": "PVC podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-21-2026_123156_99503.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003500"
+  },
+  {
+    "id": "26S01003573",
+    "name": "Teretana BW",
+    "type": "Gumeni podovi",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded05-25-2026_120343_92836.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01003573"
+  },
+  {
+    "id": "26S01004400",
+    "name": "Gardoš",
+    "type": "Deking",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_033226_99152.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004400"
+  },
+  {
+    "id": "26S01004401",
+    "name": "Boem Bar Skadarlija",
+    "type": "LVT / SPC podovi",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_033345_34033.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004401"
+  },
+  {
+    "id": "26S01004392",
+    "name": "Soccerbet",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_024606_75727.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004392"
+  },
+  {
+    "id": "26S01004395",
+    "name": "Crowne Plaza teretana",
+    "type": "Sportski podovi",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_031553_90729.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004395"
+  },
+  {
+    "id": "26S01004398",
+    "name": "Zemun dečije igralište",
+    "type": "Veštačka trava",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded06-24-2026_032157_91107.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004398"
+  },
+  {
+    "id": "26S01004418",
+    "name": "Privatan stan KAHRS parket",
+    "type": "Parketi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded06-25-2026_123745_29266.png",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=26S01004418"
+  },
+  {
+    "id": "20S01001197",
+    "name": "Palata pravde",
+    "type": "Linoleum",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083210_81204.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001197"
+  },
+  {
+    "id": "20S01001180",
+    "name": "ZF Serbia Pancevo",
+    "type": "Itisoni",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_082844_48320.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001180"
+  },
+  {
+    "id": "20S01001199",
+    "name": "Savada Novi Beograd",
+    "type": "Parketi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083326_63388.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001199"
+  },
+  {
+    "id": "20S01001200",
+    "name": "32 doma zdravlja projekat NIP",
+    "type": "PVC podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083625_13126.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001200"
+  },
+  {
+    "id": "20S01001201",
+    "name": "Hotel Holiday Inn Beograd",
+    "type": "Itisoni",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083829_33607.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001201"
+  },
+  {
+    "id": "20S01001202",
+    "name": "Hotel Stara planina",
+    "type": "Itisoni",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083940_18420.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001202"
+  },
+  {
+    "id": "20S01001293",
+    "name": "Vila na Senjaku",
+    "type": "Deking",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_092329_22172.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001293"
+  },
+  {
+    "id": "20S01001294",
+    "name": "Restoran \"Djordje\" Neimar",
+    "type": "Deking",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_092449_52222.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001294"
+  },
+  {
+    "id": "20S01001296",
+    "name": "Walter restoran",
+    "type": "Deking",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_092600_84538.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001296"
+  },
+  {
+    "id": "20S01001298",
+    "name": "KPZ Valjevo",
+    "type": "Epoksidni podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_092735_34514.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001298"
+  },
+  {
+    "id": "20S01001299",
+    "name": "Okruzni zatvor Beograd",
+    "type": "Epoksidni podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_092926_86500.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001299"
+  },
+  {
+    "id": "20S01001301",
+    "name": "Muzej nauke i tehnike - Beograd",
+    "type": "Epoksidni podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_093222_88967.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001301"
+  },
+  {
+    "id": "20S01001307",
+    "name": "Zaduzbina Ilije M. Kolarca",
+    "type": "Itisoni",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_102834_33205.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001307"
+  },
+  {
+    "id": "20S01001309",
+    "name": "MTS DVORANA",
+    "type": "Itisoni",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_103612_29958.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001309"
+  },
+  {
+    "id": "20S01001300",
+    "name": "SKYCOM",
+    "type": "Epoksidni podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_093035_79859.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001300"
+  },
+  {
+    "id": "20S01001302",
+    "name": "Fish & bar",
+    "type": "Epoksidni podovi",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_093417_94029.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001302"
+  },
+  {
+    "id": "20S01001308",
+    "name": "Cineplexx Promenada Novi Sad",
+    "type": "Itisoni",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_103038_10335.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001308"
+  },
+  {
+    "id": "20S01001329",
+    "name": "Ikea Beograd",
+    "type": "Otirači",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_103725_32621.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001329"
+  },
+  {
+    "id": "20S01001331",
+    "name": "Hotel \"Jump in\"",
+    "type": "Otirači",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_104157_28284.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001331"
+  },
+  {
+    "id": "20S01001335",
+    "name": "Stambeni kompleks Bele vode",
+    "type": "Parketi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_105617_47033.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001335"
+  },
+  {
+    "id": "20S01001341",
+    "name": "Atletska dvorana Beograd",
+    "type": "PVC podovi",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_110056_14102.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001341"
+  },
+  {
+    "id": "20S01001343",
+    "name": "JAVNA MEDIJSKA USTANOVA RADIO",
+    "type": "PVC podovi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_110613_95483.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001343"
+  },
+  {
+    "id": "20S01001347",
+    "name": "Non-stop fitnes",
+    "type": "Sportski podovi",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_110728_74147.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001347"
+  },
+  {
+    "id": "20S01001349",
+    "name": "Valjevska gimnazija",
+    "type": "Sportski podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_112407_22515.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001349"
+  },
+  {
+    "id": "20S01001351",
+    "name": "Vrtić Lavić Vrčin",
+    "type": "Sportski podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_112524_71569.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001351"
+  },
+  {
+    "id": "20S01001182",
+    "name": "Aviv Arlon",
+    "type": "Parketi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083005_72613.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001182"
+  },
+  {
+    "id": "20S01001330",
+    "name": "Sbb upravna zgrada",
+    "type": "Otirači",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_103958_67482.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001330"
+  },
+  {
+    "id": "20S01001332",
+    "name": "Nordeus HQ",
+    "type": "Otirači",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_104250_99021.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001332"
+  },
+  {
+    "id": "20S01001334",
+    "name": "Stambena zgrada Bokeljska 7.",
+    "type": "Parketi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_104457_49772.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001334"
+  },
+  {
+    "id": "20S01001336",
+    "name": "ROAMING GROUP",
+    "type": "Parketi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_105720_61780.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001336"
+  },
+  {
+    "id": "20S01000957",
+    "name": "A blok - garaža",
+    "type": "Epoksidni podovi",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-21-2026_062950_31295.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01000957"
+  },
+  {
+    "id": "20S01000958",
+    "name": "Poslovni objekat Peke Dapčevića 25",
+    "type": "Odignuti podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_082609_37259.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01000958"
+  },
+  {
+    "id": "20S01001203",
+    "name": "Savograd Novi Beograd",
+    "type": "Parketi",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_084113_58495.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001203"
+  },
+  {
+    "id": "20S01001215",
+    "name": "Ambasada Japana",
+    "type": "Odignuti podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_091200_27214.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001215"
+  },
+  {
+    "id": "20S01001204",
+    "name": "Hotel Grand Kopaonik",
+    "type": "Itisoni",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_084211_32429.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001204"
+  },
+  {
+    "id": "20S01001205",
+    "name": "Knjižare Vulkan",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_084344_65080.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001205"
+  },
+  {
+    "id": "20S01001206",
+    "name": "Mozzart kladionice",
+    "type": "Itisoni",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_084453_24456.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001206"
+  },
+  {
+    "id": "20S01001207",
+    "name": "Fiat Kragujevac",
+    "type": "Odignuti podovi",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_084750_39769.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001207"
+  },
+  {
+    "id": "20S01001208",
+    "name": "Opština Rakovica Beograd",
+    "type": "Odignuti podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_085023_60574.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001208"
+  },
+  {
+    "id": "20S01001209",
+    "name": "Srpska akademia nauka i umetnosti",
+    "type": "Odignuti podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_085310_17274.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001209"
+  },
+  {
+    "id": "20S01001210",
+    "name": "Apelacioni sud Beograd",
+    "type": "PVC podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_085640_63727.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001210"
+  },
+  {
+    "id": "20S01001212",
+    "name": "OMV benzinske stanice",
+    "type": "Otirači",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_085828_27944.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001212"
+  },
+  {
+    "id": "20S01001213",
+    "name": "Drugi osnovni sud Katanićeva ulica Beograd",
+    "type": "Linoleum",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_090426_82498.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001213"
+  },
+  {
+    "id": "20S01001214",
+    "name": "Narodno pozoriste Beograd",
+    "type": "Itisoni",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_090737_64154.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001214"
+  },
+  {
+    "id": "20S01001219",
+    "name": "Phoenix pharma",
+    "type": "Laminatni podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_091352_24226.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001219"
+  },
+  {
+    "id": "20S01001220",
+    "name": "Forma ideale BIG Rakovica",
+    "type": "Laminatni podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_091628_31594.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001220"
+  },
+  {
+    "id": "20S01001221",
+    "name": "Istraživačka stanica Petnica",
+    "type": "Laminatni podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_091806_35489.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001221"
+  },
+  {
+    "id": "20S01001222",
+    "name": "Naucno tehnoloski institut Novi Sad",
+    "type": "Linoleum",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_091916_27075.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001222"
+  },
+  {
+    "id": "20S01001183",
+    "name": "Centroprojekt AD",
+    "type": "PVC podovi",
+    "sector": "Poslovni i javni prostori",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_083106_78644.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001183"
+  },
+  {
+    "id": "20S01001304",
+    "name": "Fabrika obuce Parilab - Alibunar",
+    "type": "Epoksidni podovi",
+    "sector": "Industrija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_093854_22905.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001304"
+  },
+  {
+    "id": "20S01001306",
+    "name": "Pozorište \"Boško Buha\"",
+    "type": "Gumeni podovi",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_095728_41782.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001306"
+  },
+  {
+    "id": "22S01003744",
+    "name": "IPE LAPACHO",
+    "type": "Deking",
+    "sector": "Stanovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113716_87911.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=22S01003744"
+  },
+  {
+    "id": "20S01001352",
+    "name": "O.Š. Ivo Andric - Rakovica",
+    "type": "Veštačka trava",
+    "sector": "Kultura i obrazovanje",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_112813_89963.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001352"
+  },
+  {
+    "id": "22S01002513",
+    "name": "Luštica Bay Montenegro teniski teren",
+    "type": "Sportski podovi",
+    "sector": "Sport i rekreacija",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_113412_73202.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=22S01002513"
+  },
+  {
+    "id": "19S01001699",
+    "name": "Hotel Galerija Subotica",
+    "type": "Itisoni",
+    "sector": "Hoteli i ugostiteljstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-21-2026_062625_96714.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=19S01001699"
+  },
+  {
+    "id": "20S01001342",
+    "name": "Vojnomedicinska akademija",
+    "type": "PVC podovi",
+    "sector": "Zdravstvo",
+    "image": "https://megapod.rs/docs/dynuploaded05-22-2026_110337_36325.jpg",
+    "sourceUrl": "https://megapod.rs/index.php?pageid=a226&acckey=20S01001342"
+  }
+]
