@@ -1,0 +1,224 @@
+{
+  "status": "published-public-noindex",
+  "savePhases": [
+    {
+      "validated": true,
+      "snapshotHash": "eb7e12e3f9bf49de4437437ab0e866ff10bf98c1c3b2331841bc1ff93cd50cc6",
+      "writes": 2,
+      "saved": [
+        {
+          "siteKey": "site-megapodnew2",
+          "itemType": "page",
+          "itemKey": "tree-kontakt",
+          "draftRevision": 3,
+          "concurrencyToken": "0x00000000002442C1"
+        },
+        {
+          "siteKey": "site-megapodnew2",
+          "itemType": "page",
+          "itemKey": "tree-reference",
+          "draftRevision": 2,
+          "concurrencyToken": "0x00000000002442C2"
+        }
+      ],
+      "snapshotHashAfter": "fcca506a2400c68ba42d7297bd4ed4ac9f1c3aedfd66c47a1b7d15be72f434af",
+      "unrelatedItemsUnchanged": true,
+      "backup": "W:/webfront-code-state/megapodnew2/site-qa-contact-maps-20261118/before.json",
+      "channelsUnchangedDuringSave": true,
+      "channelsBeforeBuild": [
+        {
+          "channel_name": "candidate",
+          "release_key": "r-20261118202059-916c22dc-6c0cd21aac59"
+        },
+        {
+          "channel_name": "production",
+          "release_key": "r-20261118202059-916c22dc-6c0cd21aac59"
+        }
+      ]
+    },
+    {
+      "validated": true,
+      "snapshotHash": "fcca506a2400c68ba42d7297bd4ed4ac9f1c3aedfd66c47a1b7d15be72f434af",
+      "writes": 1,
+      "saved": [
+        {
+          "siteKey": "site-megapodnew2",
+          "itemType": "global-section",
+          "itemKey": "design-main-layout-footer",
+          "draftRevision": 8,
+          "concurrencyToken": "0x00000000002442C3"
+        }
+      ],
+      "snapshotHashAfter": "28191ea5ebf381063ebec227a38e0e7097feb1f41c53d1137264595f4b7d765a",
+      "unrelatedItemsUnchanged": true,
+      "backup": "W:/webfront-code-state/megapodnew2/site-qa-contact-maps-20261118/footer-link/before.json",
+      "channelsUnchangedDuringSave": true,
+      "channelsBeforeBuild": [
+        {
+          "channel_name": "candidate",
+          "release_key": "r-20261118202059-916c22dc-6c0cd21aac59"
+        },
+        {
+          "channel_name": "production",
+          "release_key": "r-20261118202059-916c22dc-6c0cd21aac59"
+        }
+      ]
+    },
+    {
+      "validated": true,
+      "snapshotHash": "28191ea5ebf381063ebec227a38e0e7097feb1f41c53d1137264595f4b7d765a",
+      "writes": 1,
+      "saved": [
+        {
+          "siteKey": "site-megapodnew2",
+          "itemType": "page",
+          "itemKey": "tree-kontakt",
+          "draftRevision": 4,
+          "concurrencyToken": "0x00000000002442C5"
+        }
+      ],
+      "snapshotHashAfter": "671ce61412d01c4a0edd39ab95f4cc329898b83c3b6809aae1e9f189253bc1d2",
+      "unrelatedItemsUnchanged": true,
+      "backup": "W:/webfront-code-state/megapodnew2/site-qa-contact-maps-20261118/static-maps/before.json",
+      "channelsUnchangedDuringSave": true,
+      "channelsBeforeBuild": [
+        {
+          "channel_name": "candidate",
+          "release_key": "r-20261118205821-1329c66f-2a6aa0493b0b"
+        },
+        {
+          "channel_name": "production",
+          "release_key": "r-20261118202059-916c22dc-6c0cd21aac59"
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "nativeDefinitionsAndCompositionGraph": true,
+    "onlyRequestedItemsChanged": true,
+    "mapButtons": 4,
+    "sharedMapDialogs": 1,
+    "oldExpandingMapDetailsRemoved": true,
+    "mapCardActionsAlignedPerRow": [
+      768,
+      1024,
+      1280
+    ],
+    "mapLayoutNoOverflow": [
+      360,
+      390,
+      768,
+      1024,
+      1280
+    ],
+    "escapeClosesMap": true,
+    "allFourDirectionsVerified": true,
+    "referenceFieldFontMobile": "16px",
+    "referenceSearchWithoutDiacritics": "lozionica -> 1 result",
+    "referenceMore": "12 -> 24 of 89",
+    "referenceModalPhoneWidth": 352,
+    "referenceEscapeClosesModal": true,
+    "mobileCatalogSearch": "parket -> 110 products, 24 links on first page",
+    "productVariantSelectionEnabledInquiryWithoutSubmitting": true,
+    "internalUrlCount": 2062,
+    "missingAnchorCount": 0,
+    "mainResourceCount": 154,
+    "externalAllSecureMaintenance": true,
+    "staticMapPanels": 4,
+    "lazyIframes": 4,
+    "originalEmbedAddressesPreserved": true,
+    "publicResponsive": {
+      "routes": [
+        "/kontakt",
+        "/megapod",
+        "/reference",
+        "/usluge",
+        "/o-nama",
+        "/katalog",
+        "/parketi",
+        "/itisoni",
+        "/nalog",
+        "/favoriti",
+        "/korpa",
+        "/porudzbina",
+        "/upit-za-ponudu",
+        "/proizvod?id=ST00545"
+      ],
+      "widths": [
+        360,
+        390,
+        768,
+        1024
+      ],
+      "combinations": 56,
+      "horizontalOverflowFound": 0,
+      "releaseMismatchFound": 0,
+      "unresolvedEmailPlaceholders": 0
+    },
+    "candidateStaticMapLoaded": true,
+    "publicTabletMagacinMapLoaded": true,
+    "publicPhoneMap": {
+      "bottom": 709,
+      "height": 574,
+      "title": "Karađorđeva",
+      "top": 135,
+      "viewport": 844,
+      "visiblePanels": 1
+    },
+    "backdropClosesMapAndFocusReturns": true,
+    "finalMapPanels": [
+      {
+        "frame": "Mapa — Karađorđeva",
+        "name": "Karađorđeva",
+        "visiblePanels": 1
+      },
+      {
+        "frame": "Mapa — BIG Rakovica",
+        "name": "BIG Rakovica",
+        "visiblePanels": 1
+      },
+      {
+        "frame": "Mapa — TC Zmaj",
+        "name": "TC Zmaj",
+        "visiblePanels": 1
+      },
+      {
+        "frame": "Mapa — Magacin",
+        "name": "Magacin",
+        "visiblePanels": 1
+      }
+    ]
+  },
+  "publication": {
+    "releaseId": "r-20261118220708-cbed73e7-85959e2cc143",
+    "method": "Native CMS Build Candidate, review exact Candidate, then Publish",
+    "anonymousPublicChecks": [
+      {
+        "route": "/kontakt",
+        "status": 200,
+        "release": "r-20261118220708-cbed73e7-85959e2cc143",
+        "robots": "noindex, nofollow, noarchive"
+      },
+      {
+        "route": "/reference",
+        "status": 200,
+        "release": "r-20261118220708-cbed73e7-85959e2cc143",
+        "robots": "noindex, nofollow, noarchive"
+      },
+      {
+        "route": "/megapod",
+        "status": 200,
+        "release": "r-20261118220708-cbed73e7-85959e2cc143",
+        "robots": "noindex, nofollow, noarchive"
+      },
+      {
+        "route": "/",
+        "status": 200,
+        "release": null,
+        "robots": null
+      }
+    ],
+    "legacyRootUnchanged": true,
+    "seoIndexingEnabled": false
+  }
+}

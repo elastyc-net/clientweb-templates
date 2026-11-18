@@ -1,0 +1,8 @@
+@media (max-width: 1024px) {
+  [data-mp-references] .mp-filter input,
+  [data-mp-references] .mp-filter select { font-size: 16px; }
+}
+@media (max-width: 600px) {
+  [data-mp-references] .mp-filters { grid-template-columns: 1fr; }
+  [data-mp-references] .mp-filter { grid-column: 1 / -1; }
+}
