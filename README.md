@@ -189,3 +189,13 @@ with `catalog-live-v1`, SSR hydration, named query providers and typed settings
 defaults; older capability feeds exclude it. Source and engine independently pin
 all three reviewed provider definitions. Engine deployment alone does not apply
 an upgrade to existing tenant Drafts or publish content.
+
+## Commerce account session lifecycle (1.0.4 / catalog 2.0.4)
+
+The account default now embeds the shared registration and account bridge with
+current FrontAuth styling. Login/logout clears the previous private commerce
+view immediately, reloads the current account state and offers the existing
+guest-cart merge. Old in-flight responses and queued mutations cannot cross an
+identity change. The existing 1.0.3 and 2.0.3 releases remain immutable; upgrade
+review continues to preserve local component customizations. Existing catalog
+markup and pricing/stock updates retain their stable rendering behavior.
