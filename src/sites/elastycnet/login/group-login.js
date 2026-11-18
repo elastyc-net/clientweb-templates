@@ -45,7 +45,7 @@
     unlinked: translate('Prijavite se na postojeći Elastyc nalog i povežite ovaj način prijave u odeljku Moj nalog.', 'Sign in to your existing Elastyc account, then link this sign-in method in your account.'),
     organization: translate('Ova organizacija nije na listi dozvoljenih za prijavu.', 'This organization is not allowed to sign in.'),
     reauthenticate: translate('Odjavite se, prijavite se ponovo i zatim povežite nalog.', 'Sign out, sign in again, and then link your account.'),
-    'unlink-reauthenticate': translate('Prijavite se ponovo, pa odvežite nalog u roku od pet minuta.', 'Sign in again, then unlink the account within five minutes.'),
+    'unlink-reauthenticate': translate('Radi zaštite naloga, odvezivanje je dostupno prvih pet minuta nakon prijave. Kliknite „Odjavi se“, ponovo se prijavite i zatim odaberite „Odveži“.', 'To protect your account, unlinking is available during the first five minutes after sign-in. Select “Sign out”, sign in again, and then select “Unlink”.'),
     'last-sign-in-method': translate('Najpre povežite drugi dostupan način prijave ili podesite lozinku ako je prijava lozinkom dozvoljena.', 'First connect another available sign-in method or set a password if password sign-in is allowed.'),
     'rate-limit': translate('Previše pokušaja. Pokušajte ponovo kasnije.', 'Too many attempts. Try again later.'),
     'password-disabled': translate('Prijava lozinkom je isključena.', 'Password sign-in is disabled.'),
@@ -216,6 +216,9 @@
     if (!box) return;
     box.hidden = false;
     box.textContent = errorText(code);
+    if (code === 'unlink-reauthenticate') {
+      box.prepend(el('strong', { text: translate('Potrebna je ponovna prijava', 'Sign in again to continue') }));
+    }
   }
 
   function setBusy(mount, busy) {
