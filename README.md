@@ -204,8 +204,8 @@ Patch `webfront-commerce@1.0.5` keeps those contracts and updates only the accou
 bridge's shared asset references to FrontAuth SDK20/CSS10. This preserves the
 current registration/profile screen when a tenant upgrades an older locally
 embedded account component. Earlier releases and all other payloads are unchanged.
-After its Gallery Candidate verification and library approval, bootstrap pins
-1.0.5 so new installations use the same reviewed account component.
+That release was pinned after its Gallery Candidate verification and library
+approval, preserving the reviewed account component for new installations.
 
 Commerce1.0.6/catalog2.0.5 add a visible protection status and a manual widget
 retry that preserves the reviewed quote. Initial load, error, expiry and timeout
@@ -215,6 +215,10 @@ Stale quotes expose the review button again. Script callbacks ignore detached
 forms after an account switch. `src/commerce/build.mjs` creates these versions
 from the verified preceding releases, replacing only shared commerce JS/CSS;
 existing release bytes, account bridge and tenant settings are preserved.
+After four real browser order/inquiry write-and-rollback checks on Gallery and
+Megapod, bootstrap now pins commerce1.0.6 and catalog2.0.5. Existing tenant Drafts
+still require the normal reviewed library upgrade; engine source export does
+not publish a site or replace its content.
 
 Run `node tools/test-commerce-protection.cjs` with jsdom26 on the Node module
 path. Its callback fixture verifies failure, retry, expiry, account changes and
