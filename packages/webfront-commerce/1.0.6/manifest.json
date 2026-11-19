@@ -1,0 +1,83 @@
+{
+  "formatVersion": 1,
+  "packageKey": "webfront-commerce",
+  "version": "1.0.6",
+  "label": "Korpa, favoriti i poručivanje",
+  "description": "Novi serverski tokovi gosta i naloga, korpa, direktan upit i narudžbina.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "commerce-shell",
+      "path": "components/commerce-shell.json",
+      "sha256": "05a678a8c838c0ef43b70092015583b6ddd77bed33451469e5d5e832f2886c52"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "commerce-cart",
+      "path": "components/commerce-cart.json",
+      "sha256": "e53e789c444a5cf6e5d403624ba58b6d4753c0b8f9a63a9c90073c5594934c60"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "commerce-cart",
+      "path": "page-templates/commerce-cart.json",
+      "sha256": "e86f187a3c394ef8a042115e389fae9c32a392a30db4afacf47efb84f4fc0073"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "commerce-checkout",
+      "path": "components/commerce-checkout.json",
+      "sha256": "e75614c2c93d3c8a7137472090a24acb77da772e236359aa57081bf6049214cf"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "commerce-checkout",
+      "path": "page-templates/commerce-checkout.json",
+      "sha256": "8915369c2bb015468a66fd1448e2de24aac98b49629ecc2723eb6b1a865623d4"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "commerce-request",
+      "path": "components/commerce-request.json",
+      "sha256": "5e82b67b0f8c307054ca88cee24fa177923beb3b5a68b162debf830136021d90"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "commerce-request",
+      "path": "page-templates/commerce-request.json",
+      "sha256": "b2af73ab2d8a46d8ae3a9cfe5959396fb43b6366118ecb3e1c2fec3422012194"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "commerce-favorites",
+      "path": "components/commerce-favorites.json",
+      "sha256": "f0bdd5209a859f7f30f2173ded7f58ce2ec776d5d78db6f87e881196d8193b61"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "commerce-favorites",
+      "path": "page-templates/commerce-favorites.json",
+      "sha256": "9315b2b24d80a2650daf6f1463ae05809dc941a4b6efe7935ca522955e40a649"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "commerce-account",
+      "path": "components/commerce-account.json",
+      "sha256": "c68e137ad3194defd7e62ea3272f4a257901eb65a989e24d02028ba9056eb32b"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "commerce-account",
+      "path": "page-templates/commerce-account.json",
+      "sha256": "d1fea6f203c74cd45bd2ef1e22a4b806f3d006253f6364386d860822d75214f8"
+    }
+  ]
+}

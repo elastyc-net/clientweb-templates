@@ -263,8 +263,29 @@
     }
     var errorBox = node("p", "wf-shop-error"); errorBox.setAttribute("role", "alert"); form.appendChild(errorBox);
     var review = node("div", "wf-shop-review"), submit = node("button", "wf-shop-btn", "Proveri i prikaži pregled"); submit.type = "submit"; form.appendChild(submit);
-    var widgetId = null;
-    form.addEventListener("input", function () { quote = null; review.replaceChildren(); submit.hidden = false; });
+    var widgetId = null, confirm = null, confirming = false, challenge = null;
+    var needsProtection = (!state.preview || rollbackTest) && (!state.authenticated || rollbackTest);
+    var protectionReady = !needsProtection, protectionStatus = null, retryProtection = null;
+    function updateConfirmation() { if (confirm) confirm.disabled = confirming || !quote || !protectionReady; }
+    function protectionState(ready, message, retry) {
+      protectionReady = ready;
+      if (protectionStatus) protectionStatus.textContent = message;
+      if (retryProtection) retryProtection.hidden = !retry;
+      updateConfirmation();
+    }
+    function invalidateQuote() { quote = null; confirm = null; review.replaceChildren(); submit.hidden = false; }
+    function resetProtection() {
+      if (!needsProtection) return;
+      protectionState(false, "Provera zaštite je u toku…", false);
+      try {
+        if (widgetId !== null && global.turnstile) global.turnstile.reset(widgetId);
+        else loadProtection();
+      } catch (error) { protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); }
+    }
+    form.addEventListener("input", function (event) {
+      if (event.target && event.target.name === "cf-turnstile-response") return;
+      invalidateQuote();
+    });
     form.addEventListener("submit", function (event) {
       event.preventDefault(); if (!form.reportValidity()) return;
       var data = { contact: detailsData(form), kind: inquiry ? "inquiry" : "order" };
@@ -276,23 +297,63 @@
         review.appendChild(node("h2", "", inquiry ? "Pregled upita" : "Pregled porudžbine"));
         cartRows(review, false, quote.lines); if (!inquiry) totals(review, quote.totals);
         if (quote.preview && !rollbackTest) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
-        var confirm = button(rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : "Potvrdi porudžbinu"), function () {
-          if (!quote) return; confirm.disabled = true;
-          return mutate("submit", { quoteId: quote.id, protectionToken: selected(form, "cf-turnstile-response") }, function (result) {
+        confirm = node("button", "wf-shop-btn", rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : "Potvrdi porudžbinu"));
+        confirm.type = "button";
+        confirm.addEventListener("click", function () {
+          if (!quote || confirming || !protectionReady) return;
+          var token = selected(form, "cf-turnstile-response");
+          if (needsProtection && !token) { protectionState(false, "Potvrdite zaštitu pre slanja.", true); return; }
+          confirming = true; updateConfirmation();
+          mutate("submit", { quoteId: quote.id, protectionToken: token }, function (result) {
             var test = result.receipt.test;
+            if (widgetId !== null && global.turnstile) { try { global.turnstile.remove(widgetId); } catch (error) {} widgetId = null; }
             root.replaceChildren(); root.appendChild(node("h2", "", test && test.rolledBack ? "Stvarni test je prošao" : result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
             root.appendChild(node("p", "", test && test.rolledBack ? "Zaštita je potvrđena. Provereni su predmet, dokument, stavke i veza. Test upis je vraćen." : result.receipt.preview ? "Ovo je pregled. Stvarna poslovna dokumenta nisu kreirana." : "Vaš broj: " + result.receipt.caseKey));
           }).catch(function (error) {
-            confirm.disabled = false; errorBox.textContent = error.message;
-            if (widgetId !== null && global.turnstile) global.turnstile.reset(widgetId);
-          });
-        }); review.appendChild(confirm);
+            errorBox.textContent = error.message;
+            if (error.status === 409) invalidateQuote();
+            resetProtection();
+          }).finally(function () { confirming = false; updateConfirmation(); });
+        }); review.appendChild(confirm); updateConfirmation();
       }).catch(function (error) { errorBox.textContent = error.message; }).finally(function () { submit.disabled = false; });
     }); root.appendChild(form); root.appendChild(review);
-    if (state.protection && state.protection.provider === "turnstile" && (!state.preview || rollbackTest)) {
-      var challenge = node("div"); form.insertBefore(challenge, submit);
-      function challengeRender() { if (global.turnstile) widgetId = global.turnstile.render(challenge, { sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout" }); }
-      if (global.turnstile) challengeRender(); else { var script = node("script"); script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; script.onload = challengeRender; script.async = true; document.head.appendChild(script); }
+    var protectionScript = null;
+    function loadProtection() {
+      if (!form.isConnected) return;
+      if (global.turnstile) { challengeRender(); return; }
+      if (protectionScript) return;
+      var script = node("script"); protectionScript = script;
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"; script.async = true;
+      script.onload = function () {
+        protectionScript = null;
+        if (!form.isConnected) return;
+        if (global.turnstile) challengeRender();
+        else protectionState(false, "Zaštita se nije učitala. Ponovite proveru.", true);
+      };
+      script.onerror = function () { script.remove(); protectionScript = null; if (form.isConnected) protectionState(false, "Zaštita se nije učitala. Ponovite proveru.", true); };
+      document.head.appendChild(script);
+    }
+    function challengeRender() {
+      if (!form.isConnected || widgetId !== null) return;
+      try {
+        widgetId = global.turnstile.render(challenge, {
+          sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: "always", retry: "never",
+          callback: function (token) { if (form.isConnected) protectionState(typeof token === "string" && token !== "", token ? "Zaštita je potvrđena." : "Potvrdite zaštitu pre slanja.", !token); },
+          "error-callback": function () { if (form.isConnected) protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); return true; },
+          "expired-callback": function () { if (form.isConnected) protectionState(false, "Provera zaštite je istekla. Ponovite proveru pre slanja.", true); },
+          "timeout-callback": function () { if (form.isConnected) protectionState(false, "Vreme za proveru zaštite je isteklo. Ponovite proveru.", true); }
+        });
+      } catch (error) { protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); }
+    }
+    if (needsProtection) {
+      var protection = node("div", "wf-shop-protection");
+      challenge = node("div", "wf-shop-protection__widget");
+      protectionStatus = node("p", "wf-shop-help", "Provera zaštite je u toku…"); protectionStatus.setAttribute("role", "status");
+      retryProtection = node("button", "wf-shop-link", "Ponovi proveru"); retryProtection.type = "button"; retryProtection.hidden = true;
+      retryProtection.addEventListener("click", resetProtection);
+      protection.appendChild(challenge); protection.appendChild(protectionStatus); protection.appendChild(retryProtection); form.insertBefore(protection, submit);
+      if (state.protection && state.protection.provider === "turnstile") loadProtection();
+      else protectionState(false, "Zaštita trenutno nije dostupna. Pokušajte ponovo kasnije.", false);
     }
   }
   function renderAccount(root) {

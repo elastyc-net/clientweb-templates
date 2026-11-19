@@ -207,6 +207,21 @@ embedded account component. Earlier releases and all other payloads are unchange
 After its Gallery Candidate verification and library approval, bootstrap pins
 1.0.5 so new installations use the same reviewed account component.
 
+Commerce1.0.6/catalog2.0.5 add a visible protection status and a manual widget
+retry that preserves the reviewed quote. Initial load, error, expiry and timeout
+keep the final button disabled; a success callback and a present response are
+required before sending a mutation. Siteverify remains the server authority.
+Stale quotes expose the review button again. Script callbacks ignore detached
+forms after an account switch. `src/commerce/build.mjs` creates these versions
+from the verified preceding releases, replacing only shared commerce JS/CSS;
+existing release bytes, account bridge and tenant settings are preserved.
+
+Run `node tools/test-commerce-protection.cjs` with jsdom26 on the Node module
+path. Its callback fixture verifies failure, retry, expiry, account changes and
+submit gating; it is not a real Turnstile or business-write acceptance test.
+Then validate the catalog and immutable history with
+`node tools/library-catalog.mjs` and `node tools/test-library-export-history.mjs`.
+
 The 2026-11-18 engine upgrade retains repository-components 1.0.2–1.0.5 from
 the already installed, verified Gallery engine `925023a29e78`. Their bytes and
 hashes are unchanged. Bootstrap keeps the existing Acquisition setup/copy in
