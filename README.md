@@ -204,6 +204,8 @@ Patch `webfront-commerce@1.0.5` keeps those contracts and updates only the accou
 bridge's shared asset references to FrontAuth SDK20/CSS10. This preserves the
 current registration/profile screen when a tenant upgrades an older locally
 embedded account component. Earlier releases and all other payloads are unchanged.
+After its Gallery Candidate verification and library approval, bootstrap pins
+1.0.5 so new installations use the same reviewed account component.
 
 The 2026-11-18 engine upgrade retains repository-components 1.0.2–1.0.5 from
 the already installed, verified Gallery engine `925023a29e78`. Their bytes and
