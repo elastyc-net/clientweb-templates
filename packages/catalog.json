@@ -336,6 +336,12 @@
       "version": "1.0.0",
       "manifest": "release-notes/1.0.0/manifest.json",
       "sha256": "ca82013178c263b1ff7f3eeb88a66477706b6eab8ebc891424c520f0b7b500ea"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.0.5",
+      "manifest": "webfront-commerce/1.0.5/manifest.json",
+      "sha256": "ea115225009f5f21b823964c065d02940b48f88e424d3e441a1a480f7c1bc132"
     }
   ]
 }

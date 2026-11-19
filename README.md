@@ -200,6 +200,11 @@ identity change. The existing 1.0.3 and 2.0.3 releases remain immutable; upgrade
 review continues to preserve local component customizations. Existing catalog
 markup and pricing/stock updates retain their stable rendering behavior.
 
+Patch `webfront-commerce@1.0.5` keeps those contracts and updates only the account
+bridge's shared asset references to FrontAuth SDK20/CSS10. This preserves the
+current registration/profile screen when a tenant upgrades an older locally
+embedded account component. Earlier releases and all other payloads are unchanged.
+
 The 2026-11-18 engine upgrade retains repository-components 1.0.2–1.0.5 from
 the already installed, verified Gallery engine `925023a29e78`. Their bytes and
 hashes are unchanged. Bootstrap keeps the existing Acquisition setup/copy in
