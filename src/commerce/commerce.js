@@ -55,6 +55,8 @@
     if (!endpoint) return Promise.reject(new Error("Otvorite direktan pregled stranice da koristite korpu."));
     var generation = authGeneration;
     var url = new URL(endpoint, global.location.href), options = { credentials: "same-origin", headers: { Accept: "application/json" }, cache: "no-store" };
+    var purchase = new URLSearchParams(global.location.search).get("purchase");
+    if (purchase) { if (!/^[a-f0-9]{32}$/.test(purchase)) return Promise.reject(new Error("Odobrenje kupovine nije validno.")); url.searchParams.set("purchase", purchase); }
     if (authChecked) options.headers["X-WF-Auth-Checked"] = "1";
     if (mutation) {
       options.method = "POST"; options.headers["Content-Type"] = "application/json";
@@ -230,7 +232,8 @@
       mutate("payment-status", { attemptId: returnedPayment }, function (result) { renderPayment(root, result.payment); }).catch(function (error) { root.replaceChildren(node("p", "wf-shop-error", error.message)); });
       return;
     }
-    var rollbackTest = state.testMode === "rollback";
+    var rollbackTest = state.testMode === "rollback", realPurchase = !!state.purchase;
+    if (realPurchase) root.appendChild(node("p", "wf-shop-preview", "Stvarna probna kupovina · " + money(state.purchase.amount, state.purchase.currency) + ". Jedan artikal, preuzimanje u objektu. Postojeća korpa ostaje sačuvana. Porudžbinu i plaćanje potvrđujete zasebno."));
     if (rollbackTest && state.authenticated) {
       root.appendChild(node("p", "wf-shop-preview", "Za ograničeni test odjavite kupca. CMS prijava ostaje aktivna.")); return;
     }
@@ -290,7 +293,7 @@
         if (pickup) { pickup.parentNode.hidden = !pick; pickup.required = !!pick; }
       } if (delivery) delivery.addEventListener("change", toggleAddress); toggleAddress();
       var paymentSelect = optionField(paymentPanel, "Način plaćanja", "payment", state.paymentOptions);
-      if ((state.paymentOptions || []).some(function (item) { return item.kind === "card"; })) paymentPanel.appendChild(node("p", "wf-shop-help", "Kartica: Bankart TEST. Podatke kartice unosite na stranici banke."));
+      if ((state.paymentOptions || []).some(function (item) { return item.kind === "card"; })) paymentPanel.appendChild(node("p", "wf-shop-help", realPurchase ? "Kartica: AllSecure — stvarno plaćanje. Podatke kartice unosite na stranici banke." : "Kartica: Bankart TEST. Podatke kartice unosite na stranici banke."));
     }
     field(paymentPanel, "Napomena (opciono)", "note", "textarea", false);
     if (rollbackTest) {
@@ -306,7 +309,7 @@
     if (!inquiry) { back = button("Nazad", function () { goStep(Math.max(0, currentStep - 1)); }, "wf-shop-link"); navigation.appendChild(back); }
     navigation.appendChild(submit); form.appendChild(navigation);
     var widgetId = null, confirm = null, confirming = false, challenge = null;
-    var needsProtection = (!state.preview || rollbackTest) && (!state.authenticated || rollbackTest);
+    var needsProtection = realPurchase || ((!state.preview || rollbackTest) && (!state.authenticated || rollbackTest));
     var protectionReady = !needsProtection, protectionStatus = null, retryProtection = null;
     function updateConfirmation() { if (confirm) confirm.disabled = confirming || !quote || !protectionReady; }
     function protectionState(ready, message, retry) {
@@ -363,8 +366,9 @@
           review.appendChild(summary);
         }
         cartRows(review, false, quote.lines); if (!inquiry) totals(review, quote.totals);
-        if (quote.preview && !rollbackTest) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
-        confirm = node("button", "wf-shop-btn", rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : "Potvrdi porudžbinu"));
+        if (quote.realPurchase) review.appendChild(node("p", "wf-shop-preview", "Potvrdom se kreira stvarna porudžbina. Kartično plaćanje pokrećete tek na sledećem ekranu."));
+        if (quote.preview && !quote.realPurchase && !rollbackTest) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
+        confirm = node("button", "wf-shop-btn", rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : quote.realPurchase ? "Potvrdi stvarnu porudžbinu" : "Potvrdi porudžbinu"));
         confirm.type = "button";
         confirm.addEventListener("click", function () {
           if (!quote || confirming || !protectionReady) return;
@@ -375,9 +379,10 @@
             var test = result.receipt.test;
             if (widgetId !== null && global.turnstile) { try { global.turnstile.remove(widgetId); } catch (error) {} widgetId = null; }
             if (result.receipt.paymentRequired && !test) {
-              root.replaceChildren(); root.appendChild(node("h2", "", "Pregled je potvrđen"));
-              root.appendChild(node("p", "wf-shop-preview", "Bankart TEST: nastavite na test stranicu banke. Poslovna narudžbina nije kreirana."));
-              root.appendChild(button("Nastavi na Bankart TEST", function () { return mutate("payment-start", { checkoutId: result.receipt.checkoutId }, function (reply) { renderPayment(root, reply.payment); if (reply.payment.redirectUrl) global.location.assign(reply.payment.redirectUrl); }); }));
+              var livePayment = result.receipt.paymentEnvironment === "live";
+              root.replaceChildren(); root.appendChild(node("h2", "", livePayment ? "Porudžbina je primljena" : "Pregled je potvrđen"));
+              root.appendChild(node("p", "wf-shop-preview", livePayment ? "Porudžbina " + result.receipt.caseKey + " je kreirana. Plaćanje još nije potvrđeno. Nastavite na bezbednu AllSecure stranicu." : "Bankart TEST: nastavite na test stranicu banke. Poslovna narudžbina nije kreirana."));
+              root.appendChild(button(livePayment ? "Nastavi na AllSecure plaćanje" : "Nastavi na Bankart TEST", function () { return mutate("payment-start", { checkoutId: result.receipt.checkoutId }, function (reply) { renderPayment(root, reply.payment); if (reply.payment.redirectUrl) global.location.assign(reply.payment.redirectUrl); }); }));
               return;
             }
             root.replaceChildren(); root.appendChild(node("h2", "", test && test.rolledBack ? "Stvarni test je prošao" : result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
@@ -434,11 +439,12 @@
     }
   }
   function renderPayment(root, payment) {
-    root.replaceChildren(); root.appendChild(node("h2", "", "Bankart / NLB — test plaćanje"));
-    var labels = {starting:"Provera pokrenutog plaćanja je u toku.",redirect:"Nastavite plaćanje na stranici banke.",pending:"Banka obrađuje plaćanje.",unknown:"Ishod još nije potvrđen. Proverite status pre novog pokušaja.",authorized:"Test predautorizacija je potvrđena. Sredstva nisu konačno naplaćena.",failed:"Banka nije odobrila plaćanje.",cancelled:"Plaćanje je otkazano.",expired:"Plaćanje je isteklo."};
-    root.appendChild(node("p", "wf-shop-preview", "TEST režim · " + money(payment.amount, payment.currency)));
+    var live = payment.environment === "live";
+    root.replaceChildren(); root.appendChild(node("h2", "", live ? "AllSecure — plaćanje" : "Bankart / NLB — test plaćanje"));
+    var labels = {starting:"Provera pokrenutog plaćanja je u toku.",redirect:"Nastavite plaćanje na stranici banke.",pending:"Banka obrađuje plaćanje.",unknown:"Ishod još nije potvrđen. Proverite status pre novog pokušaja.",authorized:"Predautorizacija je potvrđena. Sredstva nisu konačno naplaćena.",captured:"Plaćanje je potvrđeno.",failed:"Banka nije odobrila plaćanje.",cancelled:"Plaćanje je otkazano.",expired:"Plaćanje je isteklo."};
+    root.appendChild(node("p", "wf-shop-preview", (live ? "Stvarno plaćanje · " : "TEST režim · ") + money(payment.amount, payment.currency)));
     root.appendChild(node("p", "", labels[payment.state] || "Proverite status plaćanja."));
-    if (payment.redirectUrl) { var next = node("a", "wf-shop-btn", "Otvori Bankart TEST"); next.href = payment.redirectUrl; next.rel = "noreferrer"; root.appendChild(next); }
+    if (payment.redirectUrl) { var next = node("a", "wf-shop-btn", live ? "Otvori AllSecure plaćanje" : "Otvori Bankart TEST"); next.href = payment.redirectUrl; next.rel = "noreferrer"; root.appendChild(next); }
     root.appendChild(button("Proveri status plaćanja", function () { return mutate("payment-status", {attemptId:payment.id}, function (reply) {renderPayment(root, reply.payment);}); }, "wf-shop-link"));
     if (payment.retryAllowed) root.appendChild(button("Pokušaj ponovo", function () { return mutate("payment-start", {checkoutId:payment.checkoutId}, function (reply) {renderPayment(root, reply.payment);if(reply.payment.redirectUrl) global.location.assign(reply.payment.redirectUrl);}); }));
   }
