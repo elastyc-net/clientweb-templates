@@ -264,3 +264,8 @@ form is removed. The source builder publishes new immutable packages; previous
 versions, bootstrap pins, provider contracts and backend code are preserved.
 `test-commerce-inquiry.cjs` and `test-commerce-checkout.cjs` run against the real
 shared vendor library from the sibling `common` checkout.
+
+Commerce 1.2.3 / catalog 2.2.3 keep the country dropdown as wide as its phone
+input, including after responsive layout changes. The dropdown is positioned
+inside the narrow country-button container, so its maximum width must be
+bounded by the viewport rather than by that container.

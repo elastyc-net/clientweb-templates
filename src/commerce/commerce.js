@@ -203,6 +203,8 @@
       if (!active || !widget) return;
       var button = input.parentNode.querySelector(".iti__selected-country");
       if (button) input.style.setProperty("padding-left", (button.offsetWidth + 12) + "px", "important");
+      var list = input.parentNode.querySelector(".iti__country-selector");
+      if (list && input.offsetWidth) list.style.width = input.offsetWidth + "px";
     }
     function validity() {
       if (!input.value.trim()) return "";
