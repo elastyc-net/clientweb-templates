@@ -170,24 +170,84 @@
     items.set(String(item.id), Object.assign({}, old, item)); var host = root.closest(".wf-instance"); if (host) mount(host, []);
     return true;
   }
-  function phoneValue(value) {
-    value = value.trim();
-    if (!value) return "";
-    if (!/^[+0-9().\s-]+$/.test(value)) return null;
-    var compact = value.replace(/[().\s-]/g, "");
-    if (compact.indexOf("00") === 0) compact = "+" + compact.slice(2);
-    if (/^0[1-9][0-9]{7,8}$/.test(compact)) compact = "+381" + compact.slice(1);
-    if (!/^\+[1-9][0-9]{6,14}$/.test(compact)) return null;
-    if (compact.indexOf("+381") === 0 && !/^\+381[1-9][0-9]{7,8}$/.test(compact)) return null;
-    return compact;
-  }
-  function formatPhone(value) {
-    var phone = phoneValue(value);
-    if (phone && phone.indexOf("+381") === 0) {
-      var national = phone.slice(4);
-      return "+381 " + national.slice(0, 2) + " " + national.slice(2, 5) + " " + national.slice(5);
+  var phoneLoader = null, phoneControls = new Map();
+  function loadPhone() {
+    if (!document.getElementById("elastyc-intl-tel-css")) {
+      var css = node("link"); css.id = "elastyc-intl-tel-css"; css.rel = "stylesheet";
+      css.href = "/common/intl-tel-input/dist/css/intlTelInput.min.css?v=29.1.2"; document.head.appendChild(css);
     }
-    return phone === null ? value : phone;
+    if (global.intlTelInput && global.intlTelInput.utils) return Promise.resolve(global.intlTelInput);
+    if (phoneLoader) return phoneLoader;
+    phoneLoader = new Promise(function (resolve, reject) {
+      var script = node("script"), timer = global.setTimeout(failed, 15000);
+      function failed() {
+        global.clearTimeout(timer); script.onload = script.onerror = null; script.remove(); phoneLoader = null;
+        reject(new Error("Kontrola telefona nije učitana. Pokušajte ponovo."));
+      }
+      script.src = "/common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js?v=29.1.2";
+      script.onerror = failed;
+      script.onload = function () {
+        if (!global.intlTelInput || !global.intlTelInput.utils) { failed(); return; }
+        global.clearTimeout(timer); resolve(global.intlTelInput);
+      };
+      document.head.appendChild(script);
+    });
+    return phoneLoader;
+  }
+  function phoneControl(input) {
+    var active = true, widget = null, observer = null, failed = false;
+    var help = node("span", "wf-shop-help"), retry = node("button", "wf-shop-link", "Ponovo učitaj telefon");
+    help.setAttribute("role", "status"); retry.type = "button"; retry.hidden = true;
+    input.parentNode.appendChild(help); input.parentNode.appendChild(retry);
+    function fit() {
+      if (!active || !widget) return;
+      var button = input.parentNode.querySelector(".iti__selected-country");
+      if (button) input.style.setProperty("padding-left", (button.offsetWidth + 12) + "px", "important");
+    }
+    function validity() {
+      if (!input.value.trim()) return "";
+      if (!widget) return failed ? "Ponovo učitajte kontrolu telefona pre slanja." : "Sačekajte učitavanje kontrole telefona.";
+      return widget.isValidNumber() ? "" : "Unesite ispravan broj telefona za izabranu zemlju.";
+    }
+    function start() {
+      failed = false; retry.hidden = true; help.hidden = false; help.textContent = "Učitavanje telefona…";
+      loadPhone().then(function (factory) {
+        if (!active || !input.isConnected) return;
+        widget = factory(input, {
+          initialCountry: "rs", countryOrder: ["rs", "ba", "hr", "me", "si", "mk"],
+          countrySelectorMode: "DROPDOWN", countryNameLocale: "sr-Latn", separateDialCode: true,
+          numberDisplayFormat: "NATIONAL", placeholderNumberPolicy: "OFF", strictMode: true,
+          allowedNumberTypes: ["MOBILE", "FIXED_LINE"], allowNumberExtensions: false, allowPhonewords: false,
+          uiTranslations: { searchPlaceholder: "Pretraga zemlje", selectedCountryAriaLabel: "Izaberite zemlju za telefonski broj",
+            noCountrySelected: "Zemlja nije izabrana", countryListAriaLabel: "Zemlje", clearSearchAriaLabel: "Očisti pretragu", searchEmptyState: "Nema rezultata" }
+        });
+        widget.setDisabled(input.disabled); widget.setReadonly(input.readOnly); fit();
+        help.textContent = ""; help.hidden = true; input.setCustomValidity(validity());
+        if (global.ResizeObserver) {
+          observer = new global.ResizeObserver(fit); observer.observe(input);
+          var countryButton = input.parentNode.querySelector(".iti__selected-country"); if (countryButton) observer.observe(countryButton);
+        }
+      }).catch(function () {
+        if (!active) return;
+        failed = true; help.textContent = "Kontrola telefona nije učitana."; retry.hidden = false;
+        input.setCustomValidity(validity());
+      });
+    }
+    retry.addEventListener("click", start);
+    input.addEventListener("countrychange", function () { input.setCustomValidity(validity()); fit(); });
+    var control = {
+      validate: function (format) {
+        input.setCustomValidity(validity());
+        if (format && widget && input.value.trim() && input.checkValidity()) widget.setNumber(widget.getNumber());
+      },
+      value: function () { return input.value.trim() && widget ? widget.getNumber() : ""; },
+      setDisabled: function (disabled) { if (widget) widget.setDisabled(disabled); },
+      destroy: function () { active = false; if (observer) observer.disconnect(); if (widget) widget.destroy(); phoneControls.delete(input); }
+    };
+    phoneControls.set(input, control); start(); return control;
+  }
+  function clearPhones(root) {
+    phoneControls.forEach(function (control, input) { if (root.contains(input)) control.destroy(); });
   }
   function contactValidity(form, format) {
     var email = form.querySelector('[name="email"]'), phone = form.querySelector('[name="phone"]');
@@ -196,20 +256,22 @@
       email.setCustomValidity(email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) ? "Unesite ispravnu email adresu, na primer ime@domen.rs." : "");
     }
     if (phone) {
-      phone.setCustomValidity(phoneValue(phone.value) === null ? "Unesite ispravan telefon, na primer 064 123 4567 ili +381 64 123 4567." : "");
-      if (format) phone.value = formatPhone(phone.value);
+      var control = phoneControls.get(phone);
+      if (control) control.validate(format);
     }
   }
   function field(form, label, name, type, required, autocomplete) {
-    var wrap = node("label", "wf-shop-field"), input = node(type === "textarea" ? "textarea" : "input");
-    wrap.appendChild(node("span", "", label + (required ? " *" : ""))); input.name = name;
+    var wrap = node(type === "tel" ? "div" : "label", "wf-shop-field"), input = node(type === "textarea" ? "textarea" : "input");
+    var caption = node(type === "tel" ? "label" : "span", "", label + (required ? " *" : ""));
+    if (type === "tel") { input.id = "wf-phone-" + key(); caption.htmlFor = input.id; }
+    wrap.appendChild(caption); input.name = name;
     if (type !== "textarea") input.type = type || "text"; input.required = !!required; input.maxLength = type === "textarea" ? 2000 : 160;
-    if (type === "tel") { input.maxLength = 60; input.inputMode = "tel"; input.placeholder = "+381 64 123 4567"; }
+    if (type === "tel") { input.maxLength = 60; input.inputMode = "tel"; input.placeholder = "64 123 4567"; }
     if (autocomplete) input.autocomplete = autocomplete; wrap.appendChild(input); form.appendChild(wrap); return input;
   }
   function selected(root, name) { var input = root.querySelector('[name="' + name + '"]'); return input ? input.value.trim() : ""; }
   function detailsData(form) {
-    var result = {}; ["firstName", "lastName", "email", "phone", "street", "number", "postalCode", "city", "note", "delivery", "pickup", "payment", "addressId"].forEach(function (name) { result[name] = name === "phone" ? phoneValue(selected(form, name)) : selected(form, name); }); return result;
+    var result = {}; ["firstName", "lastName", "email", "phone", "street", "number", "postalCode", "city", "note", "delivery", "pickup", "payment", "addressId"].forEach(function (name) { result[name] = name === "phone" ? phoneControls.get(form.querySelector('[name="phone"]')).value() : selected(form, name); }); return result;
   }
   function optionField(form, label, name, options) {
     if (!options || !options.length) return null;
@@ -339,7 +401,7 @@
     var navigation = node("div", "wf-shop-step-actions"), back = null;
     if (!inquiry) { back = button("Nazad", function () { goStep(Math.max(0, currentStep - 1)); }, "wf-shop-link"); navigation.appendChild(back); }
     navigation.appendChild(submit); form.appendChild(navigation);
-    var widgetId = null, confirm = null, confirming = false, requestingQuote = false, challenge = null;
+    var widgetId = null, confirm = null, confirming = false, requestingQuote = false, challenge = null, lockedFields = [];
     var needsProtection = realPurchase || ((!state.preview || rollbackTest) && (!state.authenticated || rollbackTest));
     var protectionReady = !needsProtection, protectionStatus = null, retryProtection = null;
     function updateConfirmation() {
@@ -384,6 +446,7 @@
       confirming = true; updateConfirmation();
       return mutate("submit", { quoteId: quote.id, protectionToken: token }, function (result) {
         var test = result.receipt.test;
+        clearPhones(root);
         if (widgetId !== null && global.turnstile) { try { global.turnstile.remove(widgetId); } catch (error) {} widgetId = null; }
         if (result.receipt.paymentRequired && !test) {
           var livePayment = result.receipt.paymentEnvironment === "live";
@@ -405,6 +468,7 @@
       if (inquiry && (requestingQuote || confirming)) return;
       contactValidity(form, false); invalidateQuote();
     });
+    form.addEventListener("countrychange", function () { if (!requestingQuote && !confirming) invalidateQuote(); });
     form.addEventListener("focusout", function () { contactValidity(form, true); });
     form.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -419,7 +483,11 @@
       errorBox.textContent = "";
       requestingQuote = true; submit.disabled = true;
       // Prevent edits from changing the contact between quote validation and submission.
-      if (inquiry) Array.from(form.elements).forEach(function (input) { input.disabled = true; });
+      if (inquiry) {
+        lockedFields = Array.from(form.elements).map(function (input) { return { input: input, disabled: input.disabled }; });
+        lockedFields.forEach(function (field) { field.input.disabled = true; });
+        phone.setDisabled(true);
+      }
       var quoteRequest = inquiry && quote ? Promise.resolve() : mutate("quote", data, function (result) {
         quote = result.quote;
         if (inquiry) return;
@@ -443,7 +511,7 @@
         .catch(function (error) { errorBox.textContent = error.message; })
         .finally(function () {
           requestingQuote = false;
-          if (inquiry) Array.from(form.elements).forEach(function (input) { input.disabled = false; });
+          if (inquiry) { lockedFields.forEach(function (field) { field.input.disabled = field.disabled; }); phone.setDisabled(false); }
           submit.disabled = false; updateConfirmation();
         });
     }); root.appendChild(form); root.appendChild(review);
@@ -485,6 +553,7 @@
       if (state.protection && state.protection.provider === "turnstile") { if (inquiry || currentStep === 2) loadProtection(); }
       else protectionState(false, "Zaštita trenutno nije dostupna. Pokušajte ponovo kasnije.", false);
     }
+    var phone = phoneControl(form.querySelector('[name="phone"]'));
     contactValidity(form, true); updateConfirmation();
     if (!inquiry) {
       goStep(0, false);
@@ -530,6 +599,7 @@
     document.querySelectorAll("[data-wf-cart-count]").forEach(function (el) { el.textContent = "0"; });
     viewRoots.forEach(function (root) {
       if (root.dataset.wfShopView === "account") return;
+      clearPhones(root);
       root.replaceChildren(node("p", "wf-shop-help", "Učitavanje…")); root.dataset.rendered = "false";
     });
     document.querySelectorAll(".wf-instance").forEach(function (host) { mount(host, []); });
@@ -555,7 +625,7 @@
     viewRoots.forEach(function (root) {
       // Preserve form fields, focus and a reviewed quote during unrelated state updates.
       if (root.dataset.rendered === "true" && ["checkout", "request", "account"].indexOf(root.dataset.wfShopView) >= 0) return;
-      root.replaceChildren(); root.dataset.rendered = "true";
+      clearPhones(root); root.replaceChildren(); root.dataset.rendered = "true";
       if (root.dataset.wfShopView === "cart") renderCart(root);
       if (root.dataset.wfShopView === "favorites") renderFavorites(root);
       if (root.dataset.wfShopView === "checkout") renderCheckout(root, false);

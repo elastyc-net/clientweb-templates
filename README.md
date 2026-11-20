@@ -250,3 +250,17 @@ Verify with `node tools/test-commerce-inquiry.cjs` and
 fixture exercises the packaged 1.2.1 runtime, including retry and token expiry;
 it does not replace real Candidate verification. Prior releases and bootstrap
 pins stay unchanged until the normal Gallery and tenant library review.
+
+
+Commerce 1.2.2 / catalog 2.2.2 add the shared `intl-tel-input` 29.1.2 country
+picker to inquiry and checkout contact forms. Serbia is the initial country;
+saved international numbers select their own country. National numbers are
+formatted and validated for the selected country, including mobile and landline
+numbers, and submitted as E.164. The existing `/common/intl-tel-input/dist/`
+assets are loaded once per page, with a visible retry if loading fails. Optional
+empty phone fields remain optional. Country changes invalidate an existing
+quote; the picker locks during a direct inquiry send and is destroyed when the
+form is removed. The source builder publishes new immutable packages; previous
+versions, bootstrap pins, provider contracts and backend code are preserved.
+`test-commerce-inquiry.cjs` and `test-commerce-checkout.cjs` run against the real
+shared vendor library from the sibling `common` checkout.

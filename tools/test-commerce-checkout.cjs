@@ -21,6 +21,8 @@ async function fixture(authenticated = true, protectedForm = false, live = false
     return {ok:true,status:200,json:async()=>reply};
   };
   w.turnstile = {render(target, options) {const input=w.document.createElement('input');input.type='hidden';input.name='cf-turnstile-response';target.appendChild(input);widgets.push({input,options});return widgets.length;},reset(id){widgets[id-1].input.value='';},remove(){}};
+  w.matchMedia = () => ({matches:false,addEventListener(){},removeEventListener(){}});
+  w.eval(fs.readFileSync(path.join(__dirname, '../../common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'), 'utf8')+';window.intlTelInput=intlTelInput;');
   w.eval(script); w.document.dispatchEvent(new w.Event('DOMContentLoaded')); await settle();
   const button = text => Array.from(root.querySelectorAll('button')).find(item => item.textContent === text);
   const submit = async () => {root.querySelector('form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await settle();};
