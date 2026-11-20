@@ -231,3 +231,22 @@ the already installed, verified Gallery engine `925023a29e78`. Their bytes and
 hashes are unchanged. Bootstrap keeps the existing Acquisition setup/copy in
 1.0.5, alongside the new commerce versions; an upgrade must not silently drop
 these installed contracts or their runtime helpers.
+
+Commerce 1.2.1 / catalog 2.2.1 send product inquiries directly from the contact
+form. One explicit click obtains a server-validated quote and submits it, without
+an intermediate review. Contact edits and repeated clicks are blocked while the
+request is pending; a retry retains the same quote unless it is stale. Inquiry
+Turnstile uses `interaction-only`; server Siteverify and expiry/error handling
+remain required. Order checkout keeps its existing review and payment steps.
+
+Optional phones accept Serbian national numbers and international `+` / `00`
+numbers. Serbian numbers are displayed with spaces and sent in international
+format; invalid phones and email domains block sending. The commerce engine
+also validates and normalizes phones in `CommercePolicy`. These checks validate
+format, not mailbox ownership or telephone reachability.
+
+Verify with `node tools/test-commerce-inquiry.cjs` and
+`node tools/test-commerce-checkout.cjs` using the jsdom26 module path. The inquiry
+fixture exercises the packaged 1.2.1 runtime, including retry and token expiry;
+it does not replace real Candidate verification. Prior releases and bootstrap
+pins stay unchanged until the normal Gallery and tenant library review.

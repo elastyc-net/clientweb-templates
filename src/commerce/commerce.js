@@ -170,15 +170,46 @@
     items.set(String(item.id), Object.assign({}, old, item)); var host = root.closest(".wf-instance"); if (host) mount(host, []);
     return true;
   }
+  function phoneValue(value) {
+    value = value.trim();
+    if (!value) return "";
+    if (!/^[+0-9().\s-]+$/.test(value)) return null;
+    var compact = value.replace(/[().\s-]/g, "");
+    if (compact.indexOf("00") === 0) compact = "+" + compact.slice(2);
+    if (/^0[1-9][0-9]{7,8}$/.test(compact)) compact = "+381" + compact.slice(1);
+    if (!/^\+[1-9][0-9]{6,14}$/.test(compact)) return null;
+    if (compact.indexOf("+381") === 0 && !/^\+381[1-9][0-9]{7,8}$/.test(compact)) return null;
+    return compact;
+  }
+  function formatPhone(value) {
+    var phone = phoneValue(value);
+    if (phone && phone.indexOf("+381") === 0) {
+      var national = phone.slice(4);
+      return "+381 " + national.slice(0, 2) + " " + national.slice(2, 5) + " " + national.slice(5);
+    }
+    return phone === null ? value : phone;
+  }
+  function contactValidity(form, format) {
+    var email = form.querySelector('[name="email"]'), phone = form.querySelector('[name="phone"]');
+    if (email) {
+      if (format) email.value = email.value.trim();
+      email.setCustomValidity(email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) ? "Unesite ispravnu email adresu, na primer ime@domen.rs." : "");
+    }
+    if (phone) {
+      phone.setCustomValidity(phoneValue(phone.value) === null ? "Unesite ispravan telefon, na primer 064 123 4567 ili +381 64 123 4567." : "");
+      if (format) phone.value = formatPhone(phone.value);
+    }
+  }
   function field(form, label, name, type, required, autocomplete) {
     var wrap = node("label", "wf-shop-field"), input = node(type === "textarea" ? "textarea" : "input");
     wrap.appendChild(node("span", "", label + (required ? " *" : ""))); input.name = name;
     if (type !== "textarea") input.type = type || "text"; input.required = !!required; input.maxLength = type === "textarea" ? 2000 : 160;
+    if (type === "tel") { input.maxLength = 60; input.inputMode = "tel"; input.placeholder = "+381 64 123 4567"; }
     if (autocomplete) input.autocomplete = autocomplete; wrap.appendChild(input); form.appendChild(wrap); return input;
   }
   function selected(root, name) { var input = root.querySelector('[name="' + name + '"]'); return input ? input.value.trim() : ""; }
   function detailsData(form) {
-    var result = {}; ["firstName", "lastName", "email", "phone", "street", "number", "postalCode", "city", "note", "delivery", "pickup", "payment", "addressId"].forEach(function (name) { result[name] = selected(form, name); }); return result;
+    var result = {}; ["firstName", "lastName", "email", "phone", "street", "number", "postalCode", "city", "note", "delivery", "pickup", "payment", "addressId"].forEach(function (name) { result[name] = name === "phone" ? phoneValue(selected(form, name)) : selected(form, name); }); return result;
   }
   function optionField(form, label, name, options) {
     if (!options || !options.length) return null;
@@ -248,7 +279,7 @@
     }
     if (rollbackTest) root.appendChild(node("p", "wf-shop-preview", "Ograničeni test: koristi označene test podatke, proverava zaštitu i vraća poslovni upis. Nema slanja kupcu."));
     var form = node("form", "wf-shop-form"), panels = [], currentStep = 0, stepButtons = [], furthestStep = 0;
-    form.noValidate = true;
+    form.noValidate = true; form.dataset.inquiry = inquiry ? "true" : "false";
     var contactPanel = form, deliveryPanel = form, paymentPanel = form;
     if (!inquiry) {
       var stepsNav = node("nav", "wf-shop-steps"); stepsNav.setAttribute("aria-label", "Koraci porudžbine");
@@ -304,22 +335,26 @@
       });
     }
     var errorBox = node("p", "wf-shop-error"); errorBox.setAttribute("role", "alert"); form.appendChild(errorBox);
-    var review = node("div", "wf-shop-review"), submit = node("button", "wf-shop-btn", "Proveri i prikaži pregled"); submit.type = "submit";
+    var review = node("div", "wf-shop-review"), submit = node("button", "wf-shop-btn", inquiry ? (rollbackTest ? "Pokreni test upita" : "Pošalji upit za ponudu") : "Proveri i prikaži pregled"); submit.type = "submit";
     var navigation = node("div", "wf-shop-step-actions"), back = null;
     if (!inquiry) { back = button("Nazad", function () { goStep(Math.max(0, currentStep - 1)); }, "wf-shop-link"); navigation.appendChild(back); }
     navigation.appendChild(submit); form.appendChild(navigation);
-    var widgetId = null, confirm = null, confirming = false, challenge = null;
+    var widgetId = null, confirm = null, confirming = false, requestingQuote = false, challenge = null;
     var needsProtection = realPurchase || ((!state.preview || rollbackTest) && (!state.authenticated || rollbackTest));
     var protectionReady = !needsProtection, protectionStatus = null, retryProtection = null;
-    function updateConfirmation() { if (confirm) confirm.disabled = confirming || !quote || !protectionReady; }
+    function updateConfirmation() {
+      if (confirm) confirm.disabled = confirming || !quote || !protectionReady;
+      if (inquiry) submit.disabled = requestingQuote || confirming || !protectionReady;
+    }
     function protectionState(ready, message, retry) {
       protectionReady = ready;
-      if (protectionStatus) protectionStatus.textContent = message;
+      if (protectionStatus) { protectionStatus.textContent = message; protectionStatus.hidden = inquiry && ready; }
       if (retryProtection) retryProtection.hidden = !retry;
       updateConfirmation();
     }
     function invalidateQuote() { quote = null; confirm = null; review.replaceChildren(); submit.hidden = false; }
     function validStep(index) {
+      contactValidity(form, true);
       var invalid = Array.from(panels[index].querySelectorAll("input,select,textarea")).find(function (input) { return !input.checkValidity(); });
       if (!invalid) return true;
       if (panels[index].hidden) goStep(index, false);
@@ -342,21 +377,53 @@
         else loadProtection();
       } catch (error) { protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); }
     }
+    function submitQuote() {
+      if (!quote || confirming || !protectionReady) return;
+      var token = selected(form, "cf-turnstile-response");
+      if (needsProtection && !token) { protectionState(false, "Potvrdite zaštitu pre slanja.", true); return; }
+      confirming = true; updateConfirmation();
+      return mutate("submit", { quoteId: quote.id, protectionToken: token }, function (result) {
+        var test = result.receipt.test;
+        if (widgetId !== null && global.turnstile) { try { global.turnstile.remove(widgetId); } catch (error) {} widgetId = null; }
+        if (result.receipt.paymentRequired && !test) {
+          var livePayment = result.receipt.paymentEnvironment === "live";
+          root.replaceChildren(); root.appendChild(node("h2", "", livePayment ? "Porudžbina je primljena" : "Pregled je potvrđen"));
+          root.appendChild(node("p", "wf-shop-preview", livePayment ? "Porudžbina " + result.receipt.caseKey + " je kreirana. Plaćanje još nije potvrđeno. Nastavite na bezbednu AllSecure stranicu." : "Bankart TEST: nastavite na test stranicu banke. Poslovna narudžbina nije kreirana."));
+          root.appendChild(button(livePayment ? "Nastavi na AllSecure plaćanje" : "Nastavi na Bankart TEST", function () { return mutate("payment-start", { checkoutId: result.receipt.checkoutId }, function (reply) { renderPayment(root, reply.payment); if (reply.payment.redirectUrl) global.location.assign(reply.payment.redirectUrl); }); }));
+          return;
+        }
+        root.replaceChildren(); root.appendChild(node("h2", "", test && test.rolledBack ? "Stvarni test je prošao" : result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
+        root.appendChild(node("p", "", test && test.rolledBack ? "Zaštita je potvrđena. Provereni su predmet, dokument, stavke i veza. Test upis je vraćen." : result.receipt.preview ? "Ovo je pregled. Stvarna poslovna dokumenta nisu kreirana." : "Vaš broj: " + result.receipt.caseKey));
+      }).catch(function (error) {
+        errorBox.textContent = error.message;
+        if (error.status === 409) invalidateQuote();
+        resetProtection();
+      }).finally(function () { confirming = false; updateConfirmation(); });
+    }
     form.addEventListener("input", function (event) {
       if (event.target && event.target.name === "cf-turnstile-response") return;
-      invalidateQuote();
+      if (inquiry && (requestingQuote || confirming)) return;
+      contactValidity(form, false); invalidateQuote();
     });
+    form.addEventListener("focusout", function () { contactValidity(form, true); });
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      if (requestingQuote || confirming) return;
+      contactValidity(form, true);
       if (!inquiry && currentStep < 2) { if (validStep(currentStep)) goStep(currentStep + 1); return; }
       if (!inquiry) { for (var index = 0; index < panels.length; index++) { if (!validStep(index)) return; } }
       else if (!form.reportValidity()) return;
       var data = { contact: detailsData(form), kind: inquiry ? "inquiry" : "order" };
       if (inquiry) { var p = new URLSearchParams(global.location.search); data.productId = p.get("productId"); data.variantId = p.get("variantId") || ""; data.quantity = p.get("quantity") || "1"; }
+      if (inquiry && !protectionReady) return;
       errorBox.textContent = "";
-      submit.disabled = true;
-      mutate("quote", data, function (result) {
-        quote = result.quote; review.replaceChildren(); submit.hidden = true;
+      requestingQuote = true; submit.disabled = true;
+      // Prevent edits from changing the contact between quote validation and submission.
+      if (inquiry) Array.from(form.elements).forEach(function (input) { input.disabled = true; });
+      var quoteRequest = inquiry && quote ? Promise.resolve() : mutate("quote", data, function (result) {
+        quote = result.quote;
+        if (inquiry) return;
+        review.replaceChildren(); submit.hidden = true;
         review.appendChild(node("h2", "", inquiry ? "Pregled upita" : "Pregled porudžbine"));
         if (!inquiry) {
           var details = detailsData(form), summary = node("div", "wf-shop-confirmation-details");
@@ -370,30 +437,15 @@
         if (quote.preview && !quote.realPurchase && !rollbackTest) review.appendChild(node("p", "wf-shop-preview", "Candidate pregled: završni korak proverava tok bez kreiranja stvarne porudžbine ili ponude."));
         confirm = node("button", "wf-shop-btn", rollbackTest ? (inquiry ? "Pokreni test upita" : "Pokreni test porudžbine") : (inquiry ? "Pošalji upit za ponudu" : quote.realPurchase ? "Potvrdi stvarnu porudžbinu" : "Potvrdi porudžbinu"));
         confirm.type = "button";
-        confirm.addEventListener("click", function () {
-          if (!quote || confirming || !protectionReady) return;
-          var token = selected(form, "cf-turnstile-response");
-          if (needsProtection && !token) { protectionState(false, "Potvrdite zaštitu pre slanja.", true); return; }
-          confirming = true; updateConfirmation();
-          mutate("submit", { quoteId: quote.id, protectionToken: token }, function (result) {
-            var test = result.receipt.test;
-            if (widgetId !== null && global.turnstile) { try { global.turnstile.remove(widgetId); } catch (error) {} widgetId = null; }
-            if (result.receipt.paymentRequired && !test) {
-              var livePayment = result.receipt.paymentEnvironment === "live";
-              root.replaceChildren(); root.appendChild(node("h2", "", livePayment ? "Porudžbina je primljena" : "Pregled je potvrđen"));
-              root.appendChild(node("p", "wf-shop-preview", livePayment ? "Porudžbina " + result.receipt.caseKey + " je kreirana. Plaćanje još nije potvrđeno. Nastavite na bezbednu AllSecure stranicu." : "Bankart TEST: nastavite na test stranicu banke. Poslovna narudžbina nije kreirana."));
-              root.appendChild(button(livePayment ? "Nastavi na AllSecure plaćanje" : "Nastavi na Bankart TEST", function () { return mutate("payment-start", { checkoutId: result.receipt.checkoutId }, function (reply) { renderPayment(root, reply.payment); if (reply.payment.redirectUrl) global.location.assign(reply.payment.redirectUrl); }); }));
-              return;
-            }
-            root.replaceChildren(); root.appendChild(node("h2", "", test && test.rolledBack ? "Stvarni test je prošao" : result.receipt.preview ? "Provera je uspešna" : inquiry ? "Upit je poslat" : "Porudžbina je primljena"));
-            root.appendChild(node("p", "", test && test.rolledBack ? "Zaštita je potvrđena. Provereni su predmet, dokument, stavke i veza. Test upis je vraćen." : result.receipt.preview ? "Ovo je pregled. Stvarna poslovna dokumenta nisu kreirana." : "Vaš broj: " + result.receipt.caseKey));
-          }).catch(function (error) {
-            errorBox.textContent = error.message;
-            if (error.status === 409) invalidateQuote();
-            resetProtection();
-          }).finally(function () { confirming = false; updateConfirmation(); });
-        }); review.appendChild(confirm); updateConfirmation();
-      }).catch(function (error) { errorBox.textContent = error.message; }).finally(function () { submit.disabled = false; });
+        confirm.addEventListener("click", submitQuote); review.appendChild(confirm); updateConfirmation();
+      });
+      quoteRequest.then(function () { if (inquiry && form.isConnected) return submitQuote(); })
+        .catch(function (error) { errorBox.textContent = error.message; })
+        .finally(function () {
+          requestingQuote = false;
+          if (inquiry) Array.from(form.elements).forEach(function (input) { input.disabled = false; });
+          submit.disabled = false; updateConfirmation();
+        });
     }); root.appendChild(form); root.appendChild(review);
     var protectionScript = null;
     function loadProtection() {
@@ -415,7 +467,7 @@
       if (!form.isConnected || widgetId !== null) return;
       try {
         widgetId = global.turnstile.render(challenge, {
-          sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: "always", retry: "never",
+          sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: inquiry ? "interaction-only" : "always", retry: "never",
           callback: function (token) { if (form.isConnected) protectionState(typeof token === "string" && token !== "", token ? "Zaštita je potvrđena." : "Potvrdite zaštitu pre slanja.", !token); },
           "error-callback": function () { if (form.isConnected) protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); return true; },
           "expired-callback": function () { if (form.isConnected) protectionState(false, "Provera zaštite je istekla. Ponovite proveru pre slanja.", true); },
@@ -424,7 +476,7 @@
       } catch (error) { protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); }
     }
     if (needsProtection) {
-      var protection = node("div", "wf-shop-protection");
+      var protection = node("div", "wf-shop-protection" + (inquiry ? " wf-shop-protection--quiet" : ""));
       challenge = node("div", "wf-shop-protection__widget");
       protectionStatus = node("p", "wf-shop-help", "Provera zaštite je u toku…"); protectionStatus.setAttribute("role", "status");
       retryProtection = node("button", "wf-shop-link", "Ponovi proveru"); retryProtection.type = "button"; retryProtection.hidden = true;
@@ -433,6 +485,7 @@
       if (state.protection && state.protection.provider === "turnstile") { if (inquiry || currentStep === 2) loadProtection(); }
       else protectionState(false, "Zaštita trenutno nije dostupna. Pokušajte ponovo kasnije.", false);
     }
+    contactValidity(form, true); updateConfirmation();
     if (!inquiry) {
       goStep(0, false);
       if (savedAddress && savedAddress.value) savedAddress.dispatchEvent(new Event("change"));
