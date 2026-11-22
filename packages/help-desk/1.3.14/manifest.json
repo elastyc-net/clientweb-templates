@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.14",
+  "label": "Help Desk",
+  "description": "Razgovor u fokusu sa očuvanjem skrola pri promeni visine i širine ekrana.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "c43002ea44b7eb6c8960db77524da36629a32d2660245e08569386c169dc580c"
+    }
+  ]
+}
