@@ -16,7 +16,7 @@ const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const write=(p,value)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),JSON.stringify(value,null,2)+'\n');};
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
 const releases=read('packages/catalog.json');
-for(const [key,from,to] of [['webfront-commerce','1.2.5','1.2.6'],['product-catalog','2.2.5','2.2.6']]){
+for(const [key,from,to] of [['webfront-commerce','1.2.6','1.2.7'],['product-catalog','2.2.6','2.2.7']]){
  const base='packages/'+key+'/'+from,target='packages/'+key+'/'+to;
  if(spawnSync('git',['ls-files','--error-unmatch',target+'/manifest.json'],{cwd:root,stdio:'ignore'}).status===0)throw new Error('Immutable release is tracked: '+target);
  const previous=read(base+'/manifest.json');
@@ -31,7 +31,7 @@ for(const [key,from,to] of [['webfront-commerce','1.2.5','1.2.6'],['product-cata
     if(!asset)throw new Error('Missing shared commerce asset: '+item.path+' '+name);
     asset.content=runtime[name];
    }
-   if(definition.componentKey==='product-list'){
+   if(definition.componentKey==='product-list' && from==='2.2.5'){
     for(const asset of [...definition.styles,...definition.scripts])if(runtime[asset.name])asset.content=runtime[asset.name];
     definition.htmlContent=definition.htmlContent.replace('data-show-list-description=', 'data-list-variants="detail" data-hide-current-category="{{setting:hide-current-category}}" data-show-grid-description="{{setting:show-grid-description}}" data-show-list-description=');
     const settings=definition.settingsSchema.properties;
@@ -40,7 +40,7 @@ for(const [key,from,to] of [['webfront-commerce','1.2.5','1.2.6'],['product-cata
     settings['show-grid-description']={type:'boolean',title:'Kratak opis u mreži',default:false};
     settings['hide-current-category']={type:'boolean',title:'Ne ponavljaj otvorenu kategoriju',default:true};
    }
-   if(definition.componentKey==='product-detail'){
+   if(definition.componentKey==='product-detail' && from==='2.2.5'){
     for(const asset of definition.scripts)if(runtime[asset.name])asset.content=runtime[asset.name];
     definition.htmlContent=definition.htmlContent.replace('data-commerce-enabled=', 'data-variant-display="{{setting:variant-display}}" data-show-brand="{{setting:show-brand}}" data-show-category="{{setting:show-category}}" data-commerce-enabled=');
     Object.assign(definition.settingsSchema.properties,{
@@ -50,7 +50,7 @@ for(const [key,from,to] of [['webfront-commerce','1.2.5','1.2.6'],['product-cata
     });
    }
    write(target+'/'+item.path,definition);
-  }else if(item.itemType==='provider' && item.itemKey==='catalog-products'){
+  }else if(item.itemType==='provider' && item.itemKey==='catalog-products' && from==='2.2.5'){
    const definition=read(base+'/'+item.path), properties=definition.outputSchema.properties;
    properties.filters.properties={ordered:properties.filters.properties.ordered};properties.filters.required=['ordered'];
    const product=properties.items.items;delete product.properties.variants;
@@ -63,10 +63,10 @@ for(const [key,from,to] of [['webfront-commerce','1.2.5','1.2.6'],['product-cata
   return {...item,sha256:sha(target+'/'+item.path)};
  });
  const next={...previous,version:to,items};
- if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.6'}:d);
+ if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.7'}:d);
  write(target+'/manifest.json',next);
  releases.packages=releases.packages.filter(p=>!(p.packageKey===key&&p.version===to));
  releases.packages.push({packageKey:key,version:to,manifest:key+'/'+to+'/manifest.json',sha256:sha(target+'/manifest.json')});
 }
 write('packages/catalog.json',releases);
-console.log('Built webfront-commerce@1.2.6 and product-catalog@2.2.6; prior releases preserved.');
+console.log('Built webfront-commerce@1.2.7 and product-catalog@2.2.7; prior releases preserved.');

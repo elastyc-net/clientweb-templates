@@ -519,7 +519,10 @@
     }
     function protectionState(ready, message, retry) {
       protectionReady = ready;
-      if (protectionStatus) { protectionStatus.textContent = message; protectionStatus.hidden = inquiry && ready; }
+      if (protectionStatus) {
+        protectionStatus.textContent = message; protectionStatus.hidden = inquiry && ready;
+        if (ready) delete protectionStatus.dataset.wfProtectionError;
+      }
       if (retryProtection) retryProtection.hidden = !retry;
       updateConfirmation();
     }
@@ -644,11 +647,20 @@
       if (!form.isConnected || widgetId !== null) return;
       try {
         widgetId = global.turnstile.render(challenge, {
-          sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: inquiry ? "interaction-only" : "always", retry: "never",
+          sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: inquiry ? "interaction-only" : "always",
+          retry: "auto", "retry-interval": 8000, "refresh-expired": "auto", "refresh-timeout": "auto",
           callback: function (token) { if (form.isConnected) protectionState(typeof token === "string" && token !== "", token ? "Zaštita je potvrđena." : "Potvrdite zaštitu pre slanja.", !token); },
-          "error-callback": function () { if (form.isConnected) protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); return true; },
-          "expired-callback": function () { if (form.isConnected) protectionState(false, "Provera zaštite je istekla. Ponovite proveru pre slanja.", true); },
-          "timeout-callback": function () { if (form.isConnected) protectionState(false, "Vreme za proveru zaštite je isteklo. Ponovite proveru.", true); }
+          "error-callback": function (code) {
+            if (form.isConnected) {
+              var reference = typeof code === "string" && /^[0-9]{6}$/.test(code) ? code : "unknown";
+              protectionStatus.dataset.wfProtectionError = reference;
+              var configurationError = /^(110100|110110|110200|400020|400021|400070)$/.test(reference);
+              protectionState(false, configurationError ? "Zaštita sajta trenutno nije dostupna. Pokušajte kasnije." : "Provera zaštite je prekinuta. Automatski pokušavamo ponovo…", true);
+            }
+            return true;
+          },
+          "expired-callback": function () { if (form.isConnected) protectionState(false, "Obnavljamo proveru zaštite…", true); },
+          "timeout-callback": function () { if (form.isConnected) protectionState(false, "Provera zaštite je istekla. Automatski pokušavamo ponovo…", true); }
         });
       } catch (error) { protectionState(false, "Zaštita nije uspela. Ponovite proveru pre slanja.", true); }
     }

@@ -293,3 +293,9 @@ Verify `tools/test-commerce-loading.cjs` as well as inquiry/checkout/protection.
 Patch 1.2.5 / 2.2.5 keeps the full state for mixed pages that also contain
 commerce product widgets. Pending reads are shared only within the same view
 and identity; adding a cart/product widget upgrades a compact read to full state.
+
+Patch 1.2.7 / 2.2.7 restores Turnstile's automatic retry and token/timeout
+refresh with its standard eight-second retry interval. A failed or expired check
+still blocks sending until a fresh successful callback; recovery never submits
+the form. The status element retains only a six-digit support code (or `unknown`)
+in `data-wf-protection-error`, never a token or raw diagnostic text.

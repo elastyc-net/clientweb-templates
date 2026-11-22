@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
-const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.5/components/commerce-request.json')));
+const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.7/components/commerce-request.json')));
 const script = component.scripts.find(asset => asset.name === 'commerce.js').content;
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; }
@@ -40,6 +40,7 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
     check(f.send.textContent==='Pošalji upit za ponudu' && f.send.disabled, 'One clear send action waits for protection');
     f.submit(); await settle(); check(f.calls.length===0,'Programmatic submit cannot bypass pending protection');
     check(f.widgets[0].options.appearance==='interaction-only','Cloudflare displays a widget only when interaction is needed');
+    check(f.widgets[0].options.retry==='auto' && f.widgets[0].options['retry-interval']===8000 && f.widgets[0].options['refresh-expired']==='auto' && f.widgets[0].options['refresh-timeout']==='auto','Transient failures and expired challenges use the documented automatic recovery');
     f.success(); check(!f.send.disabled && f.root.querySelector('.wf-shop-protection [role=status]').hidden,'Successful background check enables the direct action quietly');
     for (const phone of ['1','abc','1234','+1234567890123456']) {
       f.form.elements.phone.value=phone;f.submit();await settle();check(f.calls.length===0 && !f.form.elements.phone.checkValidity(),'Invalid phone blocks all network mutations: '+phone);
@@ -54,6 +55,18 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
     check(f.calls[1].protectionToken==='local-token' && f.root.textContent.includes('Upit je poslat'),'Protected send reaches its receipt');
     check(!f.root.textContent.includes('Pregled upita') && !f.root.querySelector('form'),'No extra review or confirmation screen');
   } finally {f.dom.window.close();}
+  const interrupted=await fixture();try {
+    const status=interrupted.root.querySelector('.wf-shop-protection [role=status]');
+    interrupted.widgets[0].options['error-callback']('200500');interrupted.submit();await settle();
+    check(interrupted.send.disabled && interrupted.calls.length===0 && status.dataset.wfProtectionError==='200500','An iframe failure retains a bounded support code and blocks sending');
+    check(interrupted.form.elements.firstName.value==='Test' && interrupted.form.elements.note.value==='Fixture','Challenge recovery preserves the contact and note');
+    interrupted.success();await settle();
+    check(!interrupted.send.disabled && !status.dataset.wfProtectionError && interrupted.calls.length===0,'Automatic recovery needs a real callback and never submits the form on its own');
+    interrupted.widgets[0].options['error-callback']('110200');
+    check(interrupted.send.disabled && status.textContent.includes('Pokušajte kasnije'),'A domain configuration error is distinguished from a transient error');
+    interrupted.widgets[0].options['error-callback']('<unsafe diagnostic>');
+    check(status.dataset.wfProtectionError==='unknown' && !interrupted.root.textContent.includes('unsafe'),'Untrusted callback text is never exposed');
+  }finally{interrupted.dom.window.close();}
   const slow = await fixture();
   try {
     slow.success();slow.setMode('defer');slow.submit();slow.submit();await settle();
