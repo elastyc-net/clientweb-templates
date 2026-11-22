@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.17",
+  "label": "Help Desk",
+  "description": "Diktiranje ostaje uključeno kroz pauze i prekide servisa do Stop ili slanja završnog teksta.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "1c220a3d1623f2322ed506e8e59883068004ea15acd4c02def5fd974c59cddbc"
+    }
+  ]
+}
