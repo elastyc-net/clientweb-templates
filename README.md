@@ -47,6 +47,16 @@ Van obima: Web Site Assets, Pages (`_sitestruct`), `_templatesback` (Elastyc for
 
 ## Webfront v2 library packages
 
+`product-catalog@2.2.6` and `webfront-commerce@1.2.6` add compact responsive list
+cards, separate brand/category and grid/list description controls, and detail
+variant selection or a list of individually priced variant rows. Category cards
+link to the detail instead of displaying variant selectors. Catalog-only pages
+use a compact commerce summary; detail variant offers are loaded in one batch.
+Build these immutable releases with `node src/commerce/build.mjs`, validate with
+`node tools/library-catalog.mjs`, and test actions with
+`node tools/test-catalog-actions.cjs` (jsdom required). The engine capability is
+`catalog-compact-v1`; existing published versions remain unchanged.
+
 `packages/catalog.json` is the immutable design library source, independent of
 the legacy `templategallery/{Folder}` packs above. `starter-site@1.0.0` includes
 four page templates, five static components, a layout and two shared sections.
