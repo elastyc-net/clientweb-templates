@@ -299,3 +299,7 @@ refresh with its standard eight-second retry interval. A failed or expired check
 still blocks sending until a fresh successful callback; recovery never submits
 the form. The status element retains only a six-digit support code (or `unknown`)
 in `data-wf-protection-error`, never a token or raw diagnostic text.
+
+Patch 1.2.8 / 2.2.8 keeps the verified 1.2.7 / 2.2.7 runtime and includes variant
+rows in the shared commerce theme and box-sizing scope, so quantity inputs and
+cart buttons retain the site palette and borders outside the parent action slot.
