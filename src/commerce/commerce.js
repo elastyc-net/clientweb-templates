@@ -4,9 +4,9 @@
   var state = null, csrf = "", endpoint = "", queue = Promise.resolve(), quote = null;
   var items = new Map(), viewRoots = [], busy = false, channel = null;
   var authGeneration = 0, refreshingAuth = false;
-  var stateRead = null, stateReadGeneration = -1, lastStateAt = 0, requestSequence = 0, appliedSequence = 0;
+  var stateRead = null, stateReadGeneration = -1, stateReadView = "", lastStateAt = 0, requestSequence = 0, appliedSequence = 0;
   var inquiryDrafts = new WeakMap();
-  function inquiryView() { return viewRoots.some(function (root) { return root.dataset.wfShopView === "request"; }) && !viewRoots.some(function (root) { return ["cart", "checkout", "favorites", "account"].indexOf(root.dataset.wfShopView) >= 0; }); }
+  function inquiryView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "request"; }) && !viewRoots.some(function (root) { return root.isConnected && ["cart", "checkout", "favorites", "account"].indexOf(root.dataset.wfShopView) >= 0; }) && !document.querySelector('[data-commerce-enabled="true"]'); }
   function themeContrast(host) {
     var raw = global.getComputedStyle(host).getPropertyValue("--wf-color-primary").trim();
     if (/^#[a-f0-9]{3}$/i.test(raw)) raw = "#" + raw.slice(1).split("").map(function (x) { return x + x; }).join("");
@@ -56,9 +56,10 @@
   }
   function request(action, data, mutation, authChecked) {
     if (!mutation && action === "state" && !authChecked) {
-      if (stateRead && stateReadGeneration === authGeneration) return stateRead;
+      var view = inquiryView() ? "inquiry" : "full";
+      if (stateRead && stateReadGeneration === authGeneration && stateReadView === view) return stateRead;
       var pending = performRequest(action, data, false, false);
-      stateRead = pending; stateReadGeneration = authGeneration;
+      stateRead = pending; stateReadGeneration = authGeneration; stateReadView = view;
       var clear = function () { if (stateRead === pending) stateRead = null; };
       pending.then(clear, clear); return pending;
     }
@@ -88,6 +89,7 @@
           });
         }
         if (!response.ok || !payload.ok) { var error = new Error(payload.message || "Zahtev nije uspeo. Pokušajte ponovo."); error.status = response.status; throw error; }
+        if (!mutation && payload.state && payload.state.view === "inquiry" && !inquiryView()) return request("state", {}, false);
         if (payload.csrf) csrf = payload.csrf;
         if (payload.state && sequence >= appliedSequence) { appliedSequence = sequence; lastStateAt = Date.now(); state = payload.state; render(); }
         if (payload.stateUnavailable) { notify("Promena je sačuvana. Osvežavanje pregleda trenutno nije dostupno."); global.setTimeout(function () { request("state", {}, false).catch(function () {}); }, 1000); }
@@ -674,7 +676,7 @@
   }
   function scan() {
     document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { if (viewRoots.indexOf(root) < 0) viewRoots.push(root); });
-    if (endpoint) { render(); return; }
+    if (endpoint) { if (state && state.view === "inquiry" && !inquiryView()) request("state", {}, false).catch(function (error) { notify(error.message, true); }); else render(); return; }
     var host = document.querySelector("[data-wf-commerce-url]"); if (!host) { viewRoots.forEach(function (root) { root.textContent = "Za proveru korpe i formi otvorite direktan Candidate pregled."; }); return; }
     themeContrast(host);
     if (global.parent !== global && host.dataset.wfCatalogBridge === "true") { viewRoots.forEach(function (root) { root.textContent = "Za interaktivnu proveru korpe otvorite direktan Candidate pregled."; }); return; }

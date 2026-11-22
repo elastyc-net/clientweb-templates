@@ -279,3 +279,7 @@ shared per identity, fresh state is not fetched again on each focus, and older
 responses cannot repaint newer state. Placeholder styling follows the public
 theme's optional `--wf-color-placeholder` with its muted color as fallback.
 Verify `tools/test-commerce-loading.cjs` as well as inquiry/checkout/protection.
+
+Patch 1.2.5 / 2.2.5 keeps the full state for mixed pages that also contain
+commerce product widgets. Pending reads are shared only within the same view
+and identity; adding a cart/product widget upgrades a compact read to full state.

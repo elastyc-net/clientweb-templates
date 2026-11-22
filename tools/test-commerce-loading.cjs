@@ -16,8 +16,10 @@ async function fixture(){
  w.fetch=async(url,options={})=>{
   const body=options.body?JSON.parse(options.body):null;
   if(body){posts.push(body);server.cartCount=9;const r=await response(server).json();if(body.action==='quote')r.quote={id:'b'.repeat(32),lines:[],preview:true};if(body.action==='submit')r.receipt={preview:true};return {ok:true,status:200,json:async()=>r};}
-  reads.push(String(url));if(auto)return response(server);
-  return new Promise(resolve=>waiting.push(state=>resolve(response(state))));
+  reads.push(String(url));const compact=new URL(url).searchParams.get('wf_commerce_view')==='inquiry';
+  const readResponse=state=>response(compact?state:{...state,view:undefined});
+  if(auto)return readResponse(server);
+  return new Promise(resolve=>waiting.push(state=>resolve(readResponse(state))));
  };
  w.eval(fs.readFileSync(path.join(__dirname,'../../common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'),'utf8')+';window.intlTelInput=intlTelInput;');
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));
@@ -53,5 +55,12 @@ async function fixture(){
   old(base);await tick();check(a.root.querySelector('[name=firstName]').value==='Other account' && a.w.document.querySelector('[data-wf-cart-count]').textContent==='2','A late previous-identity response cannot restore private data.');
   a.w.testChannel.onmessage({data:'refresh'});a.w.testChannel.onmessage({data:'refresh'});await tick();check(a.reads.length===4,'Cross-tab refresh messages share a pending read.');a.waiting.shift()(next);await tick();
  }finally{a.dom.window.close();}
+ const mixed=await fixture();try{
+  const product=mixed.w.document.createElement('div');product.dataset.commerceEnabled='true';mixed.w.document.body.appendChild(product);mixed.w.ElastycCommerce.scan();
+  mixed.waiting.shift()(base);await tick();
+  check(mixed.reads.length===2 && !new URL(mixed.reads[1]).searchParams.has('wf_commerce_view'),'A product widget added during a compact read receives its separate full state.');
+  mixed.waiting.shift()(base);await tick();
+  check(!!mixed.root.querySelector('.iti') && !mixed.root.querySelector('button[type=submit]').disabled,'Mixed compositions finish without a compact/full response loop.');
+ }finally{mixed.dom.window.close();}
  console.log('Commerce loading:',checks,'checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
