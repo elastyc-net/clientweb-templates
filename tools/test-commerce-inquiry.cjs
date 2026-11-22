@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
-const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.8/components/commerce-request.json')));
+const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.9/components/commerce-request.json')));
 const script = component.scripts.find(asset => asset.name === 'commerce.js').content;
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; }
@@ -17,6 +17,7 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
     const body = options.body ? JSON.parse(options.body) : null;
     if (body) calls.push(body);
     if (body && body.action === 'quote' && mode === 'defer') await new Promise(resolve => {releaseQuote = resolve;});
+    if (body && body.action === 'submit' && mode === 'defer-submit') await new Promise(resolve => {releaseQuote = resolve;});
     if (body && body.action === 'submit' && mode === 'network') throw new Error('Mreža nije dostupna.');
     if (body && body.action === 'submit' && mode === 'conflict') return {ok:false,status:409,json:async()=>({ok:false,message:'Napravite novi pregled.'})};
     const reply = {ok:true,csrf:'a'.repeat(64),state:structuredClone(state)};
@@ -71,13 +72,20 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
   try {
     slow.success();slow.setMode('defer');slow.submit();slow.submit();await settle();
     check(slow.calls.length===1 && slow.form.elements.firstName.disabled && slow.form.querySelector('.iti__selected-country').disabled,'Pending validation locks contact edits and double submits');
+    check(slow.send.getAttribute('aria-busy')==='true' && slow.send.textContent==='Šaljem upit…' && slow.form.querySelector('.wf-shop-sending').textContent.includes('Sačekajte potvrdu'),'Slow quote immediately shows spinner hook, busy label and accessible sending status');
     slow.release();await settle();check(slow.calls.length===2,'Deferred validation still sends only once');
   }finally{slow.dom.window.close();}
+  const sending = await fixture();try {
+    sending.success();sending.setMode('defer-submit');sending.submit();await settle();sending.submit();
+    check(sending.send.getAttribute('aria-busy')==='true' && sending.send.disabled && sending.calls.length===2,'Busy indicator remains active between quote and final submission without a duplicate request');
+    sending.release();await settle();check(sending.root.textContent.includes('Upit je poslat') && !sending.root.querySelector('[aria-busy=true]'),'Confirmed receipt replaces the sending indicator');
+  }finally{sending.dom.window.close();}
   for(const mode of ['network','conflict']) {
     const retry=await fixture();try {
       retry.success();retry.setMode(mode);retry.submit();await settle();
       check(retry.root.querySelector('[role=alert]').textContent && !retry.form.elements.firstName.disabled && retry.form.elements.note.value==='Fixture','Failure preserves contact and note for correction');
       check(retry.resets()===1 && retry.send.disabled,'Failure requires a fresh protection token');
+      check(!retry.send.hasAttribute('aria-busy') && retry.send.textContent==='Pošalji upit za ponudu' && retry.form.querySelector('.wf-shop-sending').hidden,'Failure clears the loader and restores its action label');
       retry.setMode('');retry.success();retry.submit();await settle();
       check(retry.calls.filter(call=>call.action==='quote').length===(mode==='network'?1:2),'Retry retains the same quote unless the server rejected it as stale');
       check(retry.root.textContent.includes('Upit je poslat'),'Retry reaches receipt');

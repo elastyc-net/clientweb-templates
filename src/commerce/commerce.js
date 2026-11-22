@@ -506,6 +506,7 @@
       });
     }
     var errorBox = node("p", "wf-shop-error"); errorBox.setAttribute("role", "alert"); form.appendChild(errorBox);
+    var sendingStatus = node("p", "wf-shop-help wf-shop-sending"); sendingStatus.setAttribute("role", "status"); sendingStatus.hidden = true; form.appendChild(sendingStatus);
     var review = node("div", "wf-shop-review"), submit = node("button", "wf-shop-btn", inquiry ? (rollbackTest ? "Pokreni test upita" : "Pošalji upit za ponudu") : "Proveri i prikaži pregled"); submit.type = "submit";
     var navigation = node("div", "wf-shop-step-actions"), back = null;
     if (!inquiry) { back = button("Nazad", function () { goStep(Math.max(0, currentStep - 1)); }, "wf-shop-link"); navigation.appendChild(back); }
@@ -513,9 +514,22 @@
     var widgetId = null, confirm = null, confirming = false, requestingQuote = false, challenge = null, lockedFields = [];
     var needsProtection = realPurchase || ((!state.preview || rollbackTest) && (!state.authenticated || rollbackTest));
     var protectionReady = !needsProtection, protectionStatus = null, retryProtection = null;
+    function pendingButton(control, pending, label) {
+      if (!control) return;
+      if (pending) {
+        if (!control.hasAttribute("aria-busy")) control.dataset.idleLabel = control.textContent;
+        control.setAttribute("aria-busy", "true"); control.textContent = label;
+      } else if (control.hasAttribute("aria-busy")) {
+        control.removeAttribute("aria-busy"); control.textContent = control.dataset.idleLabel; delete control.dataset.idleLabel;
+      }
+    }
     function updateConfirmation() {
       if (confirm) confirm.disabled = confirming || !quote || !protectionReady;
       if (inquiry) submit.disabled = requestingQuote || confirming || !protectionReady;
+      pendingButton(submit, requestingQuote || (inquiry && confirming), inquiry ? "Šaljem upit…" : "Proveravam podatke…");
+      pendingButton(confirm, confirming, inquiry ? "Šaljem upit…" : "Šaljem porudžbinu…");
+      sendingStatus.hidden = !requestingQuote && !confirming;
+      sendingStatus.textContent = sendingStatus.hidden ? "" : inquiry ? "Šaljemo vaš upit. Sačekajte potvrdu." : confirming ? "Šaljemo porudžbinu. Sačekajte potvrdu." : "Proveravamo podatke. Sačekajte.";
     }
     function protectionState(ready, message, retry) {
       protectionReady = ready;
@@ -593,7 +607,7 @@
       if (inquiry) { var p = new URLSearchParams(global.location.search); data.productId = p.get("productId"); data.variantId = p.get("variantId") || ""; data.quantity = p.get("quantity") || "1"; }
       if (inquiry && !protectionReady) return;
       errorBox.textContent = "";
-      requestingQuote = true; submit.disabled = true;
+      requestingQuote = true; submit.disabled = true; updateConfirmation();
       // Prevent edits from changing the contact between quote validation and submission.
       if (inquiry) {
         lockedFields = Array.from(form.elements).map(function (input) { return { input: input, disabled: input.disabled }; });

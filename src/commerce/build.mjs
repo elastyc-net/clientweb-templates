@@ -16,7 +16,7 @@ const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const write=(p,value)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),JSON.stringify(value,null,2)+'\n');};
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
 const releases=read('packages/catalog.json');
-for(const [key,from,to] of [['webfront-commerce','1.2.7','1.2.8'],['product-catalog','2.2.7','2.2.8']]){
+for(const [key,from,to] of [['webfront-commerce','1.2.8','1.2.9'],['product-catalog','2.2.8','2.2.9']]){
  const base='packages/'+key+'/'+from,target='packages/'+key+'/'+to;
  if(spawnSync('git',['ls-files','--error-unmatch',target+'/manifest.json'],{cwd:root,stdio:'ignore'}).status===0)throw new Error('Immutable release is tracked: '+target);
  const previous=read(base+'/manifest.json');
@@ -63,10 +63,10 @@ for(const [key,from,to] of [['webfront-commerce','1.2.7','1.2.8'],['product-cata
   return {...item,sha256:sha(target+'/'+item.path)};
  });
  const next={...previous,version:to,items};
- if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.8'}:d);
+ if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.9'}:d);
  write(target+'/manifest.json',next);
  releases.packages=releases.packages.filter(p=>!(p.packageKey===key&&p.version===to));
  releases.packages.push({packageKey:key,version:to,manifest:key+'/'+to+'/manifest.json',sha256:sha(target+'/manifest.json')});
 }
 write('packages/catalog.json',releases);
-console.log('Built webfront-commerce@1.2.8 and product-catalog@2.2.8; prior releases preserved.');
+console.log('Built webfront-commerce@1.2.9 and product-catalog@2.2.9; prior releases preserved.');
