@@ -1,5 +1,12 @@
 # clientweb-templates
 
+Commerce 1.2.10 / catalog 2.2.10 remove the redundant category variant CTA.
+Category cards open their detail through the existing image/name link. The
+component option **Dodavanje u korpu iz kategorije** defaults off; enabling it
+permits purchase controls only for products without variants. Favorites remain
+independent. Variant choice/list and authoritative purchase remain on the detail.
+Existing releases, page settings and bootstrap pins are preserved.
+
 Git packovi za Elastyc **front Web Site Templates** (analog `common/Elastyc/Procesi`).
 
 ## Stabla

@@ -5,7 +5,7 @@ const script=fs.readFileSync(require('node:path').join(__dirname,'../src/commerc
 const tick=async()=>{for(let n=0;n<12;n++)await new Promise(r=>setTimeout(r,0));};
 const product={id:'P',name:'Tepih',price:100,currency:'RSD',unit:'KOM','stock-known':true,stock:5,'ordering-mode':'Ponuda kad nije dostupno','commerce-known':true,variants:[{id:'row:1',label:'Crna'},{id:'row:2',label:'Bela'}]};
 let checks=0;function check(v,message){assert(v,message);checks++;}
-async function fixture(detail=false,display='Lista'){
+async function fixture(detail=false,display='Lista',options={}){
  const html='<div data-wf-commerce-url="/api?channel=production"></div><span data-wf-cart-count></span><div class="wf-instance">'+(detail?'<article class="wf-detail" data-commerce-enabled="true" data-variant-display="'+display+'"><div data-wf-item-id="P"><div class="wf-detail__layout"><div class="wf-detail__summary"></div></div></div></article>':'<section class="wf-catalog" data-commerce-enabled="true" data-list-variants="detail" data-detail-url="/proizvod"><article class="wf-product" data-wf-item-id="P"></article></section>')+'</div>';
  const dom=new JSDOM(html,{url:'https://megapod.example/katalog',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,requests=[];
  let state={view:'catalog',revision:0,lines:[],cartCount:0,favorites:[],favoritesEnabled:true,authenticated:false,mergeAvailable:false,preview:false,paths:{product:'/proizvod',cart:'/korpa',request:'/upit',favorites:'/favoriti',account:'/nalog'}};
@@ -20,13 +20,13 @@ async function fixture(detail=false,display='Lista'){
   return {ok:true,status:200,json:async()=>data};
  };
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));await tick();
- const host=w.document.querySelector('.wf-instance');w.ElastycCommerce.mount(host,[structuredClone(product)]);await tick();return {dom,w,host,requests,state};
+ const host=w.document.querySelector('.wf-instance');if(!detail)host.querySelector('.wf-catalog').dataset.listCartEnabled=options.cart?'true':'false';w.ElastycCommerce.mount(host,[structuredClone(options.product||product)]);await tick();return {dom,w,host,requests,state};
 }
 (async()=>{
  const a=await fixture();try{
   check(a.requests[0].url.searchParams.get('wf_commerce_view')==='catalog','Catalog uses the compact owned read model.');
   check(!a.host.querySelector('select'),'Category cards never render inline variant selectors.');
-  check(a.host.querySelector('a.wf-shop-btn').getAttribute('href')==='/proizvod?id=P','A variant parent links to its detail.');
+  check(!a.host.querySelector('a.wf-shop-btn')&&!a.host.querySelector('.wf-shop-qty')&&!a.host.querySelector('button.wf-shop-btn'),'Category has no redundant variant CTA or purchase controls.');
   check(!a.requests.some(r=>r.op==='variants'||r.op==='selection'),'Category display does not resolve variant pricing.');
   a.host.querySelector('.wf-shop-heart').click();await tick();check(a.host.querySelector('.wf-shop-heart').getAttribute('aria-pressed')==='true','Favorite works independently of variant selection.');
  }finally{a.dom.window.close();}
@@ -48,5 +48,17 @@ async function fixture(detail=false,display='Lista'){
   select.value='row:2';select.dispatchEvent(new c.w.Event('change',{bubbles:true}));await tick();
   check(c.host.querySelector('select').value==='row:2'&&!c.host.querySelector('.wf-shop-btn').disabled,'A server-confirmed choice is preserved and becomes actionable.');
  }finally{c.dom.window.close();}
+ const simple={...product,variants:[]};
+ const d=await fixture(false,'Lista',{product:simple});try{
+  check(!d.host.querySelector('.wf-shop-btn')&&!d.host.querySelector('.wf-shop-qty'),'List cart defaults off for simple products as well.');
+  check(!!d.host.querySelector('.wf-shop-heart'),'Hiding cart preserves independent favorite control.');
+ }finally{d.dom.window.close();}
+ const e=await fixture(false,'Lista',{product:simple,cart:true});try{
+  check(!!e.host.querySelector('button.wf-shop-btn')&&!!e.host.querySelector('.wf-shop-qty'),'Enabling the component option allows a simple product to be added.');
+  e.host.querySelector('button.wf-shop-btn').click();await tick();check(e.requests.some(r=>r.op==='add'&&r.body.variantId===''),'Simple product uses its existing authoritative add path.');
+ }finally{e.dom.window.close();}
+ const f=await fixture(false,'Lista',{cart:true});try{
+  check(!f.host.querySelector('select')&&!f.host.querySelector('.wf-shop-btn')&&!f.host.querySelector('.wf-shop-qty'),'Enabling list cart never enables a variant parent or a variant CTA.');
+ }finally{f.dom.window.close();}
  console.log('Catalog actions: '+checks+' checks passed.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

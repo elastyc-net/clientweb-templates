@@ -146,15 +146,16 @@
       if (!slot) { slot = node("div", "wf-shop-actions"); slot.setAttribute("data-wf-shop-actions", ""); (card.querySelector(".wf-detail__summary") || card).appendChild(slot); }
       var root = host.querySelector("[data-commerce-enabled=true]"), hasVariants = Number(item["variant-count"]) > 0 || Array.isArray(item.variants) && item.variants.length > 0;
       if (root.classList.contains("wf-detail") && root.dataset.variantDisplay === "Lista" && hasVariants) { root.dataset.hasVariants = "true"; renderVariantList(host, card, item, slot); return; }
-      var detailLink = root.classList.contains("wf-catalog") && root.dataset.listVariants === "detail" && (hasVariants || item["commerce-known"] === false);
+      var detailOnly = root.classList.contains("wf-catalog") && (root.dataset.listCartEnabled !== "true" || hasVariants || item["commerce-known"] === false);
+      if (root.classList.contains("wf-catalog")) slot.dataset.wfListCart = detailOnly ? "false" : "true";
       slot.dataset.wfVariants = Array.isArray(item.variants) && item.variants.length ? "true" : "false";
-      var signature = JSON.stringify([!!state, detailLink, actionFor(item), item.variants || [], item.unit, item["commerce-known"], item.selectionPending, item.selectionVariant, state && state.favoritesEnabled, state && state.favorites && state.favorites.some(function (x) { return x.productId === id; })]);
+      var signature = JSON.stringify([!!state, detailOnly, actionFor(item), item.variants || [], item.unit, item["commerce-known"], item.selectionPending, item.selectionVariant, state && state.favoritesEnabled, state && state.favorites && state.favorites.some(function (x) { return x.productId === id; })]);
       if (slot.dataset.signature === signature) return;
       var previousQty = slot.querySelector(".wf-shop-qty"), previousVariant = slot.querySelector(".wf-shop-variant");
       var qtyValue = previousQty ? previousQty.value : "1", variantValue = previousVariant ? previousVariant.value : "";
       slot.dataset.signature = signature; slot.replaceChildren();
       var variant = null, qty = quantity(qtyValue), line = node("div", "wf-shop-actions__row");
-      if (!detailLink && Array.isArray(item.variants) && item.variants.length) {
+      if (!detailOnly && Array.isArray(item.variants) && item.variants.length) {
         variant = node("select", "wf-shop-variant"); variant.setAttribute("aria-label", "Varijanta");
         variant.appendChild(new Option("Izaberite varijantu", "")); item.variants.forEach(function (v) { variant.appendChild(new Option(v.label, v.id)); }); variant.value = variantValue; slot.appendChild(variant);
       }
@@ -184,9 +185,8 @@
         main.title = currentAction === "unknown" ? "Čeka se potvrda raspoloživosti." : "";
       }
       refreshMain(); qty.addEventListener("input", refreshMain);
-      if (detailLink) {
+      if (detailOnly) {
         slot.dataset.wfVariants = "false";
-        var link = node("a", "wf-shop-btn", hasVariants ? "Pogledaj varijante" : "Pogledaj proizvod"); link.href = linkTo(state ? state.paths.product : root.dataset.detailUrl || "/proizvod", { id: id }); line.appendChild(link);
       } else {
         if (action === "buy" || action === "inquiry") { line.appendChild(qty); if (item.unit) { var unit = node("span", "wf-shop-unit", item.unit); line.appendChild(unit); } }
         line.appendChild(main);
@@ -196,7 +196,8 @@
         var heart = button("", function () { return mutate("favorite", { productId: id, selected: !active }); }, "wf-shop-heart");
         heart.appendChild(icon("heart")); heart.setAttribute("aria-label", active ? "Ukloni iz favorita" : "Sačuvaj u favorite"); heart.setAttribute("aria-pressed", active ? "true" : "false"); line.appendChild(heart);
       }
-      slot.appendChild(line);
+      slot.hidden = !line.childNodes.length;
+      if (!slot.hidden) slot.appendChild(line);
     });
   }
   function applyOffers(root, item) {

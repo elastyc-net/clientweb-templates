@@ -1,6 +1,8 @@
 /* List rows keep a bounded thumbnail independently of text and purchase controls. */
 .wf-catalog[data-layout="list"] .wf-product{display:grid;grid-template-columns:minmax(0,1fr) minmax(12rem,15rem);align-items:center;gap:1rem;padding:1rem;container-type:normal}
 .wf-catalog[data-layout="list"] .wf-product:not(:has([data-wf-shop-actions])){grid-template-columns:minmax(0,1fr)}
+.wf-catalog[data-layout="list"] .wf-product:has([data-wf-list-cart="false"]){grid-template-columns:minmax(0,1fr) 44px}
+.wf-catalog[data-layout="list"] .wf-product:has([data-wf-shop-actions][hidden]){grid-template-columns:minmax(0,1fr)}
 .wf-catalog[data-layout="list"] .wf-product__link{display:grid;grid-template-columns:112px minmax(0,1fr);align-items:start;gap:1rem;height:auto;min-width:0}
 .wf-catalog[data-layout="list"] .wf-product__link>.wf-product__media{width:112px;height:112px;aspect-ratio:1/1;flex:none;border-radius:.5rem}
 .wf-catalog[data-layout="list"] .wf-product__media img{display:block;width:100%;height:100%;object-fit:contain}
@@ -19,10 +21,12 @@
 .wf-catalog[data-layout="grid"][data-show-grid-description="true"] .wf-product__description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
 @media(max-width:700px){
  .wf-catalog[data-layout="list"] .wf-product{grid-template-columns:minmax(0,1fr);gap:.75rem;padding:.75rem}
+ .wf-catalog[data-layout="list"] .wf-product:has([data-wf-list-cart="false"]){grid-template-columns:minmax(0,1fr)}
  .wf-catalog[data-layout="list"] .wf-product__link{grid-template-columns:80px minmax(0,1fr);gap:.75rem}
  .wf-catalog[data-layout="list"] .wf-product__link>.wf-product__media{width:80px;height:80px}
  .wf-catalog[data-layout="list"] .wf-product__stock{justify-content:flex-start;text-align:start}
  .wf-catalog[data-layout="list"] .wf-shop-actions{padding-top:.75rem;border-top:1px solid var(--wf-border)}
+ .wf-catalog[data-layout="list"] [data-wf-list-cart="false"] .wf-shop-actions__row{justify-content:flex-end}
  .wf-catalog[data-layout="list"] .wf-shop-actions .wf-shop-btn{flex:1}
  .wf-catalog[data-layout="list"] .wf-shop-heart{min-height:44px;min-width:44px}
 }

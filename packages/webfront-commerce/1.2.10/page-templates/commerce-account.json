@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-account",
+  "label": "Moj nalog",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Moj nalog",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-account-main",
+        "componentKey": "commerce-account",
+        "settings": {
+          "title": "Moj nalog"
+        }
+      }
+    ]
+  }
+}

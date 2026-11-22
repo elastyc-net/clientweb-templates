@@ -528,6 +528,18 @@
       "version": "1.3.17",
       "manifest": "help-desk/1.3.17/manifest.json",
       "sha256": "c66f384629a5e49618976937d103beaac679b7f86a725d80bff176ce80772838"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.2.10",
+      "manifest": "webfront-commerce/1.2.10/manifest.json",
+      "sha256": "26607f9af9f30227cccef87c254ca619820c73e48d45a86c2487a8ffcbb3f760"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.2.10",
+      "manifest": "product-catalog/2.2.10/manifest.json",
+      "sha256": "8e8b3886385e1f0a07ef7d77498076d1495ee4910920964138b3bd404c992feb"
     }
   ]
 }
