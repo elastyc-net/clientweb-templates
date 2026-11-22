@@ -540,6 +540,12 @@
       "version": "2.2.10",
       "manifest": "product-catalog/2.2.10/manifest.json",
       "sha256": "8e8b3886385e1f0a07ef7d77498076d1495ee4910920964138b3bd404c992feb"
+    },
+    {
+      "packageKey": "help-desk",
+      "version": "1.3.18",
+      "manifest": "help-desk/1.3.18/manifest.json",
+      "sha256": "df3b03c96fd3e1c15157daf21423d0d9e6f21fdf6021c0485033a5ca83f7aa57"
     }
   ]
 }
