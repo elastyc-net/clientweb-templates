@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.12",
+  "label": "Help Desk",
+  "description": "Stalno vidljiva desktop pretraga iznad kartica, uz mobilnu lupu koja otvara polje.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "68e64eabc46077d0da1249499ec3735d2ce3904db7c57bc50fa2b525e8c38500"
+    }
+  ]
+}

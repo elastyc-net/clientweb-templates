@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-22",
+  "siteKey": "elastycnet",
+  "packageSource": "help-desk@1.3.12",
+  "tenantLibraryReceiptAdvanced": false,
+  "previousProduction": "r-20261122124134-bb2d2b23-976a0dea2e6e",
+  "releaseId": "r-20261122125411-43684273-c941213a65f6",
+  "activatedAtUtc": "2026-11-22T12:58:59+00:00",
+  "changedRoutes": [
+    "/en/help-desk",
+    "/help-desk"
+  ],
+  "stylesheetSha256": "72337819055ac591878a56206d8866e24d6fdb5cc8b7fd853f0df7ab9bb3fd0c",
+  "scriptSha256": "9f32e8793aa4b074d085cc4f28337757eefe0a05207ae0e178d567b84d6639cb",
+  "verifiedOtherFiles": 123,
+  "otherContentAndAccessPreserved": true,
+  "homePreserved": true,
+  "contactPreserved": true,
+  "savedDraftReviewed": {
+    "desktop": true,
+    "mobileWidth": 390
+  },
+  "productionB2BReviewed": {
+    "visibleRequests": 8,
+    "desktopSearchVisibleOnLoad": true,
+    "desktopSearchNumber": "26S01000930",
+    "desktopResultCount": 1,
+    "desktopClearKeepsInputVisible": true,
+    "desktopClearPreservesInputFocus": true,
+    "clearRestoresRequests": 8,
+    "mobileWidth": 390,
+    "mobileStartsWithMagnifier": true,
+    "mobileMagnifierOpensInput": true,
+    "mobileCloseRestoresMagnifier": true
+  }
+}
