@@ -1,5 +1,5 @@
-.wf-shop,.wf-shop-actions,.wf-shop-shell{--shop-accent:var(--wf-color-primary,#ff9800);--shop-text:var(--wf-color-text,#222526);--shop-muted:var(--wf-color-muted,#626a70);--shop-border:var(--wf-color-border,#e0e4e7);--shop-surface:var(--wf-color-surface,#fff);color:var(--shop-text);font-family:inherit;box-sizing:border-box}
-.wf-shop *,.wf-shop-actions *,.wf-shop-shell *{box-sizing:border-box}
+.wf-shop,.wf-shop-actions,.wf-shop-shell,.wf-variants{--shop-accent:var(--wf-color-primary,#ff9800);--shop-text:var(--wf-color-text,#222526);--shop-muted:var(--wf-color-muted,#626a70);--shop-border:var(--wf-color-border,#e0e4e7);--shop-surface:var(--wf-color-surface,#fff);color:var(--shop-text);font-family:inherit;box-sizing:border-box}
+.wf-shop *,.wf-shop-actions *,.wf-shop-shell *,.wf-variants *{box-sizing:border-box}
 .wf-shop{max-width:1160px;padding:32px 24px 64px;margin:0 auto;min-height:45vh}
 .wf-shop h1{font-size:clamp(26px,4vw,36px);line-height:1.15;margin:0 0 24px;font-weight:800;letter-spacing:-.025em}
 .wf-shop h2{font-size:21px;margin:24px 0 16px}.wf-shop [hidden],.wf-shop-actions [hidden],.wf-shop-shell [hidden]{display:none!important}
