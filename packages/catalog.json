@@ -414,6 +414,18 @@
       "version": "2.2.3",
       "manifest": "product-catalog/2.2.3/manifest.json",
       "sha256": "2e45f5778c2adf936f186ce3db06edd64806788232c148301c7f1955ddafeb68"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.2.4",
+      "manifest": "webfront-commerce/1.2.4/manifest.json",
+      "sha256": "92084bda8144f680529b4ac5a0abc77aeb99da0003bcc7ce12014908628101b8"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.2.4",
+      "manifest": "product-catalog/2.2.4/manifest.json",
+      "sha256": "d3187ccab4f09320aaa915fadc996964144b3d8db1ca17327bc4511d9f60707e"
     }
   ]
 }

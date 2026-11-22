@@ -269,3 +269,13 @@ Commerce 1.2.3 / catalog 2.2.3 keep the country dropdown as wide as its phone
 input, including after responsive layout changes. The dropdown is positioned
 inside the narrow country-button container, so its maximum width must be
 bounded by the viewport rather than by that container.
+
+Commerce 1.2.4 / catalog 2.2.4 show inquiry fields before contact context arrives,
+preserve edits/autofill and focus during prefill, and request the bounded inquiry
+read model. Current engines return only a scoped cart count/revision and verified
+contact; older engines retain their full-state response. Sending still requires
+the normal CSRF, current quote and protection checks. Concurrent state reads are
+shared per identity, fresh state is not fetched again on each focus, and older
+responses cannot repaint newer state. Placeholder styling follows the public
+theme's optional `--wf-color-placeholder` with its muted color as fallback.
+Verify `tools/test-commerce-loading.cjs` as well as inquiry/checkout/protection.

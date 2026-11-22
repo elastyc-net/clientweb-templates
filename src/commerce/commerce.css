@@ -26,6 +26,7 @@
 .wf-shop-protection--quiet .wf-shop-protection__widget{min-height:0}.wf-shop-form[data-inquiry=true] .wf-shop-step-actions>.wf-shop-btn{margin-left:0}
 
 /* Country picker shares the public site's form palette and input geometry. */
+.wf-shop-field input::placeholder,.wf-shop-field textarea::placeholder{color:var(--wf-color-placeholder,var(--shop-muted));opacity:.8;font-weight:400;font-size:.94em}
 .wf-shop-field .iti{width:100%;min-width:0;--iti-border-color:var(--shop-border);--iti-country-selector-bg:var(--shop-surface);--iti-icon-color:var(--shop-muted);--iti-hover-color:var(--wf-color-secondary,#f4f5f6);--iti-spacer-horizontal:12px}
 .wf-shop-field .iti__selected-country{border-radius:8px 0 0 8px;font:inherit;color:var(--shop-text);min-height:44px}
 .wf-shop-field .iti__selected-country:focus-visible{outline:2px solid var(--shop-accent);outline-offset:3px}

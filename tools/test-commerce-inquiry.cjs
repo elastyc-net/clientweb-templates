@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
-const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.3/components/commerce-request.json')));
+const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.4/components/commerce-request.json')));
 const script = component.scripts.find(asset => asset.name === 'commerce.js').content;
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; }

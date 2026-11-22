@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-checkout",
+  "label": "Porudžbina",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Porudžbina",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-checkout-main",
+        "componentKey": "commerce-checkout",
+        "settings": {
+          "title": "Porudžbina"
+        }
+      }
+    ]
+  }
+}
