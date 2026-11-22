@@ -1,6 +1,6 @@
 # Help Desk — Razgovor u fokusu
 
-`help-desk@1.3.13` opts into the shared CaseMessenger focus surface. It keeps the
+`help-desk@1.3.14` opts into the shared CaseMessenger focus surface. It keeps the
 list, search and facets unchanged. The conversation has one compact title row,
 information and close icons, a bounded history and one composer bar with attach,
 auto-growing text (up to 128 px), speech dictation and icon-only send. On mobile
@@ -21,9 +21,12 @@ Plan/Apply overlay (four runtime files) at the same reviewed SHA. A scoped
 Candidate derived from the active Production release changed only the Help Desk
 component CSS/JS on `/help-desk` and `/en/help-desk`. It retained page access and
 the independent Home/Contact publications. Standard WorkspaceProductionPublisher
-activated the browser-reviewed Candidate. This direct component save did not
+activated the browser-reviewed Candidate. The final shared revision also keeps
+the last message anchored through viewport changes and preserves older reading
+positions; desktop → mobile → desktop and a shorter desktop viewport were verified. This direct component save did not
 advance the tenant's library installation receipt. Private operator proofs:
-`{DataDir}/operations/help-desk-focus-20261122`.
+`{DataDir}/operations/help-desk-focus-20261122` and
+`{DataDir}/operations/help-desk-focus-resize-20261122`.
 
 Validation: all 107 Webfront PHP test files and agent regression tests passed;
 Common communication scope (37 checks), viewport (69 checks) and immutable library
