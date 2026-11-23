@@ -83,3 +83,9 @@
 @media(max-width:480px){.wfcr-header:has(.mp-nav) .wfcr-main{gap:4px}.wfcr-header:has(.mp-nav) .wfcr-inner{padding-inline:10px}.wfcr-header:has(.mp-nav) .wfcr-brand-zone{max-width:calc(100% - 190px)}.wfcr-header:has(.mp-nav) .wfcr-actions-zone{flex:0 0 auto}.wfcr-header .mp-nav .mp-nav__toolbar{gap:0}}
 
 .wfcr-header:has(.mp-nav) .wfcr-navigation{margin-left:0}
+@media(max-width:480px){
+ .wfcr-header:has(.mp-nav) .wfcr-brand-zone{flex:0 1 155px;min-width:0;max-width:155px}
+ .wfcr-header:has(.mp-nav) .wfcr-brand-zone .mph-brand{width:100%}
+ .wfcr-header:has(.mp-nav) .wf-shop-shell :is([data-wf-favorites-link],[data-wf-cart-link]){position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:8px;box-sizing:border-box;gap:0;flex:0 0 44px}
+ .wfcr-header:has(.mp-nav) .wf-shop-shell :is([data-wf-favorite-count],[data-wf-cart-count]){position:absolute;top:1px;right:0;min-width:16px;height:16px;font-size:10px;line-height:16px}
+}
