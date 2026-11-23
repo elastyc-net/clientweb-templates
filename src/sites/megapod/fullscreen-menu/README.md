@@ -1,0 +1,1 @@
+Megapod fullscreen hamburger menu. Reuses verified FrontAuth first-paint account and read-only native header-profile display. No authorization policy changes. Cart/favorites remain in original commerce slot. Native scoped Draft writes require chrome-navigation revision 2 and global header revision 8, followed by Candidate verification and explicit publish.

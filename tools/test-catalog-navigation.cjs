@@ -40,5 +40,13 @@ async function fixture(type,{legacy=false,denied=false}={}){
   assert.equal(button.querySelector('[data-wf-filter-label]').textContent,'Filteri (1)');checks++;
   button.click();assert.equal(button.getAttribute('aria-expanded'),'true');button.click();assert.equal(button.getAttribute('aria-expanded'),'false');checks++;
  }finally{f.dom.window.close();}
+ const mobile=await fixture('navigate');try{
+  Object.defineProperty(mobile.w,'innerWidth',{value:390});Object.defineProperty(mobile.w,'scrollY',{value:350});
+  const b=mobile.w.document.querySelector('[data-wf-filters-toggle]');b.click();
+  assert.equal(mobile.w.document.body.style.position,'fixed');assert.equal(mobile.w.document.body.style.top,'-350px');
+  assert.equal(mobile.w.document.querySelector('[data-wf-filters]').getAttribute('aria-modal'),'true');checks++;
+  mobile.w.document.dispatchEvent(new mobile.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+  assert.equal(mobile.w.document.body.style.position,'');assert.deepEqual(mobile.calls,[[0,350]]);assert.equal(b.getAttribute('aria-expanded'),'false');checks++;
+ }finally{mobile.dom.window.close();}
  console.log('Catalog navigation and filter control: '+checks+' checks passed.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
-const from='2.3.3',to='2.3.4',key='product-catalog';
+const from='2.3.4',to='2.4.0',key='product-catalog';
 const base='packages/'+key+'/'+from,target='packages/'+key+'/'+to;
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
@@ -21,7 +21,19 @@ const items=previous.items.map(item=>{
   const definition=read(base+'/'+item.path);
   const style=definition.styles.find(x=>x.name==='products.css');
   if(!style)throw new Error('Catalog style asset missing');
-  style.content=css;write(target+'/'+item.path,definition);
+  style.content=css;
+  definition.scripts.find(x=>x.name==='products.js').content=fs.readFileSync(path.join(root,'src/catalog/products.js'),'utf8');
+  write(target+'/'+item.path,definition);
+ }else if(item.itemType==='component'&&item.itemKey==='product-detail'){
+  const definition=read(base+'/'+item.path);
+  definition.scripts.find(x=>x.name==='product.js').content=fs.readFileSync(path.join(root,'src/catalog/product.js'),'utf8');
+  definition.htmlContent=definition.htmlContent.replace('<section class="wf-detail__related"', '<section class="wf-detail__documents" data-wf-documents hidden><h2>Dokumenti artikla</h2><ul data-wf-document-list></ul></section>\n<section class="wf-detail__related"');
+  definition.styles.find(x=>x.name==='product.css').content+='\n.wf-detail__documents{margin-top:32px}.wf-detail__documents ul{list-style:none;padding:0;display:grid;gap:10px}.wf-detail__documents a{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--wf-color-border);border-radius:8px;color:inherit;text-decoration:underline;overflow-wrap:anywhere}.wf-detail__documents a::before{content:"↓";font-size:22px}';
+  write(target+'/'+item.path,definition);
+ }else if(item.itemType==='provider'&&item.itemKey==='catalog-product'){
+  const definition=read(base+'/'+item.path);
+  definition.outputSchema.properties.documents={type:'array',maxItems:50,items:{type:'object',additionalProperties:false,required:['label','url'],properties:{label:{type:'string',maxLength:240},url:{type:'string',maxLength:260,format:'safe-url'}}}};
+  write(target+'/'+item.path,definition);
  }else{
   fs.mkdirSync(path.dirname(path.join(root,target,item.path)),{recursive:true});
   fs.copyFileSync(path.join(root,base,item.path),path.join(root,target,item.path));
