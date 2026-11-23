@@ -239,6 +239,7 @@
     if (mode === "Dozvoljeno kad je dostupno") return available ? "buy" : "unavailable";
     return "unavailable";
   }
+  function hasVariantName(value) { return typeof value === "string" && value.trim() !== ""; }
   function mount(host, products) {
     if (!host || !host.querySelector("[data-commerce-enabled=true]")) return;
     var store = items.get(host); if (!store) { store = new Map(); items.set(host, store); }
@@ -249,8 +250,10 @@
       var slot = card.querySelector("[data-wf-shop-actions]");
       if (!slot) { slot = node("div", "wf-shop-actions"); slot.setAttribute("data-wf-shop-actions", ""); (card.querySelector(".wf-detail__summary") || card).appendChild(slot); }
       var root = host.querySelector("[data-commerce-enabled=true]"), hasVariants = Number(item["variant-count"]) > 0 || Array.isArray(item.variants) && item.variants.length > 0;
+      var namedVariants = Array.isArray(item.variants) ? item.variants.filter(function (v) { return hasVariantName(v.label); }) : [];
       if (root.classList.contains("wf-detail") && root.dataset.variantDisplay === "Lista" && hasVariants) { root.dataset.hasVariants = "true"; renderVariantList(host, card, item, slot); return; }
-      var detailOnly = root.classList.contains("wf-catalog") && (root.dataset.listCartEnabled !== "true" || hasVariants || item["commerce-known"] === false);
+      var detailOnly = root.classList.contains("wf-catalog") && (root.dataset.listCartEnabled !== "true" || hasVariants || item["commerce-known"] === false)
+        || root.classList.contains("wf-detail") && hasVariants && !namedVariants.length;
       if (root.classList.contains("wf-catalog")) slot.dataset.wfListCart = detailOnly ? "false" : "true";
       slot.dataset.wfVariants = Array.isArray(item.variants) && item.variants.length ? "true" : "false";
       var signature = JSON.stringify([!!state, detailOnly, actionFor(item), item.variants || [], item.unit, item["commerce-known"], item.selectionPending, item.selectionVariant, state && state.favoritesEnabled, state && state.favorites && state.favorites.some(function (x) { return x.productId === id; })]);
@@ -261,7 +264,7 @@
       var variant = null, qty = quantity(qtyValue), line = node("div", "wf-shop-actions__row");
       if (!detailOnly && Array.isArray(item.variants) && item.variants.length) {
         variant = node("select", "wf-shop-variant"); variant.setAttribute("aria-label", "Varijanta");
-        variant.appendChild(new Option("Izaberite varijantu", "")); item.variants.forEach(function (v) { variant.appendChild(new Option(v.label, v.id)); }); variant.value = variantValue; slot.appendChild(variant);
+        variant.appendChild(new Option("Izaberite varijantu", "")); namedVariants.forEach(function (v) { variant.appendChild(new Option(v.label, v.id)); }); variant.value = variantValue; slot.appendChild(variant);
       }
       var action = actionFor(item), main = button(action === "inquiry" ? "Pošalji upit" : action === "unavailable" ? "Trenutno nedostupno" : "Dodaj u korpu", function () {
         if (!qty.reportValidity() || (variant && !variant.value)) { if (variant) { variant.setCustomValidity("Izaberite varijantu."); variant.reportValidity(); } return; }
@@ -331,6 +334,7 @@
     if (!state) { if (!section.children.length) section.appendChild(node("p", "wf-shop-help", "Učitavanje varijanti…")); return; }
     if (!record || record.generation !== authGeneration) {
       record = { generation: authGeneration, status: "loading" }; records.set(item.id, record);
+      section.hidden = false;
       section.replaceChildren(node("h2", "", "Varijante"), node("p", "wf-shop-help", "Učitavanje cena i raspoloživosti…")); section.setAttribute("aria-busy", "true");
       request("variants", { productId: item.id }, false).then(function (result) {
         if (!Array.isArray(result.variants)) throw new Error("Varijante trenutno nisu dostupne.");
@@ -343,9 +347,12 @@
     }
     if (record.status !== "ready" || section.dataset.renderedGeneration === item.id + ":" + record.generation) return;
     section.dataset.renderedGeneration = item.id + ":" + record.generation; section.removeAttribute("aria-busy"); section.replaceChildren(node("h2", "", "Varijante"));
+    var namedRows = record.rows.filter(function (row) { return hasVariantName(row.variantLabel); });
+    section.hidden = record.rows.length > 0 && !namedRows.length;
+    if (section.hidden) { section.replaceChildren(); return; }
     if (!record.rows.length) { section.appendChild(node("p", "wf-shop-help", "Varijante su promenjene. Osvežite stranicu za aktuelni prikaz.")); return; }
     var list = node("div", "wf-variants__list"); list.setAttribute("role", "list"); section.appendChild(list);
-    record.rows.forEach(function (row) {
+    namedRows.forEach(function (row) {
       var line = node("div", "wf-variants__row"), info = node("div", "wf-variants__info"), controls = node("div", "wf-variants__controls"), qty = quantity("1");
       line.setAttribute("role", "listitem"); info.appendChild(node("h3", "", row.variantLabel));
       info.appendChild(node("strong", "wf-variants__price", row.priceKnown ? money(row.unitPrice, row.currency) + (row.unit ? " / " + row.unit : "") : "Cena na upit"));

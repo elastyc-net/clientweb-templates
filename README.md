@@ -1,5 +1,13 @@
 # clientweb-templates
 
+Catalog 2.3.3 / commerce 1.3.2 keep the mobile filter button with its funnel icon
+beside the heading, with sorting and view controls together below. Cards reserve
+an old-price row only when a discount exists. Saved catalog scroll is restored
+for Back/Forward navigation, never a fresh menu/home visit or reload. Detail
+choice/list modes hide nameless variants without making their parent buyable.
+Build with `node src/commerce/build.mjs`; run `tools/test-catalog-actions.cjs`
+and `tools/test-catalog-navigation.cjs` with jsdom, then regenerate staging.
+
 Catalog 2.3.2 aligns filter disclosure arrows, checkbox labels and counts in
 shared columns, and replaces grid/list text glyphs with accessible SVG icons.
 It changes only the list component HTML/CSS; data, brand settings, commerce

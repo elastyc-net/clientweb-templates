@@ -6,13 +6,14 @@ const tick=async()=>{for(let n=0;n<12;n++)await new Promise(r=>setTimeout(r,0));
 const product={id:'P',name:'Tepih',price:100,currency:'RSD',unit:'KOM','stock-known':true,stock:5,'ordering-mode':'Ponuda kad nije dostupno','commerce-known':true,variants:[{id:'row:1',label:'Crna'},{id:'row:2',label:'Bela'}]};
 let checks=0;function check(v,message){assert(v,message);checks++;}
 async function fixture(detail=false,display='Lista',options={}){
+ const fixtureProduct=options.product||product;
  const html='<div data-wf-commerce-url="/api?channel=production"></div><span data-wf-cart-count></span><div class="wf-instance">'+(detail?'<article class="wf-detail" data-commerce-enabled="true" data-variant-display="'+display+'"><div data-wf-item-id="P"><div class="wf-detail__layout"><div class="wf-detail__summary"></div></div></div></article>':'<section class="wf-catalog" data-commerce-enabled="true" data-list-variants="detail" data-detail-url="/proizvod"><article class="wf-product" data-wf-item-id="P"></article></section>')+'</div>';
  const dom=new JSDOM(html,{url:'https://megapod.example/katalog',runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,requests=[];
  let state={view:'catalog',revision:0,lines:[],cartCount:0,favorites:[],favoritesEnabled:true,authenticated:false,mergeAvailable:false,preview:false,paths:{product:'/proizvod',cart:'/korpa',request:'/upit',favorites:'/favoriti',account:'/nalog'}};
  w.fetch=async(url,options={})=>{
   const u=new URL(url),body=options.body?JSON.parse(options.body):null,op=body?body.action:u.searchParams.get('operation');requests.push({op,body,url:u});
   let data={ok:true,csrf:'x'.repeat(64)};
-  if(op==='variants')data.variants=product.variants.map((v,i)=>({productId:'P',variantId:v.id,variantLabel:v.label,eligible:true,orderingMode:product['ordering-mode'],unit:'KOM',action:i?'inquiry':'buy',stockKnown:true,stock:i?0:5,priceKnown:true,unitPrice:i?'120':'100',currency:'RSD',issue:''}));
+  if(op==='variants')data.variants=fixtureProduct.variants.map((v,i)=>({productId:'P',variantId:v.id,variantLabel:v.label,eligible:true,orderingMode:fixtureProduct['ordering-mode'],unit:'KOM',action:i?'inquiry':'buy',stockKnown:true,stock:i?0:5,priceKnown:true,unitPrice:i?'120':'100',currency:'RSD',issue:''}));
   else if(op==='selection')data.selection={orderingMode:product['ordering-mode'],priceKnown:true,unitPrice:'100',regularPrice:100,discountPercent:0,currency:'RSD',unit:'KOM',stockKnown:true,stock:5};
   else if(op==='add'){state.revision++;state.cartCount++;}
   else if(op==='favorite'){state.revision++;state.favorites=body.selected?[{productId:body.productId}]:[];}
@@ -60,5 +61,22 @@ async function fixture(detail=false,display='Lista',options={}){
  const f=await fixture(false,'Lista',{cart:true});try{
   check(!f.host.querySelector('select')&&!f.host.querySelector('.wf-shop-btn')&&!f.host.querySelector('.wf-shop-qty'),'Enabling list cart never enables a variant parent or a variant CTA.');
  }finally{f.dom.window.close();}
+ const mixed={...product,variants:[{id:'row:3',label:'Plava'},{id:'sku:EMPTY',label:''},{id:'row:2',label:'  '}]};
+ for(const display of ['Lista','Izbor']){
+  const g=await fixture(true,display,{product:mixed});try{
+   const choices=display==='Lista'?g.host.querySelectorAll('[role=listitem]'):g.host.querySelectorAll('select option[value]:not([value=""])');
+   check(choices.length===1&&choices[0].textContent.includes('Plava'),'Detail '+display+' renders only named variants.');
+   if(display==='Lista'){
+    choices[0].querySelector('button').click();await tick();
+    check(g.requests.find(r=>r.op==='add').body.variantId==='row:3','Removing unnamed rows preserves the named variant identity.');
+   }
+  }finally{g.dom.window.close();}
+  const h=await fixture(true,display,{product:{...mixed,variants:mixed.variants.slice(1)}});try{
+   check(!h.host.querySelector('select')&&!h.host.querySelector('.wf-shop-btn')&&!h.host.querySelector('.wf-shop-qty'),'All unnamed variants never expose a parent purchase in '+display+'.');
+   const section=h.host.querySelector('[data-wf-variant-list]');
+   check(!section||section.hidden,'All unnamed variants leave no empty detail list in '+display+'.');
+   check(!!h.host.querySelector('.wf-shop-heart'),'Unnamed variants preserve independent favorites in '+display+'.');
+  }finally{h.dom.window.close();}
+ }
  console.log('Catalog actions: '+checks+' checks passed.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

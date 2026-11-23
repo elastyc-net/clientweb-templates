@@ -17,3 +17,19 @@
 .wf-catalog__view button svg{display:block;flex:none;width:21px;height:21px;pointer-events:none}
 .wf-catalog__view button:hover{color:var(--wf-text);background:var(--wf-color-secondary,#f5f8fa)}
 .wf-catalog__view button[aria-pressed="true"]{color:var(--wf-text);border-color:var(--wf-accent);background:color-mix(in srgb,var(--wf-accent) 9%,var(--wf-panel));box-shadow:inset 0 0 0 1px var(--wf-accent)}
+
+/* Only a visible regular price contributes a row. Align stock with the current price. */
+.wf-product__prices{display:flex;flex-direction:column;align-items:flex-start;gap:.15rem}
+.wf-product__footer{align-items:center}
+.wf-catalog .wf-product__stock{min-height:1.5rem}
+.wf-product__prices:has(>del:not([hidden]))+.wf-product__stock{align-self:flex-end}
+.wf-catalog__heading{min-width:0}
+.wf-catalog__filters-toggle svg{flex:none;width:19px;height:19px;pointer-events:none}
+@media(max-width:960px){
+ .wf-catalog__header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.875rem .75rem}
+ .wf-catalog__filters-toggle{display:inline-flex;grid-column:2;grid-row:1;align-items:center;justify-content:center;gap:.5rem;min-height:44px;padding:.6rem .75rem;white-space:nowrap}
+ .wf-catalog__controls{grid-column:1/-1;width:100%;flex-wrap:nowrap;gap:.5rem}
+ .wf-catalog__sort{flex:1;min-width:0}
+ .wf-catalog__sort select{min-width:0}
+ .wf-catalog__view{flex:none}
+}

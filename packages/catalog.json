@@ -606,6 +606,18 @@
       "version": "1.0.0",
       "manifest": "invoice-overview/1.0.0/manifest.json",
       "sha256": "9269ec5ea7da289bc88dca3c9a01afbb7738e72ce280416916c76702914c173f"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.3.2",
+      "manifest": "webfront-commerce/1.3.2/manifest.json",
+      "sha256": "39556944efc2f9323fba2cd8d23a05552d4d9871e9fdda75fc0255caccf3b2bc"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.3.3",
+      "manifest": "product-catalog/2.3.3/manifest.json",
+      "sha256": "f72d5d2efec6bd4a0b71db208803816c42523d5ec82a8e577b56e6bd271c86b5"
     }
   ]
 }
