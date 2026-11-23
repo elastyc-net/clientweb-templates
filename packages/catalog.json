@@ -594,6 +594,12 @@
       "version": "2.3.1",
       "manifest": "product-catalog/2.3.1/manifest.json",
       "sha256": "5f397b5794f668e78f8758897937cbcab373f798d6615f8951191666ee6fc332"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.3.2",
+      "manifest": "product-catalog/2.3.2/manifest.json",
+      "sha256": "1438ada077a20c273dca1f83cc7c7c7552cc440c5399ea8e00fa6a394bbfe906"
     }
   ]
 }

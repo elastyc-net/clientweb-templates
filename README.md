@@ -1,5 +1,12 @@
 # clientweb-templates
 
+Catalog 2.3.2 aligns filter disclosure arrows, checkbox labels and counts in
+shared columns, and replaces grid/list text glyphs with accessible SVG icons.
+It changes only the list component HTML/CSS; data, brand settings, commerce
+runtime, provider contracts and all prior immutable releases are retained.
+Build with `node src/catalog/build.mjs`, then regenerate and verify staging
+with `node tools/library-catalog.mjs --bundle packages/staged-bundle.json`.
+
 Commerce 1.2.11 / catalog 2.2.11 collapse the unused purchase footer in grid
 cards when category purchasing is off or a card has only a corner favorite.
 The footer is also collapsed before hydration, so loading offers/favorites does
