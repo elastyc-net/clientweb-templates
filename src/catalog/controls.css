@@ -33,3 +33,11 @@
  .wf-catalog__sort select{min-width:0}
  .wf-catalog__view{flex:none}
 }
+@media(max-width:700px){
+ .wf-catalog[data-layout="list"] .wf-shop-actions[data-wf-list-cart="false"],
+ .wf-catalog[data-layout="list"] [data-wf-list-cart="false"] .wf-shop-actions__row{display:contents}
+ .wf-catalog[data-layout="list"] .wf-product [data-wf-list-cart="false"] .wf-shop-heart{position:absolute;top:.75rem;right:.75rem;left:auto}
+ .wf-catalog[data-layout="list"] .wf-product:has([data-wf-list-cart="false"]) h2,
+ .wf-catalog[data-layout="list"] .wf-product:has([data-wf-list-cart="false"]) .wf-product__meta{padding-inline-end:48px}
+ .wf-catalog[data-layout="list"] .wf-product:has([data-wf-list-cart="false"]) h2{min-height:44px}
+}

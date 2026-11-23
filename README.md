@@ -1,5 +1,10 @@
 # clientweb-templates
 
+Catalog 2.3.4 keeps favorite-only mobile list cards compact: the heart sits in
+the card corner and does not create a separate bottom row. Titles reserve its
+touch area. Actual category purchase controls retain their row. Build this
+CSS-only release with `node src/catalog/build.mjs`; commerce stays at 1.3.2.
+
 Catalog 2.3.3 / commerce 1.3.2 keep the mobile filter button with its funnel icon
 beside the heading, with sorting and view controls together below. Cards reserve
 an old-price row only when a discount exists. Saved catalog scroll is restored
