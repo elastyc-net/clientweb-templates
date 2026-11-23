@@ -1,0 +1,65 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-note",
+  "label": "Tekst ili kontaktni poziv",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"wfcr-note\"><span>{{setting:text}}</span><a href=\"{{setting:url}}\" aria-label=\"{{setting:label}}\">{{setting:label}}</a></div>",
+  "styles": [
+    {
+      "name": "chrome-note.css",
+      "content": ".wfcr-note{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;white-space:pre-line;line-height:1.5}.wfcr-note a[aria-label=\"\"]{display:none}.wfcr-note a{font-weight:650}.wfcr-promo .wfcr-note{padding:14px 24px;justify-content:center;font-size:14px}.wfcr-footer-contact .wfcr-note{font-size:clamp(22px,3.5vw,42px)}.wfcr-footer-legal .wfcr-note{font-size:12px}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "text",
+      "label",
+      "url"
+    ],
+    "properties": {
+      "text": {
+        "type": "string",
+        "title": "Tekst",
+        "maxLength": 600
+      },
+      "label": {
+        "type": "string",
+        "title": "Tekst linka",
+        "maxLength": 160
+      },
+      "url": {
+        "type": "string",
+        "title": "Link",
+        "maxLength": 2048,
+        "format": "safe-url",
+        "minLength": 1
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

@@ -63,6 +63,16 @@
         else throw new Error("Radnja lokalne korpe nije validna.");
       });
     }
+    function pruneInactive(ids) {
+      var blocked = (Array.isArray(ids) ? ids : []).filter(function (p) { return typeof p === "string"; });
+      var current = read();
+      if (!current.lines.some(function (l) { return blocked.indexOf(l.productId) >= 0; }) && !current.favorites.some(function (p) { return blocked.indexOf(p) >= 0; })) return Promise.resolve(snapshot(current));
+      return edit(function (doc) {
+        doc.lines = doc.lines.filter(function (l) { return blocked.indexOf(l.productId) < 0; });
+        doc.favorites = doc.favorites.filter(function (p) { return blocked.indexOf(p) < 0; });
+        if (doc.pending) { doc.pending.lines = doc.pending.lines.filter(function (l) { return blocked.indexOf(l.productId) < 0; }); doc.pending.favorites = doc.pending.favorites.filter(function (p) { return blocked.indexOf(p) < 0; }); }
+      });
+    }
     function migrate(key, incoming) {
       var checked = selection(incoming);
       return edit(function (doc) {
@@ -90,7 +100,7 @@
       });
     }
     global.addEventListener("storage", function (event) { if (event.key === storageKey || event.key === null) { memory = null; read(); if (changed) changed(); } });
-    return {read:read,snapshot:snapshot,apply:apply,mutate:mutate,migrate:migrate,needsMigration:function (key) { return !!key && read().migrated.indexOf(key) < 0; },pending:pending,consume:consume};
+    return {pruneInactive:pruneInactive,read:read,snapshot:snapshot,apply:apply,mutate:mutate,migrate:migrate,needsMigration:function (key) { return !!key && read().migrated.indexOf(key) < 0; },pending:pending,consume:consume};
   }
   global.ElastycGuestCart = {create:create};
 })(window);

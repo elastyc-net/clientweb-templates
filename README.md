@@ -1,5 +1,7 @@
 # clientweb-templates
 
+Commerce 1.4.0 / catalog 2.5.0 / reference-chrome 1.1.0 provide the shared mobile drawer, optical cart icon, standalone auth spacing, customer order view and archived-product state. New-site bootstrap pins these releases. Build once with `node src/commerce/build-standard.mjs`, generate staging with `node tools/library-catalog.mjs --bundle packages/staged-bundle.json`, then export with `node tools/export-standard.mjs ../instance-template`. Published release bytes cannot be rebuilt. Orders links are enabled only where the corresponding page is configured; backend ownership remains authoritative.
+
 Catalog 2.3.4 keeps favorite-only mobile list cards compact: the heart sits in
 the card corner and does not create a separate bottom row. Titles reserve its
 touch area. Actual category purchase controls retain their row. Build this

@@ -630,6 +630,24 @@
       "version": "2.4.0",
       "manifest": "product-catalog/2.4.0/manifest.json",
       "sha256": "f854fbe779e58c6554e684ed9dc2d5c408a4cd7dfc182c41408e12ba5f04a0ca"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.4.0",
+      "manifest": "webfront-commerce/1.4.0/manifest.json",
+      "sha256": "d671a27b0e18dd3172b3308db4f912201de7d246b39c1ae39fbfd179ebef4f72"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.5.0",
+      "manifest": "product-catalog/2.5.0/manifest.json",
+      "sha256": "339d6e69628c8520f4bc29b27daea2fa39198bdd81043a9024fc63c97deff775"
+    },
+    {
+      "packageKey": "reference-chrome",
+      "version": "1.1.0",
+      "manifest": "reference-chrome/1.1.0/manifest.json",
+      "sha256": "22d4d7ca51eb3e16cf0627efb290243925f23d62b96efc6d8f0e8efa055c2839"
     }
   ]
 }

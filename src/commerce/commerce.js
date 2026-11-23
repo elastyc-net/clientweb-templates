@@ -41,6 +41,7 @@
     state = guestCart.apply(guestBase); if (catalogView()) state.view = "catalog"; render();
   }
   function guestState() {
+    if (guestBase && guestBase.inactiveProductIds) return guestCart.pruneInactive(guestBase.inactiveProductIds).then(function () { guestBase.inactiveProductIds = null; return guestState(); });
     var current = guestCart.snapshot(), identity = current.key + ":" + readView();
     if (guestStateRead && guestStateKey === identity) return guestStateRead;
     var generation = authGeneration;
@@ -51,9 +52,11 @@
       var favoritesView = viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "favorites"; });
       return guestFetch("guest-preview", {lines:favoritesView ? [] : snapshot.lines, favorites:favoritesView ? snapshot.favorites : []}).then(function (payload) {
         if (snapshot.key !== guestCart.snapshot().key) return {ok:true,state:state};
+        return guestCart.pruneInactive(payload.state.inactiveProductIds).then(function () {
         var local = guestCart.apply(guestBase);
         state = Object.assign(local, payload.state, {revision:local.revision,cartCount:local.cartCount,favoriteCount:local.favoriteCount,favorites:favoritesView ? payload.state.favorites : local.favorites});
         lastStateAt = Date.now(); render(); return {ok:true,localGuest:true,state:state};
+        });
       });
     });
     guestStateRead = pending; guestStateKey = identity; var clear = function () { if (guestStateRead === pending) guestStateRead = null; }; pending.then(clear,clear); return pending;
@@ -116,7 +119,7 @@
     svg.setAttribute("stroke", "currentColor"); svg.setAttribute("stroke-width", "1.8");
     svg.setAttribute("aria-hidden", "true");
     var path = document.createElementNS(svg.namespaceURI, "path");
-    path.setAttribute("d", name === "heart" ? "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" : "M3 3h2l2.4 12h11.2L21 7H6M9 21h.01M18 21h.01");
+    path.setAttribute("d", name === "heart" ? "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" : "M2 3h3l3 12h11l3-9H6M9 20a1 1 0 1 0 0 .01M19 20a1 1 0 1 0 0 .01");
     svg.appendChild(path); return svg;
   }
   function money(value, currency) {
@@ -232,6 +235,7 @@
     input.setAttribute("aria-label", "Količina"); input.inputMode = "decimal"; return input;
   }
   function actionFor(item, qty) {
+    if (item.active === false) return "unavailable";
     var mode = item["ordering-mode"], known = item["stock-known"] === true, available = known && Number(item.stock) > 0 && Number(item.stock) >= (Number(qty) || 0);
     if (mode === "Ponuda") return "inquiry";
     if (mode === "Dozvoljeno") return "buy";
@@ -249,6 +253,7 @@
       var id = card.getAttribute("data-wf-item-id"), item = store.get(id); if (!item) return;
       var slot = card.querySelector("[data-wf-shop-actions]");
       if (!slot) { slot = node("div", "wf-shop-actions"); slot.setAttribute("data-wf-shop-actions", ""); (card.querySelector(".wf-detail__summary") || card).appendChild(slot); }
+      if (item.active === false) { slot.replaceChildren(node("p", "wf-shop-help", "Proizvod više nije dostupan.")); slot.dataset.wfUnavailable = "true"; return; }
       var root = host.querySelector("[data-commerce-enabled=true]"), hasVariants = Number(item["variant-count"]) > 0 || Array.isArray(item.variants) && item.variants.length > 0;
       var namedVariants = Array.isArray(item.variants) ? item.variants.filter(function (v) { return hasVariantName(v.label); }) : [];
       if (root.classList.contains("wf-detail") && root.dataset.variantDisplay === "Lista" && hasVariants) { root.dataset.hasVariants = "true"; renderVariantList(host, card, item, slot); return; }
@@ -863,6 +868,8 @@
   }
   function renderBusy() { document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { root.setAttribute("aria-busy", busy || refreshingAuth ? "true" : "false"); }); }
   function authChanged(announce) {
+    document.documentElement.dataset.wfShopAuthenticated = "false";
+    global.dispatchEvent(new CustomEvent("elastyc:commerce-auth-changed"));
     if (!endpoint) return Promise.resolve();
     var generation = ++authGeneration;
     state = null; localMode = false; guestStateRead = null; guestStateKey = ""; checkoutLocalSnapshot = null; csrf = ""; quote = null; busy = false; pendingMutations = 0; variantReads = new WeakMap(); refreshingAuth = true; queue = Promise.resolve(); stateRead = null; lastStateAt = 0;
@@ -885,6 +892,9 @@
   }
   function render() {
     if (!state) return;
+    document.documentElement.dataset.wfShopAuthenticated = state.authenticated ? "true" : "false";
+    var contact = state.customer && state.customer.contact || {};
+    global.dispatchEvent(new CustomEvent("elastyc:commerce-profile", {detail:{authenticated:!!state.authenticated,accountUrl:state.paths.account,displayName:[contact.firstName,contact.lastName].filter(Boolean).join(" ") || "Moj nalog"}}));
     document.querySelectorAll("[data-wf-cart-count]").forEach(function (el) { var text = String(Number.isInteger(state.cartCount) ? state.cartCount : state.lines.length); if (el.textContent !== text) el.textContent = text; });
     document.querySelectorAll("[data-wf-favorite-count],[data-wf-favorites-count]").forEach(function (el) { var text = String(Number.isInteger(state.favoriteCount) ? state.favoriteCount : state.favorites.length); if (el.textContent !== text) el.textContent = text; });
     document.querySelectorAll("[data-wf-favorites-link]").forEach(function (el) { el.hidden = !state.favoritesEnabled; });

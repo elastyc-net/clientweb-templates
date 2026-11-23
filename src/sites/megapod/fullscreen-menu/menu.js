@@ -107,7 +107,7 @@
       }
       dimensions();
       var field = focusSearch ? drawer.querySelector('input[type="search"]') : null;
-      (field || closeButton).focus();
+      (field || closeButton).focus({preventScroll:true});
     }
     function mode() {
       closeMobile(false);

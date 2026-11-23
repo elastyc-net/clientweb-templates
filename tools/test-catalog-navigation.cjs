@@ -43,6 +43,7 @@ async function fixture(type,{legacy=false,denied=false}={}){
  const mobile=await fixture('navigate');try{
   Object.defineProperty(mobile.w,'innerWidth',{value:390});Object.defineProperty(mobile.w,'scrollY',{value:350});
   const b=mobile.w.document.querySelector('[data-wf-filters-toggle]');b.click();
+  const dialog=mobile.w.document.querySelector('[role=dialog]');assert(dialog.querySelector('.wf-catalog__filter-head button[aria-label="Zatvori filtere"]'));assert(dialog.querySelector('.wf-catalog__filter-foot'));checks+=2;
   assert.equal(mobile.w.document.body.style.position,'fixed');assert.equal(mobile.w.document.body.style.top,'-350px');
   assert.equal(mobile.w.document.querySelector('[data-wf-filters]').getAttribute('aria-modal'),'true');checks++;
   mobile.w.document.dispatchEvent(new mobile.w.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));

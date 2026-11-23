@@ -1,0 +1,90 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-trust",
+  "label": "Logotipi plaćanja i poverenja",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<div class=\"wfcr-trust\" role=\"group\" aria-label=\"{{setting:label}}\">{{each:images}}<a href=\"{{item:url}}\"><img src=\"{{item:image}}\" alt=\"{{item:label}}\" loading=\"lazy\"></a>{{/each:images}}</div>",
+  "styles": [
+    {
+      "name": "chrome-trust.css",
+      "content": ".wfcr-trust{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.wfcr-trust img{display:block;max-height:30px;max-width:90px;object-fit:contain;background:#fff;padding:4px;box-sizing:content-box}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "label",
+      "images"
+    ],
+    "properties": {
+      "label": {
+        "type": "string",
+        "title": "Opis grupe",
+        "maxLength": 100,
+        "minLength": 1
+      },
+      "images": {
+        "type": "array",
+        "title": "Logotipi",
+        "minItems": 0,
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "image",
+            "url"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "title": "Opis slike",
+              "maxLength": 100,
+              "minLength": 1
+            },
+            "image": {
+              "type": "string",
+              "title": "Slika",
+              "maxLength": 2048,
+              "format": "safe-url",
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "title": "Link",
+              "maxLength": 2048,
+              "format": "safe-url",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

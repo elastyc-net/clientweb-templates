@@ -48,3 +48,21 @@
  .wf-catalog[data-filters-open="true"] .wf-catalog__filter{margin-bottom:12px}
  .wf-catalog[data-filters-open="true"] .wf-catalog__filters-close{display:block;position:fixed;top:16px;right:16px;z-index:10041;min-height:44px;background:var(--wf-panel)}
 }
+
+/* Shared drawer shell: only filter values scroll; headings and actions stay reachable. */
+.wf-catalog__filter-head,.wf-catalog__filter-foot{display:none}
+.wf-catalog :is(button,summary,input,select):focus-visible{outline:2px solid var(--wf-accent);outline-offset:-3px}
+@media(max-width:960px){
+ .wf-catalog[data-filters-open="true"] .wf-catalog__filters{display:flex;flex-direction:column;overflow:hidden;padding:0;touch-action:auto}
+ .wf-catalog[data-filters-open="true"] .wf-catalog__filter-head{display:flex;flex:none;align-items:center;justify-content:space-between;gap:16px;padding:max(12px,env(safe-area-inset-top)) 16px 12px;border-bottom:1px solid var(--wf-line);font-size:20px}
+ .wf-catalog[data-filters-open="true"] .wf-catalog__filters-close{position:static;display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:44px;padding:10px;border:1px solid var(--wf-line);border-radius:10px}
+ .wf-catalog__filters-close svg{width:24px;height:24px}
+ .wf-catalog[data-filters-open="true"] .wf-catalog__filter-body{min-height:0;flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:16px}
+ .wf-catalog[data-filters-open="true"] .wf-catalog__filter-foot{display:flex;flex:none;gap:12px;padding:12px 16px max(12px,env(safe-area-inset-bottom));border-top:1px solid var(--wf-line);background:var(--wf-panel)}
+ .wf-catalog__filter-foot button{min-height:44px;padding:10px 16px;border:1px solid var(--wf-line);border-radius:10px}
+ .wf-catalog__filter-foot button:last-child{flex:1;background:var(--wf-accent);color:var(--wf-shop-on-accent,#fff)}
+}
+
+.wf-catalog [hidden]{display:none!important}.wf-catalog .wf-product__prices{display:flex;align-items:baseline;gap:4px 8px;flex-wrap:wrap}.wf-catalog .wf-product__footer{align-items:center}.wf-catalog .wf-product__stock{align-self:center}
+
+.wf-catalog__filters:focus{outline:none}

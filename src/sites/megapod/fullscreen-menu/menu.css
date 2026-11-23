@@ -89,3 +89,10 @@
  .wfcr-header:has(.mp-nav) .wf-shop-shell :is([data-wf-favorites-link],[data-wf-cart-link]){position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:8px;box-sizing:border-box;gap:0;flex:0 0 44px}
  .wfcr-header:has(.mp-nav) .wf-shop-shell :is([data-wf-favorite-count],[data-wf-cart-count]){position:absolute;top:1px;right:0;min-width:16px;height:16px;font-size:10px;line-height:16px}
 }
+
+.wfcr-header .mp-nav :is(a,button):focus-visible{outline-offset:-3px}
+.wfcr-header .mp-nav [data-mp-close]{flex:none;width:44px;height:44px;padding:10px;border:1px solid var(--wf-color-border);border-radius:10px}
+.wfcr-header .mp-nav [data-mp-close] svg{width:24px;height:24px;stroke-width:2.3}
+.wfcr-header .mp-nav .mp-nav__drawer{overflow:hidden}
+.wfcr-header .mp-nav .mp-nav__drawer>.wf-nav-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.wfcr-header .mp-nav .mp-nav__drawer-head{flex:none}

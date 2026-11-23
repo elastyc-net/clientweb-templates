@@ -10,6 +10,7 @@ const base={revision:0,lines:[],favorites:[],cartCount:0,favoriteCount:0,favorit
 const product={id:'A','variant-count':0,variants:[],unit:'KOM','commerce-known':true,'ordering-mode':'Dozvoljeno','stock-known':true,stock:10,'price-known':true,price:100,currency:'RSD'};
 async function fixture(options={}){
  const view=options.view||'catalog',bootstrap={version:1,siteKey:'local-test',channel:'production',authenticated:false,legacyKey:options.legacyKey||'',retentionDays:30,state:structuredClone(base)};
+ if(options.inactive)bootstrap.state.inactiveProductIds=options.inactive;
  const encoded=Buffer.from(JSON.stringify(bootstrap)).toString('base64url');
  const html='<span data-wf-cart-count>0</span><span data-wf-favorite-count>0</span><div data-wf-commerce-url="/api?channel=production" data-wf-commerce-bootstrap="'+encoded+'"></div>'+(view==='catalog'?'<div class="wf-instance"><section class="wf-catalog" data-commerce-enabled="true" data-list-cart-enabled="true"><article data-wf-item-id="A"></article></section></div>':'<section><div data-wf-shop-view="'+view+'"></div></section>');
  const dom=new JSDOM(html,{url:'https://shop.example/'+view,runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,calls=[];
@@ -51,6 +52,7 @@ async function fixture(options={}){
   check(f.w.document.querySelector('[data-wf-favorite-count]').textContent==='1'&&JSON.parse(f.saved()).lines.length===0,'Server badges remain accurate and acknowledged imported local lines are consumed.');
  }finally{f.dom.window.close();}
  const reload=await fixture({saved});try{check(reload.calls.length===0&&reload.w.document.querySelector('[data-wf-cart-count]').textContent==='1'&&reload.host.querySelector('.wf-shop-heart').getAttribute('aria-pressed')==='true','Guest selection and favorite survive a reload without a state request.');}finally{reload.dom.window.close();}
+ const inactive=await fixture({saved,inactive:['A']});try{check(JSON.parse(inactive.saved()).lines.length===0&&JSON.parse(inactive.saved()).favorites.length===0,'Confirmed inactive IDs are removed from both local selections.');check(inactive.calls.length===0&&inactive.w.document.querySelector('[data-wf-cart-count]').textContent==='0'&&inactive.w.document.querySelector('[data-wf-favorite-count]').textContent==='0','Inactivity cleanup updates both badges without another server state request.');}finally{inactive.dom.window.close();}
  const cart=await fixture({saved,view:'cart'});try{
   check(cart.calls.length===1&&cart.calls[0].operation==='guest-preview','Opening the guest cart makes one grouped read-only repricing request.');
   check(cart.w.document.querySelector('[data-wf-shop-view]').textContent.includes('Current A'),'Cart details come from the server, not browser supplied labels.');

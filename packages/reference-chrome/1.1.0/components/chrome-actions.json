@@ -1,0 +1,93 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-actions",
+  "label": "Dugmad i brzi linkovi",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<nav class=\"wfcr-actions\" aria-label=\"{{setting:label}}\">{{each:links}}<a href=\"{{item:url}}\" data-kind=\"{{item:kind}}\">{{item:label}}</a>{{/each:links}}</nav>",
+  "styles": [
+    {
+      "name": "chrome-actions.css",
+      "content": ".wfcr-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px}.wfcr-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:8px 16px;box-sizing:border-box;text-decoration:none;font-weight:600;white-space:nowrap;border-radius:var(--wf-radius,12px)}.wfcr-actions a[data-kind=\"primary\"]{background:var(--wf-color-primary);color:var(--wf-color-secondary)}.wfcr-actions a[data-kind=\"outline\"]{border:1px solid var(--wf-surface-border,var(--wf-color-border))}.wfcr-actions a[data-kind=\"text\"]{padding-inline:0;min-height:32px}.wfcr-footer .wfcr-actions a{font-size:inherit}.wfcr-header .wfcr-utility .wfcr-actions{font-size:12px}.wfcr-header .wfcr-utility .wfcr-actions a{min-height:24px;padding-block:0}@media(max-width:640px){.wfcr-actions{gap:10px}.wfcr-actions a{padding:8px 12px;font-size:13px}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "label",
+      "links"
+    ],
+    "properties": {
+      "label": {
+        "type": "string",
+        "title": "Opis grupe",
+        "maxLength": 80,
+        "minLength": 1
+      },
+      "links": {
+        "type": "array",
+        "title": "Dugmad i linkovi",
+        "minItems": 0,
+        "maxItems": 20,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url",
+            "kind"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "title": "Naziv",
+              "maxLength": 120,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "title": "Odredište",
+              "maxLength": 2048,
+              "format": "safe-url",
+              "minLength": 1
+            },
+            "kind": {
+              "type": "string",
+              "title": "Izgled dugmeta",
+              "maxLength": 40,
+              "enum": [
+                "text",
+                "primary",
+                "outline"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}
