@@ -34,8 +34,10 @@ async function fixture(authenticated = true, protectedForm = false, live = false
     const panels = f.root.querySelectorAll('.wf-shop-step-panel'), form = f.root.querySelector('form');
     check(panels.length === 3 && !panels[0].hidden && panels[1].hidden && panels[2].hidden, 'Three steps start at contact');
     check(form.elements.firstName.value === 'Petar' && form.elements.email.value === 'test@example.invalid', 'Verified customer profile prefills contact');
+    check(!form.elements.phone.placeholder && form.elements.phone.value === '', 'Checkout also has no invented phone placeholder');
     check(f.root.querySelectorAll('.wf-shop-step')[2].disabled, 'A future step is not directly reachable');
     form.elements.email.value = 'invalid'; await f.submit();
+    check(form.elements.email.getAttribute('aria-invalid') === 'true' && !f.w.document.getElementById(form.elements.email.getAttribute('aria-describedby')).hidden, 'Checkout uses the same associated email error');
     check(!panels[0].hidden && f.calls.length === 0, 'Invalid contact cannot advance or send a quote');
     form.elements.email.value = 'test@example.invalid'; await f.submit();
     check(!panels[1].hidden && panels[0].hidden, 'Valid contact advances to delivery');

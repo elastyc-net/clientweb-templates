@@ -1,0 +1,11 @@
+---
+description: Primeni centralno pravilo za email i telefon na svim javnim front formama
+alwaysApply: true
+---
+
+# Javne front forme
+
+Pre rada na kontakt poljima javnih formi pročitaj i primeni kanonsko pravilo
+`../common/.cursor/rules/front-form-contact-controls.mdc` iz povezanog workspace-a.
+Ako taj checkout nije dostupan, pročitaj isti fajl iz `elastyc-net/common`;
+ne održavaj kopiju njegovog tela u ovom repou.

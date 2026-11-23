@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {JSDOM} = require('jsdom');
-const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.2.9/components/commerce-request.json')));
+const component = JSON.parse(fs.readFileSync(path.join(__dirname, '../packages/webfront-commerce/1.3.1/components/commerce-request.json')));
 const script = component.scripts.find(asset => asset.name === 'commerce.js').content;
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; }
@@ -48,7 +48,14 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
     }
     f.form.elements.phone.value='0641234567';f.form.elements.phone.dispatchEvent(new f.w.Event('focusout',{bubbles:true}));
     check(f.w.intlTelInput.getInstance(f.form.elements.phone).getNumber()==='+381641234567' && f.form.elements.phone.value!=='0641234567','National phone formats after leaving the field');
-    for(const email of ['bad','test@localhost','test@@example.rs']) {f.form.elements.email.value=email;f.submit();await settle();check(f.calls.length===0 && !f.form.elements.email.checkValidity(),'Invalid email blocks sending: '+email);}
+    const emailInput=f.form.elements.email, emailError=f.w.document.getElementById(emailInput.getAttribute('aria-describedby'));
+    check(emailInput.type==='email' && emailInput.inputMode==='email' && emailInput.autocomplete==='email' && emailInput.getAttribute('autocapitalize')==='none' && !emailInput.spellcheck,'Shared email control configures the email keyboard and disables text correction');
+    for(const email of ['','bad','test@localhost','test@@example.rs','test..name@example.rs','.test@example.rs','test@example..rs','test@-example.rs','a'.repeat(65)+'@example.rs']) {
+      emailInput.value=email;emailInput.dispatchEvent(new f.w.Event('focusout',{bubbles:true}));f.submit();await settle();
+      check(f.calls.length===0 && !emailInput.checkValidity() && emailInput.getAttribute('aria-invalid')==='true' && !emailError.hidden && emailError.textContent,'Invalid email has an associated inline error and blocks sending: '+email);
+    }
+    emailInput.value='test+ponuda@example.rs';emailInput.dispatchEvent(new f.w.Event('input',{bubbles:true}));
+    check(emailInput.checkValidity() && !emailInput.hasAttribute('aria-invalid') && emailError.hidden,'Correcting the email clears the inline error and accepts plus addressing');
     f.form.elements.email.value=' test@example.rs ';f.submit();f.submit();await settle();
     check(f.calls.map(call=>call.action).join(',')==='quote,submit','One user action validates and sends exactly once');
     check(f.calls[0].contact.phone==='+381641234567' && f.calls[0].contact.email==='test@example.rs','Payload contains normalized contact data');
@@ -102,6 +109,8 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
   const foreign=await fixture({protectedForm:false});try {
     const input=foreign.form.elements.phone, widget=foreign.w.intlTelInput.getInstance(input);
     check(widget.getSelectedCountry().iso2==='rs' && foreign.form.querySelector('.iti__selected-country'),'Phone starts with a real Serbia country selector');
+    check(input.value==='' && !input.placeholder,'Empty phone shows no invented number or placeholder');
+    widget.setSelectedCountry('fr');check(input.value==='' && !input.placeholder,'Changing country does not insert an example phone number');
     widget.setSelectedCountry('gb');input.value='020 7946 0018';foreign.submit();await settle();
     check(foreign.calls[0].contact.phone==='+442079460018','Selected UK country converts a national landline to E.164');
     check(foreign.root.textContent.includes('Provera je uspešna'),'Country phone works with the single-action Candidate inquiry');
@@ -122,6 +131,7 @@ async function fixture({protectedForm = true, provider = true, phoneReady = true
     check(quotes.length===2 && quotes[1].contact.phone==='+447911123456','Changing country invalidates a retained quote and sends the new international number');
   }finally{changed.dom.window.close();}
   const loading=await fixture({protectedForm:false,phoneReady:false});try {
+    check(!loading.form.elements.phone.placeholder && loading.form.elements.phone.value==='','Phone stays empty before the country control has loaded');
     loading.form.elements.phone.value='0641234567';loading.submit();await settle();
     check(loading.calls.length===0 && !loading.form.elements.phone.checkValidity(),'Nonempty phone cannot send before its country control is ready');
     loading.w.document.querySelector('script[src*="intlTelInputWithUtils"]').dispatchEvent(new loading.w.Event('error'));await settle();

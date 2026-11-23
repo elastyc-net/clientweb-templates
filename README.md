@@ -331,3 +331,13 @@ Build with src/commerce/build.mjs, regenerate packages/staged-bundle.json, and
 verify tools/test-commerce-guest-local.cjs alongside the existing loading,
 catalog, inquiry, checkout and protection suites using jsdom26. Bootstrap pins
 and all prior immutable package bytes remain unchanged until Gallery approval.
+
+Commerce 1.3.1 / catalog 2.3.1 use the shared email field control in pending
+inquiry, ready inquiry and checkout forms. It validates required values and
+address syntax on blur and before sending, trims outer whitespace and shows an
+associated inline error that clears on correction. Server validation remains
+authoritative; syntax validation does not verify mailbox existence or ownership.
+Optional phone inputs are empty without an example placeholder, including
+before the country picker loads and after changing country. Saved real numbers
+still prefill normally. The canonical rule for all public front contact forms
+is `common/.cursor/rules/front-form-contact-controls.mdc`.

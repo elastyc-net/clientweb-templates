@@ -444,11 +444,33 @@
   function clearPhones(root) {
     phoneControls.forEach(function (control, input) { if (root.contains(input)) control.destroy(); });
   }
+  var emailControls = new WeakMap();
+  function emailControl(input) {
+    var touched = false, error = node("span", "wf-shop-error");
+    error.id = "wf-email-error-" + key(); error.hidden = true; error.setAttribute("aria-live", "polite");
+    input.setAttribute("aria-describedby", error.id); input.inputMode = "email";
+    input.setAttribute("autocapitalize", "none"); input.spellcheck = false;
+    input.parentNode.appendChild(error);
+    function validate(format, show) {
+      if (format) input.value = input.value.trim();
+      var value = input.value.trim(), parts = value.split("@"), local = parts[0], domain = parts[1] || "";
+      var atom = /^[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*$/i;
+      var labels = domain.split("."), valid = parts.length === 2 && local.length <= 64 && atom.test(local) && labels.length > 1 && labels.every(function (label) { return /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label); });
+      var message = !value ? input.required ? "Unesite email adresu." : "" : !valid || value.length > input.maxLength ? "Unesite ispravnu email adresu." : "";
+      input.setCustomValidity(message);
+      if (!message && input.validity.typeMismatch) message = "Unesite ispravnu email adresu.";
+      touched = touched || !!show;
+      error.textContent = touched ? message : ""; error.hidden = !error.textContent;
+      if (touched && message) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+    }
+    input.addEventListener("input", function () { validate(false, false); });
+    input.addEventListener("focusout", function () { validate(true, true); });
+    var control = { validate: validate }; emailControls.set(input, control); return control;
+  }
   function contactValidity(form, format) {
     var email = form.querySelector('[name="email"]'), phone = form.querySelector('[name="phone"]');
     if (email) {
-      if (format) email.value = email.value.trim();
-      email.setCustomValidity(email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) ? "Unesite ispravnu email adresu, na primer ime@domen.rs." : "");
+      emailControls.get(email).validate(format, format);
     }
     if (phone) {
       var control = phoneControls.get(phone);
@@ -461,8 +483,10 @@
     if (type === "tel") { input.id = "wf-phone-" + key(); caption.htmlFor = input.id; }
     wrap.appendChild(caption); input.name = name;
     if (type !== "textarea") input.type = type || "text"; input.required = !!required; input.maxLength = type === "textarea" ? 2000 : 160;
-    if (type === "tel") { input.maxLength = 60; input.inputMode = "tel"; input.placeholder = "64 123 4567"; }
-    if (autocomplete) input.autocomplete = autocomplete; wrap.appendChild(input); form.appendChild(wrap); return input;
+    if (type === "tel") { input.maxLength = 60; input.inputMode = "tel"; }
+    if (autocomplete) input.autocomplete = autocomplete; wrap.appendChild(input); form.appendChild(wrap);
+    if (type === "email") emailControl(input);
+    return input;
   }
   function selected(root, name) { var input = root.querySelector('[name="' + name + '"]'); return input ? input.value.trim() : ""; }
   function detailsData(form) {
