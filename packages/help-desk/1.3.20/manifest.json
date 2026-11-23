@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.20",
+  "label": "Help Desk",
+  "description": "Stvarna imena autora poruka i stabilan unos bez statusnog reda pri slanju.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "d70755ccdec10580017d0dc33f31c51bc107a71a81b0ef0b13d73400c66fa5b3"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "8ba749b5a4f47e9c9febef20469ed2f02614e69619eecf653f596c294e7373a7"
+    }
+  ]
+}
