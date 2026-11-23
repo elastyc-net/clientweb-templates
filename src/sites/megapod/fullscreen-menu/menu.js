@@ -202,7 +202,7 @@
       fetch('/page.php?wf_action=header-profile',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}})
         .then(function(response){if(!response.ok)throw new Error('Profile unavailable');return response.json();})
         .then(account).catch(function(){});
-    }else if(avatar && accountLink){accountLink.hidden=false;accountLink.textContent='Moj nalog';}
+    }else if(avatar && accountLink){accountLink.hidden=false;accountLink.textContent=(avatar.querySelector('[data-es-account-label]')?.textContent || 'Moj nalog');}
     mode();
   });
 })();

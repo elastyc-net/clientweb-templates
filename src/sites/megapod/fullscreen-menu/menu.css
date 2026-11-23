@@ -81,3 +81,5 @@
 .wfcr-header:has(.mp-nav) .wf-shop-shell{display:flex;align-items:center;gap:4px}
 .wfcr-header:has(.mp-nav) [data-wf-cart-label]{display:none}
 @media(max-width:480px){.wfcr-header:has(.mp-nav) .wfcr-main{gap:4px}.wfcr-header:has(.mp-nav) .wfcr-inner{padding-inline:10px}.wfcr-header:has(.mp-nav) .wfcr-brand-zone{max-width:calc(100% - 190px)}.wfcr-header:has(.mp-nav) .wfcr-actions-zone{flex:0 0 auto}.wfcr-header .mp-nav .mp-nav__toolbar{gap:0}}
+
+.wfcr-header:has(.mp-nav) .wfcr-navigation{margin-left:0}
