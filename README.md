@@ -316,3 +316,18 @@ in `data-wf-protection-error`, never a token or raw diagnostic text.
 Patch 1.2.8 / 2.2.8 keeps the verified 1.2.7 / 2.2.7 runtime and includes variant
 rows in the shared commerce theme and box-sizing scope, so quantity inputs and
 cart buttons retain the site palette and borders outside the parent action slot.
+
+
+Commerce 1.3.0 / catalog 2.3.0 use a guest-local adapter when the engine provides
+a verified display bootstrap from built site settings. Guest favorites/cart
+choices update localStorage and both header counters immediately; cart entry
+batches live repricing. An old server guest selection migrates once. Login
+imports use the existing protected cart API; checkout retains CSRF, ownership,
+revision, idempotency and live quote/submit checks. Older engines retain the
+existing server behavior. No auth token, price or personal contact is persisted
+by the guest adapter. Storage failure has a visible in-memory fallback.
+
+Build with src/commerce/build.mjs, regenerate packages/staged-bundle.json, and
+verify tools/test-commerce-guest-local.cjs alongside the existing loading,
+catalog, inquiry, checkout and protection suites using jsdom26. Bootstrap pins
+and all prior immutable package bytes remain unchanged until Gallery approval.

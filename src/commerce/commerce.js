@@ -6,6 +6,92 @@
   var authGeneration = 0, refreshingAuth = false;
   var stateRead = null, stateReadGeneration = -1, stateReadView = "", lastStateAt = 0, requestSequence = 0, appliedSequence = 0;
   var inquiryDrafts = new WeakMap();
+  var guestCart = null, guestBootstrap = null, guestBase = null, localMode = false, guestMigration = null, guestStateRead = null, guestStateKey = "", checkoutLocalSnapshot = null, importingLocal = null;
+  function checkoutView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "checkout"; }); }
+  function guestPageView() { return viewRoots.some(function (root) { return root.isConnected && ["cart", "favorites"].indexOf(root.dataset.wfShopView) >= 0; }); }
+  function ownsLegacySource() { return !!(guestCart && guestBootstrap && guestBootstrap.legacyKey && !guestCart.needsMigration(guestBootstrap.legacyKey)); }
+  function guestBody(snapshot) { return {lines:snapshot.lines, favorites:snapshot.favorites}; }
+  function guestFetch(operation, data) {
+    var generation = authGeneration, url = new URL(endpoint, global.location.href), options = {credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}};
+    url.searchParams.set("operation", operation);
+    if (catalogView()) url.searchParams.set("wf_commerce_view", "catalog");
+    if (operation === "guest-preview") { options.method = "POST"; options.headers["Content-Type"] = "application/json"; options.body = JSON.stringify(data); }
+    else Object.keys(data || {}).forEach(function (name) { url.searchParams.set(name, data[name]); });
+    return fetch(url.toString(), options).then(function (response) { return response.json().then(function (payload) {
+      if (generation !== authGeneration || !localMode) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
+      if (!response.ok || !payload.ok) throw new Error(payload.message || "Provera korpe nije uspela."); return payload;
+    }); });
+  }
+  function migrateGuest() {
+    if (!localMode || !guestCart || !guestBootstrap || !guestCart.needsMigration(guestBootstrap.legacyKey)) return Promise.resolve();
+    if (guestMigration) return guestMigration;
+    guestMigration = guestFetch("guest-export", {}).then(function (result) { return guestCart.migrate(guestBootstrap.legacyKey, result.selection); });
+    var pendingMigration = guestMigration; var clearMigration = function () { if (guestMigration === pendingMigration) guestMigration = null; }; pendingMigration.then(clearMigration,clearMigration); return pendingMigration;
+  }
+  function paintGuestCounts() {
+    if (!localMode || !guestCart) return;
+    var local = guestCart.snapshot();
+    document.querySelectorAll("[data-wf-cart-count]").forEach(function (el) { el.textContent = String(local.lines.length); });
+    document.querySelectorAll("[data-wf-favorite-count],[data-wf-favorites-count]").forEach(function (el) { el.textContent = String(local.favorites.length); });
+  }
+  function guestChanged() {
+    if (!localMode || !guestBase) return;
+    paintGuestCounts();
+    if (checkoutView() || inquiryView()) return;
+    state = guestCart.apply(guestBase); if (catalogView()) state.view = "catalog"; render();
+  }
+  function guestState() {
+    var current = guestCart.snapshot(), identity = current.key + ":" + readView();
+    if (guestStateRead && guestStateKey === identity) return guestStateRead;
+    var generation = authGeneration;
+    var pending = migrateGuest().then(function () {
+      if (generation !== authGeneration || !localMode) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
+      guestChanged(); var snapshot = guestCart.snapshot();
+      if (!guestPageView() || (!snapshot.lines.length && !snapshot.favorites.length)) { lastStateAt = Date.now(); return {ok:true,localGuest:true,state:state}; }
+      var favoritesView = viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "favorites"; });
+      return guestFetch("guest-preview", {lines:favoritesView ? [] : snapshot.lines, favorites:favoritesView ? snapshot.favorites : []}).then(function (payload) {
+        if (snapshot.key !== guestCart.snapshot().key) return {ok:true,state:state};
+        var local = guestCart.apply(guestBase);
+        state = Object.assign(local, payload.state, {revision:local.revision,cartCount:local.cartCount,favoriteCount:local.favoriteCount,favorites:favoritesView ? payload.state.favorites : local.favorites});
+        lastStateAt = Date.now(); render(); return {ok:true,localGuest:true,state:state};
+      });
+    });
+    guestStateRead = pending; guestStateKey = identity; var clear = function () { if (guestStateRead === pending) guestStateRead = null; }; pending.then(clear,clear); return pending;
+  }
+  function initializeGuest(host) {
+    if (!global.ElastycGuestCart || !host.dataset.wfCommerceBootstrap) return;
+    try {
+      var encoded = host.dataset.wfCommerceBootstrap.replace(/-/g,"+").replace(/_/g,"/");
+      var bootstrap = JSON.parse(decodeURIComponent(Array.from(atob(encoded), function (c) { return "%" + c.charCodeAt(0).toString(16).padStart(2,"0"); }).join("")));
+      if (bootstrap.version !== 1 || typeof bootstrap.authenticated !== "boolean" || !bootstrap.state || typeof bootstrap.siteKey !== "string") return;
+      guestBootstrap = bootstrap; guestBase = bootstrap.state; localMode = !bootstrap.authenticated && !new URLSearchParams(global.location.search).has("purchase");
+      guestCart = global.ElastycGuestCart.create(bootstrap, guestChanged, function (text) { notify(text, true); });
+      paintGuestCounts();
+      global.addEventListener("storage", function () { if (localMode && guestPageView() && !global.document.hidden) guestState().catch(function (error) { if (!error.silent) notify(error.message,true); }); });
+    } catch (error) { notify("Lokalna korpa trenutno nije dostupna. Pokušajte ponovo.", true); }
+  }
+  function synchronizeLocal() {
+    if (!guestCart || !state || inquiryView() || new URLSearchParams(global.location.search).has("purchase")) return Promise.resolve();
+    if (importingLocal) return importingLocal;
+    var snapshot;
+    if (!state.authenticated && !checkoutView()) return Promise.resolve();
+    var action = state.authenticated ? "import" : "sync-local", generation = authGeneration;
+    importingLocal = migrateGuest().then(function () {
+      snapshot = state.authenticated ? guestCart.pending(!!state.mergeAvailable && ownsLegacySource(),state.favoritesEnabled) : guestCart.snapshot();
+      if (!snapshot) return;
+      return performRequest(action,Object.assign(guestBody(snapshot),{idempotencyKey:snapshot.key},action === "import" ? {legacyKey:snapshot.legacyKey || ""} : {}),true,false).catch(function (error) {
+        if (error.status !== 409) throw error;
+        return performRequest("state",{},false,false).then(function () { return performRequest(action,Object.assign(guestBody(snapshot),{idempotencyKey:snapshot.key},action === "import" ? {legacyKey:snapshot.legacyKey || ""} : {}),true,false); });
+      });
+    }).then(function (result) {
+      if (generation !== authGeneration || !snapshot) return;
+      if (state.authenticated) return guestCart.consume(snapshot,result && result.favoritesImported === false);
+      checkoutLocalSnapshot = snapshot;
+      viewRoots.forEach(function (root) { if (root.dataset.wfShopView === "checkout") root.dataset.rendered = "false"; }); render();
+    });
+    var pending = importingLocal; var clear = function () { if (importingLocal === pending) importingLocal = null; }; pending.then(clear,clear); return pending;
+  }
+
   function inquiryView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "request"; }) && !viewRoots.some(function (root) { return root.isConnected && ["cart", "checkout", "favorites", "account"].indexOf(root.dataset.wfShopView) >= 0; }) && !document.querySelector('[data-commerce-enabled="true"]'); }
   function catalogView() { return !viewRoots.some(function (root) { return root.isConnected; }) && !!document.querySelector('[data-commerce-enabled="true"]'); }
   function readView() { return inquiryView() ? "inquiry" : catalogView() ? "catalog" : "full"; }
@@ -57,6 +143,13 @@
     global.clearTimeout(notify.timer); notify.timer = global.setTimeout(function () { el.textContent = ""; }, 6500);
   }
   function request(action, data, mutation, authChecked) {
+    if (localMode && guestCart && !inquiryView() && !checkoutView()) {
+      if (!mutation && action === "state") return guestState();
+      if (!mutation && action === "variants") return guestFetch("guest-variants", data);
+      if (mutation && action === "selection") return guestFetch("guest-preview", {lines:[{lineId:key(),productId:data.productId,variantId:data.variantId || "",quantity:data.quantity}],favorites:[]}).then(function (payload) { if (!payload.state.lines[0] || !payload.state.lines[0].eligible) throw new Error("Varijanta nije dostupna."); return {ok:true,selection:payload.state.lines[0]}; });
+      if (mutation && ["add","set","remove","favorite"].indexOf(action) >= 0) return guestCart.mutate(action,data).then(function () { guestChanged(); return guestPageView() ? guestState() : {ok:true,state:state}; });
+    }
+
     if (!mutation && action === "state" && !authChecked) {
       var view = readView();
       if (stateRead && stateReadGeneration === authGeneration && stateReadView === view) return stateRead;
@@ -71,6 +164,7 @@
     if (!endpoint) return Promise.reject(new Error("Otvorite direktan pregled stranice da koristite korpu."));
     var generation = authGeneration, sequence = ++requestSequence;
     var url = new URL(endpoint, global.location.href), options = { credentials: "same-origin", headers: { Accept: "application/json" }, cache: "no-store" };
+    if (guestCart && !mutation && action === "state" && !inquiryView() && !checkoutView()) action = "local-state";
     if (inquiryView()) url.searchParams.set("wf_commerce_view", "inquiry");
     else if (catalogView()) url.searchParams.set("wf_commerce_view", "catalog");
     var purchase = new URLSearchParams(global.location.search).get("purchase");
@@ -94,6 +188,14 @@
         if (!response.ok || !payload.ok) { var error = new Error(payload.message || "Zahtev nije uspeo. Pokušajte ponovo."); error.status = response.status; throw error; }
         if (!mutation && payload.state && payload.state.view && payload.state.view !== readView()) return request("state", {}, false);
         if (payload.csrf) csrf = payload.csrf;
+        if (guestBootstrap && /^[a-f0-9]{64}$/.test(payload.localMigrationKey || "")) guestBootstrap.legacyKey = payload.localMigrationKey;
+        if (!mutation && action === "state" && localMode && guestCart && payload.state && !payload.state.authenticated && !inquiryView() && guestCart.needsMigration(guestBootstrap.legacyKey)) {
+          guestMigration = guestCart.migrate(guestBootstrap.legacyKey,{lines:payload.state.lines,favorites:payload.state.favorites.map(function (f) { return f.productId; })});
+          var seeding = guestMigration; var clearSeed = function () { if (guestMigration === seeding) guestMigration = null; }; seeding.then(clearSeed,clearSeed);
+        }
+        if (payload.localGuest && guestCart) { localMode = true; guestBase = payload.state; payload.state = guestCart.apply(guestBase); if (catalogView()) payload.state.view = "catalog"; }
+        else if (payload.state && payload.state.authenticated) localMode = false;
+        if (action === "submit" && payload.receipt && !payload.receipt.preview && guestCart && localMode && checkoutView() && checkoutLocalSnapshot) guestCart.consume(checkoutLocalSnapshot,true).catch(function (error) { notify(error.message,true); });
         if (payload.state && sequence >= appliedSequence) { appliedSequence = sequence; lastStateAt = Date.now(); state = payload.state; render(); }
         if (payload.stateUnavailable) { notify("Promena je sačuvana. Osvežavanje pregleda trenutno nije dostupno."); global.setTimeout(function () { request("state", {}, false).catch(function () {}); }, 1000); }
         return payload;
@@ -101,11 +203,13 @@
     });
   }
   function mutate(action, data, success) {
+    if (localMode && checkoutView() && guestCart && ["quote","submit"].indexOf(action) >= 0 && (!checkoutLocalSnapshot || JSON.stringify(guestCart.snapshot().lines) !== JSON.stringify(checkoutLocalSnapshot.lines))) { var changed = new Error("Korpa je promenjena. Otvorite korpu i ponovo proverite porudžbinu."); notify(changed.message,true); return Promise.reject(changed); }
+
     var operationKey = key(), generation = authGeneration; pendingMutations++; busy = true; renderBusy();
     var run = queue.catch(function () {}).then(function () {
       if (generation !== authGeneration) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
       return request(action, Object.assign({}, data, { idempotencyKey: operationKey }), true).then(function (result) {
-        if (channel) channel.postMessage("refresh"); if (success) success(result); return result;
+        if (channel && !localMode) channel.postMessage("refresh"); if (success) success(result); return result;
       }).catch(function (error) {
         if (error.status === 409) request("state", {}, false).catch(function () {});
         if (!error.silent) notify(error.message, true); throw error;
@@ -722,7 +826,7 @@
         })); return;
       }
       global.ElastycFrontAuth.init({ host: root, apiBase: "", returnUrl: linkTo(state.paths.cart), onSuccess: function () {
-        return request("state", {}, false).then(function () { return mutate("resume", {}, function () { global.location.assign(linkTo(state.paths.cart)); }); });
+        return request("state", {}, false).then(function () { if (state.mergeAvailable && !ownsLegacySource()) return mutate("resume", {}, function () {}); }).then(function () { return synchronizeLocal(); }).then(function () { global.location.assign(linkTo(state.paths.cart)); });
       } });
     }).catch(function () { root.textContent = "Prijava trenutno nije dostupna."; });
   }
@@ -730,9 +834,9 @@
   function authChanged(announce) {
     if (!endpoint) return Promise.resolve();
     var generation = ++authGeneration;
-    state = null; csrf = ""; quote = null; busy = false; pendingMutations = 0; variantReads = new WeakMap(); refreshingAuth = true; queue = Promise.resolve(); stateRead = null; lastStateAt = 0;
+    state = null; localMode = false; guestStateRead = null; guestStateKey = ""; checkoutLocalSnapshot = null; csrf = ""; quote = null; busy = false; pendingMutations = 0; variantReads = new WeakMap(); refreshingAuth = true; queue = Promise.resolve(); stateRead = null; lastStateAt = 0;
     if (channel && announce !== false) channel.postMessage("auth-change");
-    document.querySelectorAll("[data-wf-cart-count]").forEach(function (el) { el.textContent = "0"; });
+    document.querySelectorAll("[data-wf-cart-count],[data-wf-favorite-count],[data-wf-favorites-count]").forEach(function (el) { el.textContent = "0"; });
     viewRoots.forEach(function (root) {
       if (root.dataset.wfShopView === "account") return;
       clearPhones(root);
@@ -742,8 +846,8 @@
     document.querySelectorAll(".wf-instance").forEach(function (host) { mount(host, []); });
     renderBusy();
     return request("state", {}, false).then(function () {
-      if (state && state.mergeAvailable) return mutate("resume", {}, function () {});
-    }).catch(function (error) {
+      if (state && state.mergeAvailable && !ownsLegacySource()) return mutate("resume", {}, function () {});
+    }).then(function () { return synchronizeLocal(); }).then(function () { if (localMode && !checkoutView() && !inquiryView()) return guestState(); }).catch(function (error) {
       if (!error.silent) notify("Obnova korpe nije završena. Osvežite stranicu da pokušate ponovo.", true);
       throw error;
     }).finally(function () { if (generation === authGeneration) { refreshingAuth = false; renderBusy(); } });
@@ -751,6 +855,7 @@
   function render() {
     if (!state) return;
     document.querySelectorAll("[data-wf-cart-count]").forEach(function (el) { var text = String(Number.isInteger(state.cartCount) ? state.cartCount : state.lines.length); if (el.textContent !== text) el.textContent = text; });
+    document.querySelectorAll("[data-wf-favorite-count],[data-wf-favorites-count]").forEach(function (el) { var text = String(Number.isInteger(state.favoriteCount) ? state.favoriteCount : state.favorites.length); if (el.textContent !== text) el.textContent = text; });
     document.querySelectorAll("[data-wf-favorites-link]").forEach(function (el) { el.hidden = !state.favoritesEnabled; });
     document.querySelectorAll("[data-wf-favorites-link]").forEach(function (el) { el.href = linkTo(state.paths.favorites); });
     document.querySelectorAll("[data-wf-cart-link]").forEach(function (el) { el.href = linkTo(state.paths.cart); });
@@ -760,6 +865,7 @@
     });
     document.querySelectorAll(".wf-instance").forEach(function (host) { mount(host, []); });
     viewRoots.forEach(function (root) {
+      if (localMode && guestCart && root.dataset.wfShopView === "checkout" && !checkoutLocalSnapshot) { if (root.dataset.localPending !== "true") { root.dataset.localPending = "true"; root.replaceChildren(node("p","wf-shop-help","Provera lokalne korpe…")); } root.dataset.rendered = "false"; return; }
       // Preserve form fields, focus and a reviewed quote during unrelated state updates.
       if (root.dataset.rendered === "true" && ["checkout", "request", "account"].indexOf(root.dataset.wfShopView) >= 0) return;
       var pendingFocus = root.dataset.pendingInquiry === "true" && root.contains(document.activeElement) ? document.activeElement.name : "";
@@ -771,7 +877,7 @@
       if (root.dataset.wfShopView === "request") renderCheckout(root, true);
       if (root.dataset.wfShopView === "account") renderAccount(root);
       if (pendingFocus) { var restored = root.querySelector('[name="' + pendingFocus + '"]'); if (restored) restored.focus({preventScroll:true}); }
-    }); renderBusy();
+    }); paintGuestCounts(); renderBusy();
   }
   function scan() {
     document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { if (viewRoots.indexOf(root) < 0) viewRoots.push(root); });
@@ -780,12 +886,13 @@
     themeContrast(host);
     if (global.parent !== global && host.dataset.wfCatalogBridge === "true") { viewRoots.forEach(function (root) { root.textContent = "Za interaktivnu proveru korpe otvorite direktan Candidate pregled."; }); return; }
     endpoint = host.dataset.wfCommerceUrl;
+    initializeGuest(host);
     if (inquiryView()) viewRoots.forEach(function (root) { if (root.dataset.wfShopView === "request") renderInquiryPending(root); });
     request("state", {}, false).then(function () {
-      if (state.mergeAvailable) return mutate("resume", {}, function () {});
-    }).catch(function (error) { notify(error.message, true); });
-    if (global.BroadcastChannel) { channel = new BroadcastChannel("wf-commerce-" + (new URL(endpoint, global.location.href).searchParams.get("channel") || "production")); channel.onmessage = function (event) { (event.data === "auth-change" ? authChanged(false) : request("state", {}, false)).catch(function () {}); }; }
-    global.addEventListener("focus", function () { if (!busy && !refreshingAuth && (!lastStateAt || Date.now() - lastStateAt >= 15000)) request("state", {}, false).catch(function () {}); });
+      if (state.mergeAvailable && !ownsLegacySource()) return mutate("resume", {}, function () {});
+    }).then(function () { return synchronizeLocal(); }).catch(function (error) { notify(error.message, true); });
+    if (global.BroadcastChannel) { channel = new BroadcastChannel("wf-commerce-" + (new URL(endpoint, global.location.href).searchParams.get("channel") || "production")); channel.onmessage = function (event) { (event.data === "auth-change" ? authChanged(false) : localMode && !guestPageView() ? Promise.resolve() : document.hidden ? Promise.resolve() : request("state", {}, false)).catch(function () {}); }; }
+    global.addEventListener("focus", function () { if ((!localMode || guestPageView()) && !busy && !refreshingAuth && (!lastStateAt || Date.now() - lastStateAt >= 15000)) request("state", {}, false).then(function () { return synchronizeLocal(); }).catch(function () {}); });
   }
   global.ElastycCommerce = { scan: scan, mount: mount, applyOffers: applyOffers, actionFor: actionFor, url: linkTo, authChanged: authChanged };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", scan); else scan();
