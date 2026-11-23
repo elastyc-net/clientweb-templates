@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "help-desk",
+  "version": "1.3.19",
+  "label": "Help Desk",
+  "description": "Indikator do Stop/Pošalji i zaštita od pretvaranja potpuno nemog mikrofona u izmišljen tekst.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "help-desk-cases",
+      "path": "providers/help-desk-cases.json",
+      "sha256": "86612e8373ef98facf7816c3b3a54d5b69e2422795ab74d9786186ef34266859"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "help-desk",
+      "path": "components/help-desk.json",
+      "sha256": "5093f83a765f074da5e0ed1a5a5cde6b5677a2dff57d3dcb2183ecc801556219"
+    }
+  ]
+}
