@@ -600,6 +600,12 @@
       "version": "2.3.2",
       "manifest": "product-catalog/2.3.2/manifest.json",
       "sha256": "1438ada077a20c273dca1f83cc7c7c7552cc440c5399ea8e00fa6a394bbfe906"
+    },
+    {
+      "packageKey": "invoice-overview",
+      "version": "1.0.0",
+      "manifest": "invoice-overview/1.0.0/manifest.json",
+      "sha256": "9269ec5ea7da289bc88dca3c9a01afbb7738e72ce280416916c76702914c173f"
     }
   ]
 }

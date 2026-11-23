@@ -1,0 +1,68 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "invoice-overview",
+  "label": "Pregled faktura",
+  "category": "account",
+  "renderMode": "client-data",
+  "targets": [
+    "web"
+  ],
+  "htmlContent": "<section class=\"wf-inv\" aria-label=\"{{setting:title}}\">\n    <aside class=\"wf-inv-filters\" aria-label=\"{{setting:types}}\">\n        <h2>{{setting:types}}</h2>\n        <div data-inv-types></div>\n    </aside>\n    <div class=\"wf-inv-results\">\n        <header class=\"wf-inv-heading\">\n            <h1>{{setting:title}}</h1>\n            <p data-inv-feedback role=\"status\">{{setting:loading}}</p>\n        </header>\n        <p class=\"wf-inv-empty\" data-inv-empty hidden></p>\n        <button type=\"button\" data-inv-retry hidden>{{setting:retry}}</button>\n        <ul class=\"wf-inv-list\" data-inv-list aria-busy=\"true\"></ul>\n    </div>\n</section>\n",
+  "styles": [
+    {
+      "name": "invoice-overview.css",
+      "content": ".wf-inv {\n    --inv-surface: var(--main-background1, var(--wf-color-surface, light-dark(#fff, #101a2b)));\n    --inv-raised: var(--main-background2, var(--wf-color-background, light-dark(#f3f6fa, #162235)));\n    --inv-text: var(--main-font-color, var(--wf-color-text, light-dark(#15253a, #e5edf8)));\n    --inv-muted: var(--main-font-color-light, var(--wf-color-muted, light-dark(#4e6075, #b3c3d7)));\n    --inv-line: var(--main-boder-color, var(--wf-color-border, light-dark(#d6dde6, #40516a)));\n    --inv-accent: var(--main-button-background, var(--wf-color-primary, light-dark(#167261, #25d9c5)));\n    --inv-accent-text: var(--main-button-font-color, var(--wf-color-on-primary, light-dark(#fff, #101a2b)));\n    box-sizing: border-box;\n    display: grid;\n    grid-template-columns: 228px minmax(0, 1fr);\n    gap: 24px;\n    width: min(100%, 1216px);\n    margin-inline: auto;\n    padding: 32px clamp(16px, 3vw, 32px) 48px;\n    color: var(--inv-text);\n    font-size: 14px;\n}\n.wf-inv *, .wf-inv *::before, .wf-inv *::after { box-sizing: border-box; }\n.wf-inv [hidden] { display: none !important; }\n.wf-inv-filters, .wf-inv-card, .wf-inv-empty {\n    background: var(--inv-surface);\n    border: 1px solid var(--inv-line);\n    border-radius: 8px;\n}\n.wf-inv-filters { padding: 16px; }\n.wf-inv-filters h2, .wf-inv h1 { margin: 0; font-weight: 700; }\n.wf-inv-filters h2 { color: var(--inv-muted); font-size: 12px; }\n.wf-inv h1 { font-size: 24px; line-height: 1.25; }\n.wf-inv-option {\n    display: grid;\n    grid-template-columns: auto minmax(0, 1fr) auto;\n    align-items: center;\n    gap: 8px;\n    min-height: 36px;\n    margin-top: 4px;\n    font-size: 13px;\n    cursor: pointer;\n}\n.wf-inv-option input { accent-color: var(--inv-accent); }\n.wf-inv-count { color: var(--inv-muted); font-variant-numeric: tabular-nums; font-size: 12px; }\n.wf-inv-feedback, .wf-inv-meta, .wf-inv-date { color: var(--inv-muted); font-size: 12px; }\n.wf-inv-list { display: grid; gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; }\n.wf-inv-card { display: grid; gap: 6px; padding: 14px 16px; }\n.wf-inv-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }\n.wf-inv-card strong { font-size: 17px; }\n.wf-inv-amount { margin-inline-start: auto; font-variant-numeric: tabular-nums; font-weight: 650; }\n.wf-inv-badge {\n    display: inline-block;\n    padding: 1px 8px;\n    border: 1px solid color-mix(in srgb, var(--inv-status, var(--inv-text)) 36%, var(--inv-line));\n    border-radius: 999px;\n    color: color-mix(in srgb, var(--inv-status, var(--inv-text)) 36%, var(--inv-text));\n    background: color-mix(in srgb, var(--inv-status, var(--inv-surface)) 13%, var(--inv-surface));\n    font-size: 12px;\n    font-weight: 600;\n}\n.wf-inv-badge[data-status=\"paid\"] { --inv-status: #167261; }\n.wf-inv-badge[data-status=\"partial\"] { --inv-status: #9a6700; }\n.wf-inv-badge[data-status=\"unpaid\"] { --inv-status: #8d3b3b; }\n.wf-inv-empty { margin: 16px 0 0; padding: 24px 12px; text-align: center; color: var(--inv-muted); }\n.wf-inv [data-inv-retry] {\n    min-height: 36px;\n    margin-top: 12px;\n    padding: 6px 10px;\n    border: 1px solid var(--inv-line);\n    border-radius: 4px;\n    background: var(--inv-surface);\n    color: var(--inv-text);\n    font: inherit;\n}\n@media (max-width: 720px) {\n    .wf-inv { grid-template-columns: minmax(0, 1fr); padding-block: 20px 32px; }\n    .wf-inv h1 { font-size: 20px; }\n    .wf-inv-option { min-height: 44px; }\n}\n"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "invoice-overview.js",
+      "content": "(function () {\n    'use strict';\n\n    function decode(binding) {\n        const bytes = Uint8Array.from(atob(binding.replace(/-/g, '+').replace(/_/g, '/')), value => value.charCodeAt(0));\n        return JSON.parse(new TextDecoder().decode(bytes));\n    }\n\n    function encode(input) {\n        const bytes = new TextEncoder().encode(JSON.stringify(input));\n        let text = '';\n        bytes.forEach(value => { text += String.fromCharCode(value); });\n        return btoa(text).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');\n    }\n\n    function node(tag, value, className) {\n        const element = document.createElement(tag);\n        element.textContent = value;\n        if (className) element.className = className;\n        return element;\n    }\n\n    function money(amount, currency) {\n        const number = Number(amount);\n        const shown = Number.isFinite(number) ? number.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : amount;\n        return shown + (currency ? ' ' + currency : '');\n    }\n\n    function init(host) {\n        const section = host.querySelector('.wf-inv');\n        if (!section || section.dataset.invReady) return;\n        section.dataset.invReady = 'true';\n        const english = document.documentElement.lang.toLowerCase().split('-')[0] === 'en';\n        const t = (sr, en) => english ? en : sr;\n        const labels = { paid: t('Plaćeno', 'Paid'), partial: t('Delimično', 'Partial'), unpaid: t('Nije plaćeno', 'Unpaid') };\n        const feedback = section.querySelector('[data-inv-feedback]');\n        const list = section.querySelector('[data-inv-list]');\n        const empty = section.querySelector('[data-inv-empty]');\n        const retry = section.querySelector('[data-inv-retry]');\n        const types = section.querySelector('[data-inv-types]');\n        const selected = new Set();\n        const preview = host.dataset.wfProviderPreview ? decode(host.dataset.wfProviderPreview) : null;\n        let request;\n\n        function paint(data) {\n            types.replaceChildren(...data.types.map(entry => {\n                const option = node('label', '', 'wf-inv-option');\n                const input = document.createElement('input');\n                input.type = 'checkbox';\n                input.value = entry.label;\n                input.checked = selected.has(entry.label);\n                option.append(input, node('span', entry.label), node('span', String(entry.count), 'wf-inv-count'));\n                return option;\n            }));\n            empty.hidden = data.items.length !== 0;\n            empty.textContent = t('Nema faktura za prikaz.', 'No invoices to show.');\n            feedback.textContent = data.types.reduce((sum, entry) => sum + entry.count, 0) + t(' dokumenata', ' documents');\n            list.replaceChildren(...data.items.map(item => {\n                const row = document.createElement('li');\n                const card = node('article', '', 'wf-inv-card');\n                const meta = node('div', '', 'wf-inv-row');\n                const badge = node('span', labels[item.status] || item.status, 'wf-inv-badge');\n                badge.dataset.status = item.status;\n                const date = item.date ? item.date.slice(0, 10).split('-').reverse().join('.') + '.' : '';\n                meta.append(badge, node('span', item.number, 'wf-inv-meta'), node('time', date, 'wf-inv-date'));\n                const amount = node('div', '', 'wf-inv-row');\n                amount.append(node('strong', item.type || t('Faktura', 'Invoice')), node('span', money(item.amount, item.currency), 'wf-inv-amount'));\n                card.append(meta, amount);\n                if (item.status === 'partial') {\n                    card.append(node('span', t('Preostalo ', 'Remaining ') + money(item.remaining, item.currency), 'wf-inv-meta'));\n                }\n                row.append(card);\n                return row;\n            }));\n        }\n\n        async function load() {\n            request?.abort();\n            request = new AbortController();\n            const current = request;\n            list.setAttribute('aria-busy', 'true');\n            retry.hidden = true;\n            feedback.textContent = t('Učitavanje faktura…', 'Loading invoices…');\n            try {\n                const input = {};\n                if (selected.size) input.types = [...selected];\n                let data = preview;\n                if (!preview) {\n                    const url = new URL(host.dataset.wfProviderUrl, window.location.href);\n                    url.searchParams.set('wf_input', encode(input));\n                    const response = await fetch(url, { credentials: 'same-origin', cache: 'no-store', signal: current.signal });\n                    if (!response.ok) throw new Error(String(response.status));\n                    const result = await response.json();\n                    if (!result.ok) throw new Error('Provider response');\n                    data = result.data;\n                } else if (selected.size) {\n                    data = { ...preview, items: preview.items.filter(item => selected.has(item.type)) };\n                }\n                if (request === current) paint(data);\n            } catch (error) {\n                if (request !== current) return;\n                list.replaceChildren();\n                empty.hidden = true;\n                feedback.textContent = t('Fakture trenutno nisu dostupne.', 'Invoices are currently unavailable.');\n                retry.hidden = false;\n            } finally {\n                if (request === current) list.removeAttribute('aria-busy');\n            }\n        }\n\n        types.addEventListener('change', event => {\n            const input = event.target;\n            if (input.type !== 'checkbox') return;\n            if (input.checked) {\n                if (selected.size >= 4) { input.checked = false; return; }\n                selected.add(input.value);\n            } else {\n                selected.delete(input.value);\n            }\n            load();\n        });\n        retry.addEventListener('click', load);\n        load();\n    }\n\n    document.querySelectorAll('[data-wf-component=\"invoice-overview\"]').forEach(init);\n}());\n"
+    }
+  ],
+  "settingsSchema": {
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+      "title"
+    ],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "default": "Fakture"
+      },
+      "types": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Tipovi dokumenata"
+      },
+      "loading": {
+        "type": "string",
+        "maxLength": 100,
+        "default": "Učitavanje faktura…"
+      },
+      "retry": {
+        "type": "string",
+        "maxLength": 80,
+        "default": "Pokušaj ponovo"
+      }
+    }
+  },
+  "providerKey": "invoice-overview",
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "authenticated",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  },
+  "slots": []
+}

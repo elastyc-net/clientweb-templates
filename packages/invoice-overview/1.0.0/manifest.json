@@ -1,0 +1,24 @@
+{
+  "formatVersion": 1,
+  "packageKey": "invoice-overview",
+  "version": "1.0.0",
+  "label": "Pregled faktura",
+  "description": "Poslednje fakture prijavljenog kupca, sa tipovima dokumenata i statusom plaćanja.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [],
+  "items": [
+    {
+      "itemType": "provider",
+      "itemKey": "invoice-overview",
+      "path": "providers/invoice-overview.json",
+      "sha256": "2bf100b03e46aff64da626cfd9415b9dd55b079c3b37d26829e6b0b4b2b12970"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "invoice-overview",
+      "path": "components/invoice-overview.json",
+      "sha256": "f1695dd448247badc10cf6557aeba6ff8950b63a8b2f11c659d029a961278168"
+    }
+  ]
+}
