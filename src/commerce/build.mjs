@@ -16,7 +16,7 @@ const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const write=(p,value)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),JSON.stringify(value,null,2)+'\n');};
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
 const releases=read('packages/catalog.json');
-for(const [key,from,to] of [['webfront-commerce','1.2.9','1.2.10'],['product-catalog','2.2.9','2.2.10']]){
+for(const [key,from,to] of [['webfront-commerce','1.2.10','1.2.11'],['product-catalog','2.2.10','2.2.11']]){
  const base='packages/'+key+'/'+from,target='packages/'+key+'/'+to;
  if(spawnSync('git',['ls-files','--error-unmatch',target+'/manifest.json'],{cwd:root,stdio:'ignore'}).status===0)throw new Error('Immutable release is tracked: '+target);
  const previous=read(base+'/manifest.json');
@@ -33,8 +33,10 @@ for(const [key,from,to] of [['webfront-commerce','1.2.9','1.2.10'],['product-cat
    }
    if(definition.componentKey==='product-list'){
     definition.styles.find(a=>a.name==='products.css').content=runtime['products.css'];
-    definition.htmlContent=definition.htmlContent.replace('data-commerce-enabled=', 'data-list-cart-enabled="{{setting:list-cart-enabled}}" data-commerce-enabled=');
-    definition.settingsSchema.properties['list-cart-enabled']={type:'boolean',title:'Dodavanje u korpu iz kategorije',description:'Važi za proizvode bez varijanti. Proizvod sa varijantama uvek se otvara preko slike ili naziva, a varijanta bira na detalju.',default:false};
+    if(from==='2.2.9'){
+     definition.htmlContent=definition.htmlContent.replace('data-commerce-enabled=', 'data-list-cart-enabled="{{setting:list-cart-enabled}}" data-commerce-enabled=');
+     definition.settingsSchema.properties['list-cart-enabled']={type:'boolean',title:'Dodavanje u korpu iz kategorije',description:'Važi za proizvode bez varijanti. Proizvod sa varijantama uvek se otvara preko slike ili naziva, a varijanta bira na detalju.',default:false};
+    }
    }
    if(definition.componentKey==='product-list' && from==='2.2.5'){
     for(const asset of [...definition.styles,...definition.scripts])if(runtime[asset.name])asset.content=runtime[asset.name];
@@ -68,10 +70,10 @@ for(const [key,from,to] of [['webfront-commerce','1.2.9','1.2.10'],['product-cat
   return {...item,sha256:sha(target+'/'+item.path)};
  });
  const next={...previous,version:to,items};
- if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.10'}:d);
+ if(key==='product-catalog')next.dependencies=previous.dependencies.map(d=>d.packageKey==='webfront-commerce'?{...d,minimumVersion:'1.2.11'}:d);
  write(target+'/manifest.json',next);
  releases.packages=releases.packages.filter(p=>!(p.packageKey===key&&p.version===to));
  releases.packages.push({packageKey:key,version:to,manifest:key+'/'+to+'/manifest.json',sha256:sha(target+'/manifest.json')});
 }
 write('packages/catalog.json',releases);
-console.log('Built webfront-commerce@1.2.10 and product-catalog@2.2.10; prior releases preserved.');
+console.log('Built webfront-commerce@1.2.11 and product-catalog@2.2.11; prior releases preserved.');

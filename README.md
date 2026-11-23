@@ -1,5 +1,11 @@
 # clientweb-templates
 
+Commerce 1.2.11 / catalog 2.2.11 collapse the unused purchase footer in grid
+cards when category purchasing is off or a card has only a corner favorite.
+The footer is also collapsed before hydration, so loading offers/favorites does
+not introduce an empty bottom bar. Cart-enabled simple products retain their
+purchase controls. Settings, HTML, JavaScript and prior releases are preserved.
+
 Commerce 1.2.10 / catalog 2.2.10 remove the redundant category variant CTA.
 Category cards open their detail through the existing image/name link. The
 component option **Dodavanje u korpu iz kategorije** defaults off; enabling it

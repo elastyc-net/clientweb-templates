@@ -558,6 +558,18 @@
       "version": "1.3.20",
       "manifest": "help-desk/1.3.20/manifest.json",
       "sha256": "564f32b16d39ba02907b6ba809c2c721d644a47b3a22d68ea49ab293406c5a90"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "version": "1.2.11",
+      "manifest": "webfront-commerce/1.2.11/manifest.json",
+      "sha256": "e7d2b77adfb8df7b3b369f56d3b50313fe4b7c8995984bdbc84e8095dea8316e"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.2.11",
+      "manifest": "product-catalog/2.2.11/manifest.json",
+      "sha256": "a7dfe8f6ad3f0534f46d74723c6adbf681b99ae478dc4121b439f29022c4b15a"
     }
   ]
 }

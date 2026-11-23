@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-cart",
+  "label": "Korpa",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Korpa",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-cart-main",
+        "componentKey": "commerce-cart",
+        "settings": {
+          "title": "Korpa"
+        }
+      }
+    ]
+  }
+}
