@@ -60,3 +60,7 @@ Validacija biblioteke proverava 109 izdanja / 961 fajl; 14 postojećih shared
 navigation provera prolazi. Ostaje pun meni na računaru i hamburger na
 mobilnom u Megapod lokalnoj prilagodbi. U istom CMS zadatku Home nacrt bez
 `megapod-home-hero` uklanja promotivnu sekciju sa tri slike ispod finder-a.
+
+Megapod public potvrđen: `r-20261124080916-0be814e0-9f61c6dfdbed`.
+Home više nema `megapod-home-hero` u HTML-u; redosled je finder → kategorije.
+Strelica je proverena zatvorena/otvorena i u mobilnom meniju 390 px.
