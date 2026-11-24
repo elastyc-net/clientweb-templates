@@ -48,3 +48,15 @@ stranice otvara potvrđeni Instagram profil. Anonimni HTTP zahtevi za Home,
 Kontakt i O nama vraćaju 200, novu adresu i `noindex`; legacy `/` ostaje aktivan.
 
 Objavljeni release: `r-20261118202059-916c22dc-6c0cd21aac59`.
+
+## Standardna komponenta — 24. novembar 2026.
+
+Korekcija je preneta u `src/chrome/navigation.css` i Megapod fullscreen-menu
+izvor. Ista optička kompenzacija važi za oba položaja strelice; uklonjen je
+suvišni `margin-left:6px` uz već postojeći flex gap od 8 px. Postojeća
+immutable izdanja nisu menjana: novi `reference-chrome@1.1.1` sadrži samo
+CSS promenu navigacije, a bootstrap je pinovan na novu verziju.
+Validacija biblioteke proverava 109 izdanja / 961 fajl; 14 postojećih shared
+navigation provera prolazi. Ostaje pun meni na računaru i hamburger na
+mobilnom u Megapod lokalnoj prilagodbi. U istom CMS zadatku Home nacrt bez
+`megapod-home-hero` uklanja promotivnu sekciju sa tri slike ispod finder-a.

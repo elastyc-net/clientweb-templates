@@ -1,0 +1,89 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "chrome-social",
+  "label": "Društvene mreže",
+  "category": "navigation",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<nav class=\"wfcr-social\" aria-label=\"{{setting:label}}\">{{each:links}}<a href=\"{{item:url}}\" aria-label=\"{{item:label}}\" title=\"{{item:label}}\">{{item:icon}}</a>{{/each:links}}</nav>",
+  "styles": [
+    {
+      "name": "chrome-social.css",
+      "content": ".wfcr-social{display:flex;flex-wrap:wrap;align-items:center;gap:14px}.wfcr-social a{display:inline-flex;align-items:center;justify-content:center;min-width:36px;min-height:40px;color:inherit;text-decoration:none;font-size:22px;font-weight:750}.wfcr-social a:hover{transform:translateY(-1px)}@media(prefers-reduced-motion:reduce){.wfcr-social a:hover{transform:none}}"
+    }
+  ],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "label",
+      "links"
+    ],
+    "properties": {
+      "label": {
+        "type": "string",
+        "title": "Opis grupe",
+        "maxLength": 80,
+        "minLength": 1
+      },
+      "links": {
+        "type": "array",
+        "title": "Profili",
+        "minItems": 0,
+        "maxItems": 12,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "label",
+            "url",
+            "icon"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "title": "Naziv",
+              "maxLength": 120,
+              "minLength": 1
+            },
+            "url": {
+              "type": "string",
+              "title": "Odredište",
+              "maxLength": 2048,
+              "format": "safe-url",
+              "minLength": 1
+            },
+            "icon": {
+              "type": "string",
+              "title": "Kratka oznaka",
+              "maxLength": 4,
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "public",
+    "ttlSeconds": 3600,
+    "varyBy": [
+      "tenant",
+      "locale",
+      "release"
+    ]
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

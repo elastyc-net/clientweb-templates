@@ -648,6 +648,12 @@
       "version": "1.1.0",
       "manifest": "reference-chrome/1.1.0/manifest.json",
       "sha256": "22d4d7ca51eb3e16cf0627efb290243925f23d62b96efc6d8f0e8efa055c2839"
+    },
+    {
+      "packageKey": "reference-chrome",
+      "version": "1.1.1",
+      "manifest": "reference-chrome/1.1.1/manifest.json",
+      "sha256": "3cf30959104c0bc84f4e9479b87028d9cdd041c8bd918fff870427e00424da35"
     }
   ]
 }
