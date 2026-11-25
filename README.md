@@ -1,6 +1,7 @@
-Commerce 1.4.1 / catalog 2.5.1 add explicit saved-address selection and a New
+Commerce 1.4.2 / catalog 2.5.2 add explicit saved-address selection and a New
 address action, stable loading/retry states for cart/favorites/checkout, responsive
-checkout spacing and a Turnstile theme matching the site surface. The shared
+checkout spacing and a Turnstile theme matching the site surface. Guest lists
+wait for verified names/prices and retain the last valid display during refresh. The shared
 backend retains a verified customer's shipping address only after successful real
 order confirmation. Build with `node src/commerce/build-checkout.mjs`; new-site
 bootstrap pins both releases. Earlier immutable releases stay unchanged.

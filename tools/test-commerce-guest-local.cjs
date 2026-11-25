@@ -13,7 +13,7 @@ async function fixture(options={}){
  if(options.inactive)bootstrap.state.inactiveProductIds=options.inactive;
  const encoded=Buffer.from(JSON.stringify(bootstrap)).toString('base64url');
  const html='<span data-wf-cart-count>0</span><span data-wf-favorite-count>0</span><div data-wf-commerce-url="/api?channel=production" data-wf-commerce-bootstrap="'+encoded+'"></div>'+(view==='catalog'?'<div class="wf-instance"><section class="wf-catalog" data-commerce-enabled="true" data-list-cart-enabled="true"><article data-wf-item-id="A"></article></section></div>':'<section><div data-wf-shop-view="'+view+'"></div></section>');
- const dom=new JSDOM(html,{url:'https://shop.example/'+view,runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,calls=[];
+ const dom=new JSDOM(html,{url:'https://shop.example/'+view,runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,calls=[],waiting=[];
  w.TextEncoder=TextEncoder;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
  w.BroadcastChannel=class{postMessage(){}};
  let logged=false,price=100,revision=0,accountLines=[],accountFavorites=[],mergeAvailable=!!options.legacyKey;
@@ -31,11 +31,12 @@ async function fixture(options={}){
    payload.state={...structuredClone(base),revision,authenticated:logged,mergeAvailable:logged&&mergeAvailable,view:view==='catalog'?'catalog':undefined,lines:accountLines,favorites:accountFavorites};
    if(!logged&&operation==='local-state')payload.localGuest=true;else payload.csrf='a'.repeat(64);
   }else throw new Error('Unexpected call: '+operation);
+  if(operation==='guest-preview'&&options.deferPreview)return new Promise(resolve=>waiting.push(()=>resolve({ok:true,status:200,json:async()=>structuredClone(payload)})));
   return {ok:true,status:200,json:async()=>structuredClone(payload)};
  };
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));await tick();
  const host=w.document.querySelector('.wf-instance');if(host)w.ElastycCommerce.mount(host,[structuredClone(product)]);await tick();
- return {w,dom,calls,host,logged:()=>{logged=true;},price:v=>{price=v;},saved:()=>w.localStorage.getItem('wf-guest-cart-v1:local-test:production')};
+ return {w,dom,calls,host,release:()=>waiting.shift()(),logged:()=>{logged=true;},price:v=>{price=v;},saved:()=>w.localStorage.getItem('wf-guest-cart-v1:local-test:production')};
 }
 (async()=>{
  const f=await fixture();let saved;
@@ -59,6 +60,15 @@ async function fixture(options={}){
   cart.price(150);cart.w.document.querySelector('input').value='3';cart.w.document.querySelector('button').click();await tick();
   check(cart.calls.every(c=>c.operation==='guest-preview')&&cart.w.document.querySelector('[data-wf-shop-view]').textContent.includes('450,00'),'A quantity edit stays local and the server recalculates current totals.');
  }finally{cart.dom.window.close();}
+
+ const loading=await fixture({saved,view:'cart',deferPreview:true});try{
+  const root=loading.w.document.querySelector('[data-wf-shop-view]');
+  check(!!root.querySelector('.wf-shop-loading')&&!root.textContent.includes('Cena na upit'),'Initial guest cart waits for real names/prices instead of displaying raw placeholders as final data.');
+  loading.release();await tick();check(root.textContent.includes('Current A')&&!root.querySelector('.wf-shop-loading'),'Grouped preview replaces the pending cart with current data.');
+  loading.price(150);root.querySelector('input').value='3';root.querySelector('button').click();await tick();
+  check(root.textContent.includes('Current A')&&root.getAttribute('aria-busy')==='true'&&!root.textContent.includes('Cena na upit'),'A pending quantity edit preserves the last valid product display.');
+  loading.release();await tick();check(root.textContent.includes('450,00')&&root.getAttribute('aria-busy')==='false','Repriced local quantity ends its pending state.');
+ }finally{loading.dom.window.close();}
  const migration=await fixture({legacyKey:'b'.repeat(64),legacy:{lines:[{lineId:'c'.repeat(32),productId:'A',variantId:'',quantity:'4.000'}],favorites:['A']}});let migrated;
  try{check(migration.calls.filter(c=>c.operation==='guest-export').length===1&&JSON.parse(migration.saved()).lines[0].quantity==='4.000','An existing owned server guest selection migrates once without deletion.');migrated=migration.saved();migration.logged();await migration.w.ElastycCommerce.authChanged(false);await tick();check(!migration.calls.some(c=>c.operation==='resume')&&migration.calls.filter(c=>c.operation==='import').length===1&&migration.calls.find(c=>c.operation==='import').body.legacyKey==='b'.repeat(64),'Login imports a migrated guest source once, without also resuming its retained server copy.');}finally{migration.dom.window.close();}
  const again=await fixture({saved:migrated,legacyKey:'b'.repeat(64)});try{check(again.calls.length===0&&JSON.parse(again.saved()).lines[0].quantity==='4.000','The same server session is not exported or added again after reload.');}finally{again.dom.window.close();}

@@ -1,0 +1,30 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageTemplateKey": "commerce-orders",
+  "label": "Moje narudžbine",
+  "layoutKey": "starter-layout",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadataDefaults": {
+    "title": "Moje narudžbine",
+    "description": ""
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "commerce-orders-main",
+        "componentKey": "commerce-orders",
+        "settings": {
+          "title": "Moje narudžbine"
+        }
+      }
+    ]
+  }
+}
