@@ -12,4 +12,20 @@ $test=$adapter->validate($fields,array('field1330'=>'broken','field1801'=>'F'),a
 foreach(array('field1324','field1330','field1801') as $key){if(empty($test['errors'][$key]))throw new RuntimeException('Missing validation: '.$key);}
 $test=$adapter->validate($fields,array('field1322'=>array('bad'),'field1336'=>'Unknown','field1321'=>'2026-02-31','field1348'=>'-10','field1801'=>'T'),array());
 foreach(array('field1322','field1336','field1321','field1348') as $key){if(empty($test['errors'][$key]))throw new RuntimeException('Missing validation: '.$key);}
-echo "7 native definitions and required/file/email/consent/date/price/option/server input guards passed.\n";
+$calls=array();
+$transport=function($method,$url,$body,$contentType)use(&$calls){
+ $calls[]=array($method,$url,$body,$contentType);
+ if(strpos($url,'/mailgun/sendmail.aspx?')!==false)return array('status'=>200,'body'=>'OK');
+ if(strpos($url,'/mobile/getdeviceids.asp?')!==false)return array('status'=>200,'body'=>'Test title|test-device-token|Test message');
+ if(strpos($url,'/mobile/sendnotification.php')!==false)return array('status'=>200,'body'=>'OK');
+ if(strpos($url,'/elasticsearch-api/elasticsearch-insert.php')!==false)return array('status'=>200,'body'=>'{"result":"created"}');
+ throw new RuntimeException('Unexpected completion destination');
+};
+$done=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),1650,$transport);
+if($done['errors']||$done['states']['index']!=='synchronized'||count($calls)!==4)throw new RuntimeException('Completion contract failed');
+foreach($calls as $call){if(strpos($call[1],'https://b2b.deltron.hr/')!==0)throw new RuntimeException('Wrong completion host');}
+$index=json_decode($calls[3][2],true);
+if($index!==array('acckey'=>'TESTONLY','instance'=>'deltron','nosql_aggstype'=>'Keyfield'))throw new RuntimeException('Wrong fixed index input');
+$done=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),1650,function(){return array('status'=>503,'body'=>'Unavailable');});
+if(count($done['errors'])!==3)throw new RuntimeException('Completion failures were hidden');
+echo "7 native definitions, server field guards and mocked legacy mail/push/index contracts passed; no external delivery.\n";

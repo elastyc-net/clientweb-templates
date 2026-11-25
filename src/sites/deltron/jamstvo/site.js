@@ -339,7 +339,7 @@
       try{
         const r=await fetch('/deltron-jamstvo.php',{method:'POST',credentials:'same-origin',body:data});const result=await r.json();
         if(!r.ok||!result.ok){for(const [key,message] of Object.entries(result.fields||{}))showError(key,message);throw new Error(result.message||'Prijava nije poslana. Sačuvan je vaš unos.');}
-        submitted=true;host.textContent='';const panel=node('div','dt-success');panel.setAttribute('role','status');panel.append(node('h2','','Prijava je zaprimljena'),node('p','','Broj prijave: '+result.acckey));host.append(panel);panel.tabIndex=-1;panel.focus();
+        submitted=true;host.textContent='';const panel=node('div','dt-success');panel.setAttribute('role','status');panel.append(node('h2','','Prijava je zaprimljena'),node('p','','Broj prijave: '+result.acckey));if(result.followup?.errors?.length)panel.append(node('p','dt-notice','Prijava je spremljena. Potvrda ili obavijesti još nisu potvrđene. Nemojte ponavljati prijavu; sačuvajte broj prijave za provjeru.'));host.append(panel);panel.tabIndex=-1;panel.focus();
       }catch(error){status.textContent=error.message||'Nije moguće potvrditi ishod. Provjerite prijavu prije ponovnog slanja.';status.classList.add('dt-error');}
       finally{busy=false;button.disabled=false;button.textContent='Pošalji prijavu';}
     });

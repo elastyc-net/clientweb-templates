@@ -2,7 +2,7 @@
 
 Tenant-local Composition izvori za header, prijavu i **Prijava uređaja za jamstvo**. Ovo nije library paket niti legacy `_templates` import.
 
-`node prepare.mjs` regeneriše sedam native definicija. `php verify.php /path/to/instance-template` proverava ugovore i serversku validaciju bez kreiranja predmeta. Definicije se čuvaju kroz standardni `saveDraftItem` / Save Draft sa očekivanom revizijom; manifest početno očekuje 0 i ne sme se koristiti za prepisivanje kasnijih CMS izmena.
+`node prepare.mjs` regeneriše sedam native definicija. `php verify.php /path/to/instance-template` proverava ugovore, serversku validaciju i simulirane završne mail/push/index pozive bez kreiranja predmeta ili spoljnog slanja. Definicije se čuvaju kroz standardni `saveDraftItem` / Save Draft sa očekivanom revizijom; manifest početno očekuje 0 i ne sme se koristiti za prepisivanje kasnijih CMS izmena.
 
 Novi layout `deltron-layout` koristi samo novu globalnu sekciju `deltron-site-header`. Rute su `/prijava` i `/produljeno-jamstvo`; nema nove `/` stranice. Postojeće definicije, site-config, A157 i legacy template 117 ostaju nepromenjeni. Prijava koristi postojeći FrontAuth SDK i postojeće naloge. Nema registracionog adaptera. Grupna navigacija još nije definisana; prikazuju se provereni naziv grupe, profil i odjava.
 
@@ -14,6 +14,6 @@ Posebna host-only HttpOnly sesija čuva CSRF, jednokratni zahtev i ishod. Dupli 
 
 **Status prvog reza:** Draft/Candidate pregled nema stvarno slanje. Backend ima dodatni operator gate: `incConn/deltron-jamstvo-live.php` mora eksplicitno vratiti `true`; fajl nije deo paketa i ne kreira se automatski. Ne uključivati ga pre kontrolisane funkcionalne probe, provere vlasništva/statusa/priloga, obaveštenja i indeksiranja, i eksplicitne paralelne objave. Stari obrazac i dalje šalje kao do sada.
 
-Pre live aktivacije treba završiti proveru završnih koraka koje stari JS radi posle kreiranja (`publishDatanew`, mail i Elasticsearch insert). Novi endpoint ih još ne poziva i uspeh na mreži nije dokaz isporuke emaila. Ne uključivati live gate dok ti koraci nisu povezani i provereni; ne menjati shared ili tenant SQL naslepo.
+Posle trajnog receipt-a lokalni adapter poziva iste postojeće mail/push/index putanje kao `New case front`: `mailgun/sendmail.aspx` sa `newkom`, postojeći device lookup/push i PHP single-case index. Odredišta, tenant i kontekst su serverski fiksni; privatni odgovori/primaoci se ne vraćaju browseru. Ponovljen POST vraća receipt i ne ponavlja spoljno slanje. Mrežna greška ne poništava već kreiran predmet: korisnik vidi broj prijave i poruku za proveru. HTTP prihvatanje nije dokaz dolaska emaila. Simulirani transport pokriva ugovore uspeha i greške; kontrolisana živa proba i dalje je obavezna. Stari WebSync realtime broadcast nije prenet u novi login/layout; zapis predmeta i postojeći aftercase ostaju isti. Ne menjati shared ili tenant SQL naslepo.
 
 Git/IIS source sync ne objavljuje Webfront. Production Publish ostaje zaseban, eksplicitan korak posle Candidate pregleda. Kanonski plan je u `common/docs/plans/deltron-webfront-jamstvo.md`.

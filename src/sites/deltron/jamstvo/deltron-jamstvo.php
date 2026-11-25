@@ -152,8 +152,64 @@ final class DeltronJamstvo
         $saved=$this->rows('SELECT nam,val FROM dbo._serviceform WHERE acckey=?',array($result['acckey']));
         $map=array();foreach($saved as $row){$map[$row['nam']]=$row['val'];}
         foreach($values as $key=>$value){if(!array_key_exists($key,$map)||trim((string)$map[$key])!==trim($value)){throw new RuntimeException('Jamstvo field persistence mismatch.');}}
-        return array('ok'=>true,'acckey'=>$result['acckey']);
+        return array('ok'=>true,'acckey'=>$result['acckey'],'postid'=>(int)$result['postid']);
     }
+
+    /** Same fixed post-create destinations as New case front. No browser-selected recipient/index. */
+    public function complete(array $receipt, $userid, $transport = null)
+    {
+        if (!preg_match('/^[A-Za-z0-9]{1,30}$/D',$receipt['acckey']??'') || (int)($receipt['postid']??0)<1 || (int)$userid<1) {
+            throw new InvalidArgumentException('Invalid trusted completion receipt.');
+        }
+        $transport = $transport ?: array($this,'http');
+        $base='https://b2b.deltron.hr'; $errors=array();
+        $context=array('acckey'=>$receipt['acckey'],'postid'=>(int)$receipt['postid'],'userid'=>(int)$userid);
+        $states=array('email'=>'pending','push'=>'pending','index'=>'pending');
+        try {
+            $params=array_merge($context,array('action'=>'newkom','primalac'=>'T','strpath'=>$base.'/'));
+            $response=call_user_func($transport,'POST',$base.'/mailgun/sendmail.aspx?'.http_build_query($params,'','&',PHP_QUERY_RFC3986),'','text/html');
+            if ($response['status']!==200 || stripos(ltrim($response['body']),'Nije poslato')===0) { throw new RuntimeException('Legacy mail request failed.'); }
+            // HTTP acceptance is not proof of arrival; the controlled mailbox trial remains required.
+            $states['email']='requested';
+        } catch (Throwable $error) { $errors[]='email'; }
+        try {
+            $response=call_user_func($transport,'GET',$base.'/mobile/getdeviceids.asp?'.http_build_query($context,'','&',PHP_QUERY_RFC3986),'','text/html');
+            $parts=explode('|',$response['body']);
+            if ($response['status']!==200 || count($parts)<3) { throw new RuntimeException('Legacy push lookup failed.'); }
+            if (trim($parts[1])==='') { $states['push']='not-required'; }
+            else {
+                $body=http_build_query(array('regid'=>$parts[1],'title'=>$parts[0],'message'=>$parts[2],'acckey'=>$receipt['acckey'],'instance'=>$base.'/'),'','&',PHP_QUERY_RFC3986);
+                $response=call_user_func($transport,'POST',$base.'/mobile/sendnotification.php',$body,'application/x-www-form-urlencoded');
+                if ($response['status']!==200) { throw new RuntimeException('Legacy push request failed.'); }
+                $states['push']='requested';
+            }
+        } catch (Throwable $error) { $errors[]='push'; }
+        try {
+            $body=json_encode(array('acckey'=>$receipt['acckey'],'instance'=>'deltron','nosql_aggstype'=>'Keyfield'));
+            $response=call_user_func($transport,'POST',$base.'/elasticsearch-api/elasticsearch-insert.php',$body,'application/json');
+            $result=json_decode($response['body'],true);
+            if ($response['status']!==200 || !is_array($result) || isset($result['error']) || !in_array($result['result']??'',array('created','updated','noop'),true)) {
+                throw new RuntimeException('Legacy index sync failed.');
+            }
+            $states['index']='synchronized';
+        } catch (Throwable $error) { $errors[]='index'; }
+        return array('states'=>$states,'errors'=>$errors);
+    }
+    private function http($method,$url,$body,$contentType)
+    {
+        if (!function_exists('curl_init')) { throw new RuntimeException('Jamstvo completion transport unavailable.'); }
+        $handle=curl_init($url); $response='';
+        curl_setopt_array($handle,array(CURLOPT_CUSTOMREQUEST=>$method,CURLOPT_FOLLOWLOCATION=>false,
+            CURLOPT_CONNECTTIMEOUT=>5,CURLOPT_TIMEOUT=>15,CURLOPT_SSL_VERIFYPEER=>true,CURLOPT_SSL_VERIFYHOST=>2,
+            CURLOPT_HTTPHEADER=>array('Content-Type: '.$contentType,'Accept: application/json, text/plain, */*'),
+            CURLOPT_USERAGENT=>'Elastyc-Deltron-Warranty/1.0',
+            CURLOPT_WRITEFUNCTION=>function($handle,$chunk)use(&$response){if(strlen($response)+strlen($chunk)>4194304)return 0;$response.=$chunk;return strlen($chunk);}));
+        if($method==='POST'){curl_setopt($handle,CURLOPT_POSTFIELDS,$body);}
+        $ok=curl_exec($handle);$status=(int)curl_getinfo($handle,CURLINFO_HTTP_CODE);curl_close($handle);
+        if($ok===false){throw new RuntimeException('Jamstvo completion transport failed.');}
+        return array('status'=>$status,'body'=>$response);
+    }
+
 }
 if (PHP_SAPI === 'cli') { return; }
 header('Content-Type: application/json; charset=UTF-8');header('Cache-Control: no-store');header('X-Content-Type-Options: nosniff');
@@ -196,8 +252,18 @@ try {
     $receipt=$adapter->create($fields,$checked['values'],$_FILES,$userid,session_id(),$moved);
     $committed=sqlsrv_commit($con);$transaction=false;
     if(!$committed){throw new RuntimeException('Jamstvo commit outcome uncertain.');}
+    $requestId=$_SESSION['requestId'];
+    $receipt['followup']=array('states'=>array('email'=>'pending','push'=>'pending','index'=>'pending'),'errors'=>array());
     $_SESSION['receipt']=$receipt;unset($_SESSION['pending']);
-    if(!session_write_close()){error_log('[deltron-jamstvo] receipt persistence needs operator review');}
+    $stored=session_write_close();
+    if(!$stored){error_log('[deltron-jamstvo] receipt persistence needs operator review');}
+    // The durable case receipt precedes external requests. A repeated POST never sends them again.
+    $receipt['followup']=$adapter->complete($receipt,$userid);
+    if($receipt['followup']['errors']){error_log('[deltron-jamstvo] completion needs operator review: '.implode(',',$receipt['followup']['errors']));}
+    if($stored&&session_start()){
+        if(($_SESSION['requestId']??'')===$requestId){$_SESSION['receipt']=$receipt;}
+        session_write_close();
+    }
     djReply($receipt);
 } catch (DomainException $error) {
     djReply(array('ok'=>false,'message'=>$error->getMessage()),401);
