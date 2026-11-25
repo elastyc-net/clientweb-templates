@@ -112,7 +112,7 @@ final class DeltronJamstvo
         return array('values'=>$values,'errors'=>$errors);
     }
     /** Caller owns an outer transaction. Existing procedure, aftercase and custom rules stay intact. */
-    public function create(array $fields, array $values, array $files, $userid, $sessionKey, array &$moved)
+    public function create(array $fields, array $values, array $files, $userid, $sessionKey, array &$moved, $description = '')
     {
         $documents=array();
         foreach ($fields as $field) {
@@ -134,7 +134,7 @@ final class DeltronJamstvo
             // Delimiter recipe used by New case front. A space preserves an empty slot on old SQL splitters.
             $names[]=$key; $encoded[]=($value===''?' ':str_replace(',','!@!',$value));
         }
-        $statement=$this->query('EXEC dbo._el_client_newcase_newapp ?,?,?,?,?,?,?,?,?,?,?,?,?',array(self::PROCESS,$userid,'',implode(',',$names),implode(',',$encoded),'F',$sessionKey,0,'','','','',''));
+        $statement=$this->query('EXEC dbo._el_client_newcase_newapp ?,?,?,?,?,?,?,?,?,?,?,?,?',array(self::PROCESS,$userid,$description,implode(',',$names),implode(',',$encoded),'F',$sessionKey,0,'','','','',''));
         $result=null;
         do {
             if (sqlsrv_num_fields($statement)>0) {
@@ -155,6 +155,20 @@ final class DeltronJamstvo
         return array('ok'=>true,'acckey'=>$result['acckey'],'postid'=>(int)$result['postid']);
     }
 
+    public function policy()
+    {
+        $path=__DIR__.'/incConn/deltron-jamstvo-live.php';
+        return is_file($path) ? require $path : false;
+    }
+    public static function trialAllowed($policy, $requestId, $email = null)
+    {
+        return is_array($policy) && ($policy['testOnly']??false)===true
+            && is_string($requestId) && strlen($requestId)===48
+            && is_string($policy['requestHash']??null)
+            && hash_equals($policy['requestHash'],hash('sha256',$requestId))
+            && is_int($policy['expires']??null) && $policy['expires']>=time() && $policy['expires']<=time()+1200
+            && ($email===null || is_string($policy['email']??null) && strtolower(trim($policy['email']))===strtolower(trim($email)));
+    }
     /** Same fixed post-create destinations as New case front. No browser-selected recipient/index. */
     public function complete(array $receipt, $userid, $transport = null)
     {
@@ -231,7 +245,7 @@ try {
         if (empty($_SESSION['requestId']) || isset($_SESSION['receipt'])) {
             $_SESSION['requestId']=bin2hex(random_bytes(24));unset($_SESSION['receipt'],$_SESSION['pending']);
         }
-        djReply(array('ok'=>true,'fields'=>$fields,'schemaHash'=>$schema,'csrf'=>$_SESSION['csrf'],'requestId'=>$_SESSION['requestId']));
+        djReply(array('ok'=>true,'fields'=>$fields,'schemaHash'=>$schema,'csrf'=>$_SESSION['csrf'],'requestId'=>$_SESSION['requestId'],'trialAllowed'=>DeltronJamstvo::trialAllowed($adapter->policy(),$_SESSION['requestId'])));
     }
     foreach(array('csrf','schemaHash','requestId') as $key){if(!isset($_POST[$key])||!is_string($_POST[$key]))djReply(array('ok'=>false,'message'=>'Osvježite obrazac.'),400);}
     if(empty($_SESSION['csrf'])||!hash_equals($_SESSION['csrf'],$_POST['csrf'])||!hash_equals($_SESSION['requestId']??'',$_POST['requestId'])){djReply(array('ok'=>false,'message'=>'Obrazac je istekao. Sačuvajte unos i osvježite stranicu.'),403);}
@@ -243,13 +257,13 @@ try {
     $userid=$adapter->identity();
     // Separate operator activation after Candidate review and a controlled end-to-end trial.
     // No public request can enable live writes. The flag is intentionally absent in this delivery.
-    $flag=__DIR__.'/incConn/deltron-jamstvo-live.php';
-    $enabled=is_file($flag) ? require $flag : false;
-    if($enabled!==true){djReply(array('ok'=>false,'message'=>'Nova forma još nije otvorena za slanje. Koristite postojeću stranicu Produljeno jamstvo.'),503);}
+    $policy=$adapter->policy();
+    $testOnly=DeltronJamstvo::trialAllowed($policy,$_SESSION['requestId'],$checked['values']['field1330']??'');
+    if($policy!==true&&!$testOnly){djReply(array('ok'=>false,'message'=>'Nova forma još nije otvorena za slanje. Koristite postojeću stranicu Produljeno jamstvo.'),503);}
     $_SESSION['pending']=true;
     if(!session_write_close()||!session_start()){throw new RuntimeException('Jamstvo receipt store unavailable.');}
     if(!sqlsrv_begin_transaction($con)){throw new RuntimeException('Jamstvo transaction unavailable.');}$transaction=true;
-    $receipt=$adapter->create($fields,$checked['values'],$_FILES,$userid,session_id(),$moved);
+    $receipt=$adapter->create($fields,$checked['values'],$_FILES,$userid,session_id(),$moved,$testOnly?'TEST WEBFRONT — kontrolisana prijava; nije stvarni zahtjev za jamstvo.':'');
     $committed=sqlsrv_commit($con);$transaction=false;
     if(!$committed){throw new RuntimeException('Jamstvo commit outcome uncertain.');}
     $requestId=$_SESSION['requestId'];

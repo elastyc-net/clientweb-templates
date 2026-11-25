@@ -12,6 +12,9 @@ $test=$adapter->validate($fields,array('field1330'=>'broken','field1801'=>'F'),a
 foreach(array('field1324','field1330','field1801') as $key){if(empty($test['errors'][$key]))throw new RuntimeException('Missing validation: '.$key);}
 $test=$adapter->validate($fields,array('field1322'=>array('bad'),'field1336'=>'Unknown','field1321'=>'2026-02-31','field1348'=>'-10','field1801'=>'T'),array());
 foreach(array('field1322','field1336','field1321','field1348') as $key){if(empty($test['errors'][$key]))throw new RuntimeException('Missing validation: '.$key);}
+$id=str_repeat('a',48);$policy=array('testOnly'=>true,'requestHash'=>hash('sha256',$id),'expires'=>time()+600,'email'=>'test@example.invalid');
+if(!DeltronJamstvo::trialAllowed($policy,$id,'test@example.invalid')||DeltronJamstvo::trialAllowed($policy,str_repeat('b',48),'test@example.invalid')||DeltronJamstvo::trialAllowed($policy,$id,'other@example.invalid'))throw new RuntimeException('Trial scope failed');
+$policy['expires']=time()-1;if(DeltronJamstvo::trialAllowed($policy,$id))throw new RuntimeException('Expired trial accepted');
 $calls=array();
 $transport=function($method,$url,$body,$contentType)use(&$calls){
  $calls[]=array($method,$url,$body,$contentType);

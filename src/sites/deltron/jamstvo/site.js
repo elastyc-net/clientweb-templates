@@ -2,7 +2,8 @@
   const sandbox = window.parent !== window || !!document.querySelector('base[target="_blank"]');
   const query = new URLSearchParams(location.search);
   const candidate = query.get('channel') === 'candidate';
-  const preview = sandbox || candidate;
+  let preview = sandbox || candidate;
+  let trial = false;
   function route(path) {
     if (!candidate) return path;
     const params = new URLSearchParams({channel:'candidate',wf_path:path});
@@ -285,6 +286,7 @@
   }
   function render(fields){
     host.textContent='';
+    if(trial)host.append(node('p','dt-notice','Kontrolisana testna prijava — nije stvarni zahtjev za jamstvo.'));
     if(preview)host.append(node('p','dt-notice','Pregled nove forme — slanje je isključeno i neće se kreirati predmet.'));
     const form=node('form','dt-form');form.noValidate=true;
     let group;
@@ -345,5 +347,5 @@
     });
   }
   if(sandbox){render(previewFields);return;}
-  fetch('/deltron-jamstvo.php',{credentials:'same-origin',cache:'no-store'}).then(async r=>{const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.message);schema=data.schemaHash;token=data.csrf;requestId=data.requestId;render(data.fields);}).catch(()=>{host.textContent='Obrazac trenutno nije dostupan. Osvježite stranicu ili pokušajte ponovo kasnije.';});
+  fetch('/deltron-jamstvo.php',{credentials:'same-origin',cache:'no-store'}).then(async r=>{const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.message);schema=data.schemaHash;token=data.csrf;requestId=data.requestId;if(candidate&&query.get('deltron_trial')==='1'&&data.trialAllowed===true){preview=false;trial=true;}render(data.fields);}).catch(()=>{host.textContent='Obrazac trenutno nije dostupan. Osvježite stranicu ili pokušajte ponovo kasnije.';});
 })();
