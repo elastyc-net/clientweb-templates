@@ -1,0 +1,201 @@
+[
+  {
+    "key": "field1320",
+    "naziv": "Detalji kupnje",
+    "tip": "label",
+    "obavezno": "F",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1321",
+    "naziv": " Datum kupnje",
+    "tip": "datum",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1322",
+    "naziv": "Naziv trgovine ili web prodajnog mjesta",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1323",
+    "naziv": "Broj računa",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1348",
+    "naziv": "Cijena uređaja",
+    "tip": "numeric",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1797",
+    "naziv": "Naziv tvrtke instalatera",
+    "tip": "text",
+    "obavezno": "F",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1324",
+    "naziv": "Preslika računa",
+    "tip": "file",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1326",
+    "naziv": "Osobni podaci",
+    "tip": "label",
+    "obavezno": "F",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1327",
+    "naziv": "Ime",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1328",
+    "naziv": "Prezime",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field2745",
+    "naziv": "OIB",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "U slučaju pravne osobe, upisati OIB od pravne osobe",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1330",
+    "naziv": "Email adresa",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1331",
+    "naziv": "Kontakt broj",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1332",
+    "naziv": "Adresa",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1333",
+    "naziv": "Mjesto",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1334",
+    "naziv": "Poštanski broj",
+    "tip": "text",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1336",
+    "naziv": "Proizvođač",
+    "tip": "select",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": "",
+    "options": [
+      {
+        "value": "Gree",
+        "label": "Gree"
+      },
+      {
+        "value": "Azuri",
+        "label": "Azuri"
+      }
+    ]
+  },
+  {
+    "key": "field1796",
+    "naziv": "Slika serijskog broja 1 - Molimo priložite sliku serijskog broja unutarnje jedinice",
+    "tip": "file",
+    "obavezno": "F",
+    "tooltip": "Serijski broj nalazi se na naljepnici unutarnje jedinice. Najčešće se nalazi na okviru maske uređaja.",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1807",
+    "naziv": "Slika serijskog broja 2 - Molimo priložite sliku serijskog broja vanjske jedinice",
+    "tip": "file",
+    "obavezno": "F",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1802",
+    "naziv": "Da biste dovršili registraciju, molimo Vas da potvrdite:",
+    "tip": "label",
+    "obavezno": "F",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  },
+  {
+    "key": "field1801",
+    "naziv": "Prihvaćam opće uvjete dodatnog jamstva i pravila privatnosti",
+    "tip": "checkbox",
+    "obavezno": "T",
+    "tooltip": "",
+    "connectedfield": "",
+    "connectedfieldvalue": ""
+  }
+]

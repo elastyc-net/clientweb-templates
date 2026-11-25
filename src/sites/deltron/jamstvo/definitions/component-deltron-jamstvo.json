@@ -1,0 +1,33 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "deltron-jamstvo",
+  "label": "Deltron · prijava uređaja za jamstvo",
+  "category": "forms",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"dt-warranty\"><div class=\"dt-page-heading\"><p class=\"dt-eyebrow\">DELTRON · PODRŠKA</p><h1>Prijava uređaja za jamstvo</h1><p class=\"dt-muted\">Ispunite podatke o kupnji i priložite presliku računa.</p></div><div data-dt-warranty aria-live=\"polite\"><p>Učitavanje obrasca…</p></div><noscript>Za unos prijave omogućite JavaScript u pregledniku.</noscript></section>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

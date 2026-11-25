@@ -1,0 +1,12 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "globalSectionKey": "deltron-site-header",
+  "label": "Deltron · zaglavlje",
+  "role": "header",
+  "instance": {
+    "componentKey": "deltron-header",
+    "instanceKey": "deltron-header-global",
+    "settings": {}
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "componentKey": "deltron-login",
+  "label": "Deltron · prijava",
+  "category": "forms",
+  "renderMode": "static",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "htmlContent": "<section class=\"dt-login\"><p class=\"dt-eyebrow\">DELTRON</p><h1>Prijava</h1><p class=\"dt-muted\">Prijavite se svojim postojećim korisničkim računom.</p><div data-dt-login></div><a class=\"dt-back\" href=\"/produljeno-jamstvo\" data-dt-route=\"/produljeno-jamstvo\">← Prijava uređaja za jamstvo</a></section>",
+  "styles": [],
+  "scripts": [],
+  "settingsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  },
+  "providerKey": null,
+  "cache": {
+    "scope": "none",
+    "ttlSeconds": 0,
+    "varyBy": []
+  },
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "seo": {
+    "mode": "none"
+  }
+}

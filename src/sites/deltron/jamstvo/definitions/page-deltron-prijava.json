@@ -1,0 +1,29 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageKey": "deltron-prijava",
+  "layoutKey": "deltron-layout",
+  "route": "/prijava",
+  "locale": "sr",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadata": {
+    "title": "Prijava | Deltron",
+    "description": "Prijava postojećih Deltron korisnika."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "deltron-prijava-main",
+        "componentKey": "deltron-login",
+        "settings": {}
+      }
+    ]
+  }
+}

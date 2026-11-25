@@ -1,0 +1,47 @@
+{
+  "siteKey": "site-deltron",
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "deltron-header",
+      "file": "definitions/component-deltron-header.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "component",
+      "itemKey": "deltron-login",
+      "file": "definitions/component-deltron-login.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "component",
+      "itemKey": "deltron-jamstvo",
+      "file": "definitions/component-deltron-jamstvo.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "global-section",
+      "itemKey": "deltron-site-header",
+      "file": "definitions/global-section-deltron-site-header.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "layout",
+      "itemKey": "deltron-layout",
+      "file": "definitions/layout-deltron-layout.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "page",
+      "itemKey": "deltron-prijava",
+      "file": "definitions/page-deltron-prijava.json",
+      "expectedRevision": 0
+    },
+    {
+      "itemType": "page",
+      "itemKey": "deltron-produljeno-jamstvo",
+      "file": "definitions/page-deltron-produljeno-jamstvo.json",
+      "expectedRevision": 0
+    }
+  ]
+}

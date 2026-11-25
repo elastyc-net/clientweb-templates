@@ -1,0 +1,29 @@
+{
+  "formatVersion": 2,
+  "contractVersion": 1,
+  "pageKey": "deltron-produljeno-jamstvo",
+  "layoutKey": "deltron-layout",
+  "route": "/produljeno-jamstvo",
+  "locale": "sr",
+  "targets": [
+    "web",
+    "mobile"
+  ],
+  "access": {
+    "visibility": "public",
+    "permissions": []
+  },
+  "metadata": {
+    "title": "Prijava uređaja za jamstvo | Deltron",
+    "description": "Prijava uređaja za produljeno jamstvo."
+  },
+  "regions": {
+    "main": [
+      {
+        "instanceKey": "deltron-produljeno-jamstvo-main",
+        "componentKey": "deltron-jamstvo",
+        "settings": {}
+      }
+    ]
+  }
+}
