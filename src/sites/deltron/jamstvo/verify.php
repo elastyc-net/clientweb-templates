@@ -30,8 +30,14 @@ $transport=function($method,$url,$body,$contentType)use(&$calls){
 $done=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),1650,$transport);
 if($done['errors']||$done['states']['index']!=='synchronized'||count($calls)!==4)throw new RuntimeException('Completion contract failed');
 foreach($calls as $call){if(strpos($call[1],'https://b2b.deltron.hr/')!==0)throw new RuntimeException('Wrong completion host');}
+parse_str(parse_url($calls[0][1],PHP_URL_QUERY),$mailQuery);if(($mailQuery['userid']??'')!=='-1'||($mailQuery['action']??'')!=='newkom')throw new RuntimeException('Legacy public recipient dispatch changed');
 $index=json_decode($calls[3][2],true);
 if($index!==array('acckey'=>'TESTONLY','instance'=>'deltron','nosql_aggstype'=>'Keyfield'))throw new RuntimeException('Wrong fixed index input');
+$optional=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),-1,function($method,$url){
+ if(strpos($url,'getdeviceids.asp')!==false)return array('status'=>404,'body'=>'Not installed');
+ return array('status'=>200,'body'=>strpos($url,'elasticsearch-insert.php')!==false?' {"result":"updated"}':'OK');
+});
+if($optional['errors']||$optional['states']['push']!=='not-configured')throw new RuntimeException('Absent optional push blocked intake');
 $done=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),1650,function(){return array('status'=>503,'body'=>'Unavailable');});
 if(count($done['errors'])!==3)throw new RuntimeException('Completion failures were hidden');
 echo "7 native definitions, server field guards and mocked legacy mail/push/index contracts passed; no external delivery.\n";

@@ -68,7 +68,8 @@ final class DeltronJamstvo
         }
         $rows = $this->rows('SELECT a.anonimous FROM dbo._el_appsettings a JOIN dbo._userspp u ON u.user_id=a.anonimous');
         if (count($rows) !== 1 || (int)$rows[0]['anonimous'] <= 0) { throw new RuntimeException('Jamstvo anonymous identity unavailable.'); }
-        return (int)$rows[0]['anonimous'];
+        // Legacy public intake uses -1; the procedure maps its internal anonymous account.
+        return -1;
     }
     public function validate(array $fields, array $input, array $files)
     {
@@ -194,7 +195,7 @@ final class DeltronJamstvo
     /** Same fixed post-create destinations as New case front. No browser-selected recipient/index. */
     public function complete(array $receipt, $userid, $transport = null)
     {
-        if (!preg_match('/^[A-Za-z0-9]{1,30}$/D',$receipt['acckey']??'') || (int)($receipt['postid']??0)<1 || (int)$userid<1) {
+        if (!preg_match('/^[A-Za-z0-9]{1,30}$/D',$receipt['acckey']??'') || (int)($receipt['postid']??0)<1 || ((int)$userid!==-1 && (int)$userid<1)) {
             throw new InvalidArgumentException('Invalid trusted completion receipt.');
         }
         $transport = $transport ?: array($this,'http');
@@ -202,7 +203,7 @@ final class DeltronJamstvo
         $context=array('acckey'=>$receipt['acckey'],'postid'=>(int)$receipt['postid'],'userid'=>(int)$userid);
         $states=array('email'=>'pending','push'=>'pending','index'=>'pending');
         try {
-            $params=array_merge($context,array('action'=>'newkom','primalac'=>'T','strpath'=>$base.'/'));
+            $params=array_merge($context,array('action'=>'newkom','primalac'=>'T','userid'=>-1,'strpath'=>$base.'/'));
             $response=call_user_func($transport,'POST',$base.'/mailgun/sendmail.aspx?'.http_build_query($params,'','&',PHP_QUERY_RFC3986),'','text/html');
             if ($response['status']!==200 || stripos(ltrim($response['body']),'Nije poslato')===0) { throw new RuntimeException('Legacy mail request failed.'); }
             // HTTP acceptance is not proof of arrival; the controlled mailbox trial remains required.
@@ -210,14 +211,17 @@ final class DeltronJamstvo
         } catch (Throwable $error) { $errors[]='email'; }
         try {
             $response=call_user_func($transport,'GET',$base.'/mobile/getdeviceids.asp?'.http_build_query($context,'','&',PHP_QUERY_RFC3986),'','text/html');
-            $parts=explode('|',$response['body']);
-            if ($response['status']!==200 || count($parts)<3) { throw new RuntimeException('Legacy push lookup failed.'); }
-            if (trim($parts[1])==='') { $states['push']='not-required'; }
+            if (in_array($response['status'],array(404,410),true)) { $states['push']='not-configured'; }
             else {
-                $body=http_build_query(array('regid'=>$parts[1],'title'=>$parts[0],'message'=>$parts[2],'acckey'=>$receipt['acckey'],'instance'=>$base.'/'),'','&',PHP_QUERY_RFC3986);
-                $response=call_user_func($transport,'POST',$base.'/mobile/sendnotification.php',$body,'application/x-www-form-urlencoded');
-                if ($response['status']!==200) { throw new RuntimeException('Legacy push request failed.'); }
-                $states['push']='requested';
+                $parts=explode('|',$response['body']);
+                if ($response['status']!==200 || count($parts)<3) { throw new RuntimeException('Legacy push lookup failed.'); }
+                if (trim($parts[1])==='') { $states['push']='not-required'; }
+                else {
+                    $body=http_build_query(array('regid'=>$parts[1],'title'=>$parts[0],'message'=>$parts[2],'acckey'=>$receipt['acckey'],'instance'=>$base.'/'),'','&',PHP_QUERY_RFC3986);
+                    $response=call_user_func($transport,'POST',$base.'/mobile/sendnotification.php',$body,'application/x-www-form-urlencoded');
+                    if ($response['status']!==200) { throw new RuntimeException('Legacy push request failed.'); }
+                    $states['push']='requested';
+                }
             }
         } catch (Throwable $error) { $errors[]='push'; }
         try {

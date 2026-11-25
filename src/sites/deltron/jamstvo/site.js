@@ -303,6 +303,7 @@
         input.append(new Option('Odaberite proizvođača',''));
         for(const option of f.options||[])input.append(new Option(option.label,option.value));
       }else input.type={text:'text',numeric:'number',datum:'date',file:'file',checkbox:'checkbox'}[f.tip]||'text';
+      if(input.type==='checkbox')input.value='T';
       if(input.type==='text')input.maxLength=500;
       if(f.tip==='numeric'){input.min='0';input.step='0.01';input.inputMode='decimal';}
       if(f.tip==='datum')input.max=new Date().toLocaleDateString('en-CA');
