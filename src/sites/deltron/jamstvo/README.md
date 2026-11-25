@@ -12,7 +12,7 @@ Validacija prethodi uploadu i kreiranju: obaveznost, email, postojeći zajednič
 
 Posebna host-only HttpOnly sesija čuva CSRF, jednokratni zahtev i ishod. Dupli POST vraća isti rezultat; nejasan prekinut zahtev zahteva proveru umesto automatskog ponovnog kreiranja. Identitet je provereni FrontAuth ili postojeći serverski gost `-1`. Registracija/širenje prava nije deo ove isporuke.
 
-**Status isporuke, 2026-11-25:** posle korisnikovog zahteva za javnu stranicu objavljen je ispravljeni Production `r-20261125155919-2c493945-a931eca171df`. Javne su tačno dve objavljene rute: [jamstvo](https://b2b.deltron.hr/produljeno-jamstvo) i [prijava](https://b2b.deltron.hr/prijava). Postojeća početna `/` ostaje legacy. Indeksiranje je i dalje `noindex`.
+**Status isporuke, 2026-11-25:** posle korisnikovog zahteva za javnu stranicu objavljen je Production, a poravnanje je objavljeno u izdanju `r-20261125163043-1488436c-ef51b1b2deda`. Javne su tačno dve objavljene rute: [jamstvo](https://b2b.deltron.hr/produljeno-jamstvo) i [prijava](https://b2b.deltron.hr/prijava). Postojeća početna `/` ostaje legacy. Indeksiranje je i dalje `noindex`.
 
 Checkbox koristi sopstvenu `dt-checkbox` klasu, odvojenu od dimenzija tekstualnih polja; obe dimenzije su 18 px. Grid od dve kolone poravnava kontrolu po sredini prvog reda labele (20 px), uključujući prelom teksta na telefonu. Provereni su odabir Space tasterom, checked/unchecked stanje i vrednost `T`. Cloudflare proxy je potvrđen DNS-om i HTTP zaglavljima; lokalna jamstvena forma nema Turnstile integraciju.
 
