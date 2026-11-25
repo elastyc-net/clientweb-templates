@@ -277,7 +277,7 @@
     let error='';
     if(f.obavezno==='T'&&(!value||i.type==='checkbox'&&!i.checked||i.type==='file'&&!i.files.length))error='Ovo polje je obavezno.';
     else if(i.type==='email'&&value&&!i.validity.valid)error='Unesite ispravnu email adresu.';
-    else if(f.key==='field1331'&&value&&(!phone||!phone.isValidNumber()))error=phone?'Unesite ispravan kontakt broj.':'Provera telefona nije dostupna. Osvježite stranicu.';
+    else if(f.key==='field1331'&&value&&(!phone||!phone.isValidNumber()))error=phone?'Unesite ispravan kontakt broj.':'Provjera telefona nije dostupna. Osvježite stranicu.';
     else if(i.type==='number'&&value&&(!i.validity.valid||!Number.isFinite(Number(value))||Number(value)<0))error='Unesite ispravnu cijenu.';
     else if(i.type==='date'&&value&&(!i.validity.valid||value>new Date().toLocaleDateString('en-CA')))error='Provjerite datum kupnje.';
     else if(i.type==='file'&&i.files.length){const file=i.files[0];if(file.size>8*1024*1024)error='Najveća dopuštena veličina je 8 MB.';else if(!/\.(pdf|jpe?g|png)$/i.test(file.name))error='Priložite PDF, JPG ili PNG datoteku.';}
@@ -324,9 +324,9 @@
     const phoneInput=inputs.get('field1331').input;
     stylesheet('/common/intl-tel-input/dist/css/intlTelInput.min.css?v=29.1.2');
     loadScript('/common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js?v=29.1.2').then(()=>{
-      phone=window.intlTelInput(phoneInput,{initialCountry:'hr',countryOrder:['hr'],autoPlaceholder:'off',nationalMode:true,separateDialCode:true});
+      phone=window.intlTelInput(phoneInput,{initialCountry:'hr',countryOrder:['hr'],countrySelectorMode:'DROPDOWN',countryNameLocale:'hr',allowedNumberTypes:null,allowNumberExtensions:false,allowPhonewords:false,numberDisplayFormat:'NATIONAL',placeholderNumberPolicy:'OFF',separateDialCode:true,strictMode:true});
       phoneInput.addEventListener('countrychange',()=>{if(phoneInput.value)validate(inputs.get('field1331'));});
-    }).catch(()=>{status.textContent='Provera telefona nije dostupna. Osvježite stranicu prije slanja.';status.classList.add('dt-error');});
+    }).catch(()=>{status.textContent='Provjera telefona nije dostupna. Osvježite stranicu prije slanja.';status.classList.add('dt-error');});
     form.addEventListener('submit',async e=>{
       e.preventDefault();if(busy||submitted)return;
       const invalid=Array.from(inputs.values()).filter(entry=>!validate(entry));
