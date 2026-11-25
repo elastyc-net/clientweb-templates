@@ -57,10 +57,13 @@ final class DeltronJamstvo
     public static function schemaHash(array $fields) { return hash('sha256',json_encode($fields,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)); }
     public function identity()
     {
-        require_once __DIR__.'/incKomponente/auth/FrontAuthRuntime.php';
-        $user = \Elastyc\FrontAuth\FrontAuthSession::resolve($this->con);
-        if ($user !== null) { return (int)$user['userid']; }
         if (!empty($_COOKIE['elastyc_front_access']) || !empty($_COOKIE['elastyc_front_refresh'])) {
+            $helper=__DIR__.'/incKomponente/auth/FrontAuthSession.php';
+            if (!is_file($helper)) { throw new RuntimeException('Jamstvo session helper unavailable.'); }
+            // The installed public helper verifies the isolated auth service's session.
+            require_once $helper;
+            $user=\Elastyc\FrontAuth\FrontAuthSession::resolve($this->con);
+            if ($user!==null && ctype_digit((string)($user['userid']??'')) && (int)$user['userid']>0) { return (int)$user['userid']; }
             throw new DomainException('Vaša prijava je istekla. Prijavite se ponovo i sačuvajte unos.');
         }
         $rows = $this->rows('SELECT a.anonimous FROM dbo._el_appsettings a JOIN dbo._userspp u ON u.user_id=a.anonimous');
@@ -174,7 +177,10 @@ final class DeltronJamstvo
     public function policy()
     {
         $path=__DIR__.'/incConn/deltron-jamstvo-live.php';
-        return is_file($path) ? require $path : false;
+        clearstatcache(true,$path);
+        if (!is_file($path)) { return false; }
+        if (function_exists('opcache_invalidate')) { opcache_invalidate($path,true); }
+        return require $path;
     }
     public static function trialAllowed($policy, $requestId, $email = null)
     {
