@@ -71,6 +71,27 @@ final class DeltronJamstvo
         // Legacy public intake uses -1; the procedure maps its internal anonymous account.
         return -1;
     }
+    private function protection()
+    {
+        require_once __DIR__.'/webfront/bootstrap.php';
+        return \Elastyc\Webfront\Adapter\CaseForm\CaseFormProtection::forTenant(
+            dirname(__DIR__,2).'/webfront-data/'.basename(__DIR__), __DIR__);
+    }
+    public function protectionConfig($userid, $guard = null)
+    {
+        if ($userid > 0) { return array('required'=>false); }
+        $guard = $guard ?: $this->protection();
+        $public = $guard->publicConfig();
+        return array('required'=>true,'provider'=>$public['provider'],'siteKey'=>$public['siteKey'],
+            'action'=>'case-form','formKey'=>'deltron-jamstvo');
+    }
+    public function verifyProtection($userid, $token, $guard = null)
+    {
+        if ($userid > 0) { return; }
+        $guard = $guard ?: $this->protection();
+        $guard->verify(array('formKey'=>'deltron-jamstvo','access'=>'public'),
+            array('protectionToken'=>$token),array('authenticated'=>false));
+    }
     public function validate(array $fields, array $input, array $files)
     {
         $values = array(); $errors = array();
@@ -271,18 +292,19 @@ try {
         if (empty($_SESSION['requestId']) || isset($_SESSION['receipt'])) {
             $_SESSION['requestId']=bin2hex(random_bytes(24));unset($_SESSION['receipt'],$_SESSION['pending']);
         }
-        djReply(array('ok'=>true,'fields'=>$fields,'schemaHash'=>$schema,'csrf'=>$_SESSION['csrf'],'requestId'=>$_SESSION['requestId'],'trialAllowed'=>DeltronJamstvo::trialAllowed($adapter->policy(),$_SESSION['requestId'])));
+        djReply(array('ok'=>true,'fields'=>$fields,'schemaHash'=>$schema,'csrf'=>$_SESSION['csrf'],'requestId'=>$_SESSION['requestId'],'trialAllowed'=>DeltronJamstvo::trialAllowed($adapter->policy(),$_SESSION['requestId']),'protection'=>$adapter->protectionConfig($adapter->identity())));
     }
     foreach(array('csrf','schemaHash','requestId') as $key){if(!isset($_POST[$key])||!is_string($_POST[$key]))djReply(array('ok'=>false,'message'=>'Osvježite obrazac.'),400);}
     if(empty($_SESSION['csrf'])||!hash_equals($_SESSION['csrf'],$_POST['csrf'])||!hash_equals($_SESSION['requestId']??'',$_POST['requestId'])){djReply(array('ok'=>false,'message'=>'Obrazac je istekao. Sačuvajte unos i osvježite stranicu.'),403);}
     if(!hash_equals($schema,$_POST['schemaHash'])){djReply(array('ok'=>false,'message'=>'Definicija obrasca je promijenjena. Sačuvajte unos i osvježite stranicu.'),409);}
     if(isset($_SESSION['receipt'])){djReply($_SESSION['receipt']);}
     if(!empty($_SESSION['pending'])){djReply(array('ok'=>false,'message'=>'Prethodna prijava se provjerava. Nemojte slati novu prijavu; kontaktirajte Deltron radi provjere ishoda.'),409);}
+    $userid=$adapter->identity();
+    $adapter->verifyProtection($userid,$_POST['protectionToken']??'');
     $checked=$adapter->validate($fields,$_POST,$_FILES);
     if($checked['errors']){djReply(array('ok'=>false,'fields'=>$checked['errors'],'message'=>'Provjerite označena polja.'),422);}
-    $userid=$adapter->identity();
     // Separate operator activation after Candidate review and a controlled end-to-end trial.
-    // No public request can enable live writes. The flag is intentionally absent in this delivery.
+    // No public request can enable live writes; activation is a separate server-owned setting.
     $policy=$adapter->policy();
     $testOnly=DeltronJamstvo::trialAllowed($policy,$_SESSION['requestId'],$checked['values']['field1330']??'');
     if($policy!==true&&!$testOnly){djReply(array('ok'=>false,'message'=>'Nova forma još nije otvorena za slanje. Koristite postojeću stranicu Produljeno jamstvo.'),503);}
@@ -305,6 +327,8 @@ try {
         session_write_close();
     }
     djReply($receipt);
+} catch (\Elastyc\Webfront\Adapter\CaseForm\CaseFormException $error) {
+    djReply(array('ok'=>false,'protectionError'=>true,'message'=>$error->getMessage()),$error->getStatus());
 } catch (DomainException $error) {
     djReply(array('ok'=>false,'message'=>$error->getMessage()),401);
 } catch (Throwable $error) {

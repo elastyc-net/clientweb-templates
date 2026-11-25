@@ -268,7 +268,7 @@
   }
 ]
 ;
-  let schema,token,requestId,phone,busy=false,submitted=false;
+  let schema,token,requestId,phone,protection,busy=false,submitted=false;
   const inputs=new Map();
   function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text)e.textContent=text;return e;}
   function showError(key,message){const entry=inputs.get(key);if(!entry)return;entry.error.textContent=message;entry.input.setAttribute('aria-invalid',message?'true':'false');}
@@ -322,8 +322,53 @@
       input.addEventListener('change',()=>validate(entry));
     }
     const actions=node('div','dt-actions');actions.append(node('p','','* Obavezna polja'));
-    const button=node('button','dt-button','Pošalji prijavu');button.type='submit';actions.append(button);form.append(actions);
+    const button=node('button','dt-button','Pošalji prijavu');button.type='submit';actions.append(button);
+    const needsProtection=!preview&&protection?.required!==false;
+    let proof='',widgetId=null,challenge=null,protectionStatus=null,protectionRetry=null,challengeLoading=false;
+    function protectionState(value,message,retry){
+      proof=typeof value==='string'?value:'';button.disabled=busy||needsProtection&&!proof;
+      if(protectionStatus)protectionStatus.textContent=message;
+      if(protectionRetry)protectionRetry.hidden=!retry;
+    }
+    function renderChallenge(){
+      if(!form.isConnected||widgetId!==null)return;
+      try{
+        widgetId=window.turnstile.render(challenge,{
+          sitekey:protection.siteKey,action:'case-form',cData:'deltron-jamstvo',theme:'light',
+          appearance:'always',size:window.matchMedia('(max-width:420px)').matches?'compact':'normal',
+          retry:'auto','retry-interval':8000,'refresh-expired':'auto','refresh-timeout':'auto',
+          callback:value=>protectionState(value,'Provjera je uspješna.',false),
+          'expired-callback':()=>protectionState('','Obnavljamo sigurnosnu provjeru…',true),
+          'timeout-callback':()=>protectionState('','Sigurnosna provjera je istekla. Pokušavamo ponovo…',true),
+          'error-callback':()=>{protectionState('','Sigurnosna provjera trenutno nije dostupna. Ponovite provjeru.',true);return true;}
+        });
+      }catch{protectionState('','Sigurnosna provjera trenutno nije dostupna. Ponovite provjeru.',true);}
+    }
+    async function loadChallenge(){
+      if(challengeLoading)return;
+      if(protection?.provider!=='turnstile'||!protection.siteKey){protectionState('','Slanje trenutno nije dostupno jer sigurnosna provjera nije podešena.',false);return;}
+      protectionState('','Sigurnosna provjera je u tijeku…',false);
+      if(window.turnstile){renderChallenge();return;}
+      challengeLoading=true;
+      try{await loadScript('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit');renderChallenge();}
+      catch{protectionState('','Sigurnosna provjera se nije učitala. Ponovite provjeru.',true);}
+      finally{challengeLoading=false;}
+    }
+    function resetChallenge(){
+      if(!needsProtection)return;
+      protectionState('','Obnavljamo sigurnosnu provjeru…',false);
+      if(widgetId!==null&&window.turnstile){try{window.turnstile.reset(widgetId);}catch{protectionState('','Ponovite sigurnosnu provjeru.',true);}}
+      else loadChallenge();
+    }
+    if(needsProtection){
+      const panel=node('div','dt-protection');panel.append(node('p','dt-help','Sigurnosna provjera'));
+      challenge=node('div','dt-protection-widget');protectionStatus=node('p','dt-help');protectionStatus.setAttribute('role','status');
+      protectionRetry=node('button','dt-protection-retry','Ponovi provjeru');protectionRetry.type='button';protectionRetry.hidden=true;
+      protectionRetry.addEventListener('click',resetChallenge);panel.append(challenge,protectionStatus,protectionRetry);form.append(panel);button.disabled=true;
+    }
+    form.append(actions);
     const status=node('p','dt-status');status.setAttribute('role','status');form.append(status);host.append(form);
+    if(needsProtection)loadChallenge();
     const phoneInput=inputs.get('field1331').input;
     if(!sandbox){
     stylesheet('/common/intl-tel-input/dist/css/intlTelInput.min.css?v=29.1.2');
@@ -337,16 +382,17 @@
       const invalid=Array.from(inputs.values()).filter(entry=>!validate(entry));
       if(invalid.length){status.textContent='Provjerite označena polja.';status.classList.add('dt-error');invalid[0].input.focus();return;}
       if(preview){status.classList.remove('dt-error');status.textContent='Podaci su provjereni. Ovo je pregled — prijava nije poslana.';return;}
+      if(needsProtection&&!proof){status.textContent='Dovršite sigurnosnu provjeru prije slanja.';status.classList.add('dt-error');return;}
       busy=true;button.disabled=true;button.textContent='Slanje…';status.textContent='';
-      const data=new FormData(form);data.set('field1331',phone.getNumber());data.set('csrf',token);data.set('schemaHash',schema);data.set('requestId',requestId);
+      const data=new FormData(form);data.set('field1331',phone.getNumber());data.set('csrf',token);data.set('schemaHash',schema);data.set('requestId',requestId);if(needsProtection)data.set('protectionToken',proof);
       try{
         const r=await fetch('/deltron-jamstvo.php',{method:'POST',credentials:'same-origin',body:data});const result=await r.json();
         if(!r.ok||!result.ok){for(const [key,message] of Object.entries(result.fields||{}))showError(key,message);throw new Error(result.message||'Prijava nije poslana. Sačuvan je vaš unos.');}
         submitted=true;host.textContent='';const panel=node('div','dt-success');panel.setAttribute('role','status');panel.append(node('h2','','Prijava je zaprimljena'),node('p','','Broj prijave: '+result.acckey));if(result.followup?.errors?.length)panel.append(node('p','dt-notice','Prijava je spremljena. Potvrda ili obavijesti još nisu potvrđene. Nemojte ponavljati prijavu; sačuvajte broj prijave za provjeru.'));host.append(panel);panel.tabIndex=-1;panel.focus();
       }catch(error){status.textContent=error.message||'Nije moguće potvrditi ishod. Provjerite prijavu prije ponovnog slanja.';status.classList.add('dt-error');}
-      finally{busy=false;button.disabled=false;button.textContent='Pošalji prijavu';}
+      finally{busy=false;button.textContent='Pošalji prijavu';if(needsProtection&&!submitted)resetChallenge();else button.disabled=false;}
     });
   }
   if(sandbox){render(previewFields);return;}
-  fetch('/deltron-jamstvo.php',{credentials:'same-origin',cache:'no-store'}).then(async r=>{const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.message);schema=data.schemaHash;token=data.csrf;requestId=data.requestId;if(candidate&&query.get('deltron_trial')==='1'&&data.trialAllowed===true){preview=false;trial=true;}render(data.fields);}).catch(()=>{host.textContent='Obrazac trenutno nije dostupan. Osvježite stranicu ili pokušajte ponovo kasnije.';});
+  fetch('/deltron-jamstvo.php',{credentials:'same-origin',cache:'no-store'}).then(async r=>{const data=await r.json();if(!r.ok||!data.ok)throw new Error(data.message);schema=data.schemaHash;token=data.csrf;requestId=data.requestId;protection=data.protection;if(candidate&&query.get('deltron_trial')==='1'&&data.trialAllowed===true){preview=false;trial=true;}render(data.fields);}).catch(()=>{host.textContent='Obrazac trenutno nije dostupan. Osvježite stranicu ili pokušajte ponovo kasnije.';});
 })();
