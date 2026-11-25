@@ -5,14 +5,16 @@ const script = fs.readFileSync(path.join(__dirname, '../src/commerce/commerce.js
 let checks = 0;
 function check(ok, message) { checks++; if (!ok) throw new Error(message); }
 const settle = async () => { for (let i = 0; i < 12; i++) await new Promise(resolve => setTimeout(resolve, 0)); };
-async function fixture(authenticated = true, protectedForm = false, live = false) {
+async function fixture(authenticated = true, protectedForm = false, live = false, surface = null, noAddresses = false) {
   const dom = new JSDOM('<div class="wf-instance" data-wf-commerce-url="/page.php?wf_action=commerce&amp;channel=candidate&amp;wf_path=%2Fporudzbina&amp;wf_instance=checkout"><section class="wf-shop" data-wf-shop-view="checkout"></section></div>', {url:'https://shop.example/page.php?channel=candidate&wf_path=%2Fporudzbina'+(live?'&purchase='+ 'e'.repeat(32):''), runScripts:'outside-only', pretendToBeVisual:true});
   const w = dom.window, root = w.document.querySelector('.wf-shop'), calls = [], widgets = [];
+  if(surface)root.style.setProperty('--wf-color-surface',surface);
   const line = {lineId:'d'.repeat(32),productId:'A',variantId:'',name:'Test artikal',quantity:'1.000',unit:'kom',priceKnown:true,unitPrice:'120.00',total:'120.00',currency:'RSD',eligible:true,action:'buy'};
   const state = {revision:1,lines:[line],favorites:[],favoritesEnabled:false,guestCheckout:true,authenticated,mergeAvailable:false,preview:!protectedForm,protection:{provider:'turnstile',siteKey:'fixture-public-key'},
     totals:{net:'100.00',tax:'20.00',gross:'120.00',currency:'RSD'},paths:{catalog:'/proizvodi',product:'/proizvod',cart:'/korpa',checkout:'/porudzbina',favorites:'/favoriti',request:'/upit-za-ponudu',account:'/nalog'},
     deliveryOptions:[{id:'address',label:'Na adresu'},{id:'pickup',label:'Preuzimanje'}],pickupOptions:[{id:'store',label:'Prodavnica'}],paymentOptions:[{id:'1',label:'Gotovina'}],
     customer:{contact:authenticated?{firstName:'Petar',lastName:'Test',email:'test@example.invalid',phone:''}:{},addresses:authenticated?[{id:'12',street:'Sačuvana ulica',number:'3',postalCode:'11000',city:'Test',label:'Kuća'}]:[]}};
+  if(noAddresses)state.customer.addresses=[];
   if(live){state.purchase={id:'e'.repeat(32),amount:'120.00',currency:'RSD'};state.preview=true;state.deliveryOptions=[{id:'pickup',label:'Preuzimanje'}];state.paymentOptions=[{id:'7',label:'Kartica',kind:'card',environment:'live'}];}
   w.fetch = async (url, options) => { const body = options && options.body ? JSON.parse(options.body) : null; if (body) calls.push(body); if(live) check(new URL(url).searchParams.get("purchase") === "e".repeat(32),"Private purchase scope is forwarded to every API request");
     const reply = {ok:true,csrf:'a'.repeat(64),state:structuredClone(state)};
@@ -41,7 +43,9 @@ async function fixture(authenticated = true, protectedForm = false, live = false
     check(!panels[0].hidden && f.calls.length === 0, 'Invalid contact cannot advance or send a quote');
     form.elements.email.value = 'test@example.invalid'; await f.submit();
     check(!panels[1].hidden && panels[0].hidden, 'Valid contact advances to delivery');
-    check(form.elements.addressId.value === '12' && form.elements.street.value === 'Sačuvana ulica' && form.elements.street.readOnly, 'Owned saved address is selected and protected from edits');
+    check(form.elements.addressId.value === '' && form.elements.street.value === '', 'Saved address is never silently selected');
+    form.elements.addressId.value='12';form.elements.addressId.dispatchEvent(new f.w.Event('change'));
+    check(form.elements.street.value === 'Sačuvana ulica' && form.elements.street.readOnly, 'Explicitly selected owned address is protected from edits');
     f.button('Nova adresa').click(); await settle();
     check(form.elements.addressId.value === '' && !form.elements.street.readOnly, 'New address enables manual input');
     for (const [name,value] of Object.entries({street:'Nova ulica',number:'5',postalCode:'11000',city:'Novo mesto'})) form.elements[name].value = value;
@@ -80,7 +84,7 @@ async function fixture(authenticated = true, protectedForm = false, live = false
     check(protectedGuest.widgets.length===1,'Protection starts on the payment step');
     await protectedGuest.submit();const confirm=protectedGuest.button('Potvrdi porudžbinu');
     check(confirm.disabled,'Pending protection disables the final confirmation');
-    const widget=protectedGuest.widgets[0];widget.input.value='fixture-token';widget.options.callback('fixture-token');
+    const widget=protectedGuest.widgets[0];check(widget.options.theme==='light','Turnstile follows the light site, independently of the system theme');widget.input.value='fixture-token';widget.options.callback('fixture-token');
     check(!confirm.disabled,'A successful protection callback enables confirmation');
     widget.options['expired-callback']();check(confirm.disabled,'Protection expiry still blocks the new three-step checkout');
     protectedGuest.button('Ponovi proveru').click();await settle();
@@ -98,5 +102,10 @@ async function fixture(authenticated = true, protectedForm = false, live = false
     check(live.root.textContent.includes('Porudžbina 26S01000001 je kreirana') && !!live.button('Nastavi na AllSecure plaćanje'),'Real order receipt names AllSecure and requires a separate payment action');
     check(!live.calls.some(call=>call.action==='payment-start'),'Order confirmation does not automatically initiate payment');
   } finally {live.dom.window.close();}
+
+  const firstAddress=await fixture(true,true,false,null,true);
+  try{check(!!firstAddress.button('Nova adresa'),'Member without saved addresses has the New address action');const form=firstAddress.root.querySelector('form');for(const[k,v]of Object.entries({street:'Test',number:'1',postalCode:'11000',city:'Test'}))form.elements[k].value=v;await firstAddress.submit();await firstAddress.submit();check(firstAddress.widgets.length===0,'Normal signed-in checkout never mounts Turnstile');}finally{firstAddress.dom.window.close();}
+  const dark=await fixture(false,true,false,'#101820');
+  try{const form=dark.root.querySelector('form');for(const[k,v]of Object.entries({firstName:'Gost',lastName:'Test',email:'guest@example.invalid',street:'Test',number:'1',postalCode:'11000',city:'Test'}))form.elements[k].value=v;await dark.submit();await dark.submit();check(dark.widgets[0].options.theme==='dark','Turnstile follows an explicitly dark site surface');}finally{dark.dom.window.close();}
   console.log('Commerce three-step checkout:', checks, 'checks passed');
 })().catch(error => {console.error(error);process.exitCode=1;});

@@ -109,6 +109,14 @@
     var luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
     document.documentElement.style.setProperty("--wf-shop-on-accent", luminance > 0.179 ? "#111111" : "#ffffff");
   }
+  function protectionTheme(root) {
+    var style = global.getComputedStyle(root), raw = style.getPropertyValue("--wf-color-surface").trim() || style.backgroundColor;
+    if (!raw || raw === "transparent" || /^rgba\([^)]*,\s*0\s*\)$/.test(raw)) raw = "#ffffff";
+    var rgb = /^#([a-f0-9]{6})$/i.exec(raw), short = /^#([a-f0-9]{3})$/i.exec(raw);
+    if (short) rgb = ["", short[1].split("").map(function (x) { return x + x; }).join("")];
+    var values = rgb ? [0,2,4].map(function (i) { return parseInt(rgb[1].slice(i,i+2),16); }) : (raw.match(/[\d.]+/g) || []).slice(0,3).map(Number);
+    return values.length === 3 && (values[0]*.2126 + values[1]*.7152 + values[2]*.0722) < 128 ? "dark" : "light";
+  }
   function node(tag, cls, text) {
     var el = document.createElement(tag); if (cls) el.className = cls;
     if (text !== undefined) el.textContent = text; return el;
@@ -620,8 +628,13 @@
           ["street", "number", "postalCode", "city"].forEach(function (name) { var input = address.querySelector('[name="' + name + '"]'); if (chosen) { if (!input.readOnly) newAddress[name] = input.value; input.value = chosen[name]; } else input.value = newAddress[name] || ""; input.readOnly = !!chosen; });
           invalidateQuote();
         });
-        if (addresses.length === 1) { savedAddress.value = addresses[0].id; }
-        deliveryPanel.appendChild(button("Nova adresa", function () { savedAddress.value = ""; savedAddress.dispatchEvent(new Event("change")); address.querySelector("input").focus(); }, "wf-shop-link"));
+      }
+      if (state.authenticated) {
+        deliveryPanel.appendChild(button("Nova adresa", function () {
+          if (savedAddress) { savedAddress.value = ""; savedAddress.dispatchEvent(new Event("change")); }
+          address.querySelector("input").focus();
+        }, "wf-shop-link wf-shop-new-address"));
+        address.appendChild(node("p", "wf-shop-help", "Nova adresa biće sačuvana u vašim dostavnim adresama nakon potvrde porudžbine."));
       }
       var pickup = optionField(deliveryPanel, "Mesto preuzimanja", "pickup", state.pickupOptions);
       function toggleAddress() {
@@ -803,6 +816,7 @@
       try {
         widgetId = global.turnstile.render(challenge, {
           sitekey: state.protection.siteKey, action: "case-form", cData: "commerce-checkout", appearance: inquiry ? "interaction-only" : "always",
+          theme: protectionTheme(root),
           retry: "auto", "retry-interval": 8000, "refresh-expired": "auto", "refresh-timeout": "auto",
           callback: function (token) { if (form.isConnected) protectionState(typeof token === "string" && token !== "", token ? "Zaštita je potvrđena." : "Potvrdite zaštitu pre slanja.", !token); },
           "error-callback": function (code) {
@@ -866,7 +880,30 @@
       } });
     }).catch(function () { root.textContent = "Prijava trenutno nije dostupna."; });
   }
-  function renderBusy() { document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { root.setAttribute("aria-busy", busy || refreshingAuth ? "true" : "false"); }); }
+  function renderBusy() { document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { root.setAttribute("aria-busy", busy || refreshingAuth || root.dataset.pending === "true" ? "true" : "false"); }); }
+  function renderPending(root) {
+    if (root.dataset.rendered === "true") return;
+    root.dataset.pending = "true"; root.setAttribute("aria-busy", "true");
+    var box = node("div", "wf-shop-loading"); box.setAttribute("role", "status");
+    box.appendChild(node("p", "wf-shop-help", root.dataset.wfShopView === "favorites" ? "Učitavanje omiljenih proizvoda…" : root.dataset.wfShopView === "cart" ? "Provera proizvoda i cena u korpi…" : "Priprema porudžbine…"));
+    var skeleton = node("div", "wf-shop-loading__rows"); skeleton.setAttribute("aria-hidden", "true");
+    for (var i=0;i<3;i++) skeleton.appendChild(node("div", "wf-shop-loading__row"));
+    box.appendChild(skeleton); root.replaceChildren(box);
+  }
+  function initialRead() {
+    viewRoots.forEach(function (root) { if (["cart","favorites","checkout"].indexOf(root.dataset.wfShopView)>=0) renderPending(root); });
+    return request("state", {}, false).then(function () {
+      if (state.mergeAvailable && !ownsLegacySource()) return mutate("resume", {}, function () {});
+    }).then(function () { return synchronizeLocal(); }).catch(function (error) {
+      viewRoots.forEach(function (root) {
+        if (root.dataset.pending !== "true") return;
+        delete root.dataset.pending; root.setAttribute("aria-busy", "false");
+        var message=node("p","wf-shop-error","Učitavanje nije uspelo. Pokušajte ponovo."); message.setAttribute("role","alert");
+        root.replaceChildren(message,button("Pokušaj ponovo",initialRead,"wf-shop-btn"));
+      });
+      if (!error.silent) notify(error.message, true);
+    });
+  }
   function authChanged(announce) {
     document.documentElement.dataset.wfShopAuthenticated = "false";
     global.dispatchEvent(new CustomEvent("elastyc:commerce-auth-changed"));
@@ -912,6 +949,7 @@
       var pendingFocus = root.dataset.pendingInquiry === "true" && root.contains(document.activeElement) ? document.activeElement.name : "";
       if (inquiryDrafts.has(root)) root.querySelectorAll("input,textarea").forEach(function (input) { if (input.name && input.value !== "" && !Object.prototype.hasOwnProperty.call(inquiryDrafts.get(root), input.name)) inquiryDrafts.get(root)[input.name] = input.value; });
       clearPhones(root); root.replaceChildren(); root.dataset.rendered = "true";
+      delete root.dataset.pending;
       if (root.dataset.wfShopView === "cart") renderCart(root);
       if (root.dataset.wfShopView === "favorites") renderFavorites(root);
       if (root.dataset.wfShopView === "checkout") renderCheckout(root, false);
@@ -929,9 +967,7 @@
     endpoint = host.dataset.wfCommerceUrl;
     initializeGuest(host);
     if (inquiryView()) viewRoots.forEach(function (root) { if (root.dataset.wfShopView === "request") renderInquiryPending(root); });
-    request("state", {}, false).then(function () {
-      if (state.mergeAvailable && !ownsLegacySource()) return mutate("resume", {}, function () {});
-    }).then(function () { return synchronizeLocal(); }).catch(function (error) { notify(error.message, true); });
+    initialRead();
     if (global.BroadcastChannel) { channel = new BroadcastChannel("wf-commerce-" + (new URL(endpoint, global.location.href).searchParams.get("channel") || "production")); channel.onmessage = function (event) { (event.data === "auth-change" ? authChanged(false) : localMode && !guestPageView() ? Promise.resolve() : document.hidden ? Promise.resolve() : request("state", {}, false)).catch(function () {}); }; }
     global.addEventListener("focus", function () { if ((!localMode || guestPageView()) && !busy && !refreshingAuth && (!lastStateAt || Date.now() - lastStateAt >= 15000)) request("state", {}, false).then(function () { return synchronizeLocal(); }).catch(function () {}); });
   }

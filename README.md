@@ -1,3 +1,10 @@
+Commerce 1.4.1 / catalog 2.5.1 add explicit saved-address selection and a New
+address action, stable loading/retry states for cart/favorites/checkout, responsive
+checkout spacing and a Turnstile theme matching the site surface. The shared
+backend retains a verified customer's shipping address only after successful real
+order confirmation. Build with `node src/commerce/build-checkout.mjs`; new-site
+bootstrap pins both releases. Earlier immutable releases stay unchanged.
+
 # clientweb-templates
 
 Commerce 1.4.0 / catalog 2.5.0 / reference-chrome 1.1.0 provide the shared mobile drawer, optical cart icon, standalone auth spacing, customer order view and archived-product state. New-site bootstrap pins these releases. Build once with `node src/commerce/build-standard.mjs`, generate staging with `node tools/library-catalog.mjs --bundle packages/staged-bundle.json`, then export with `node tools/export-standard.mjs ../instance-template`. Published release bytes cannot be rebuilt. Orders links are enabled only where the corresponding page is configured; backend ownership remains authoritative.

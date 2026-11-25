@@ -7,8 +7,8 @@ const tick=async()=>{for(let i=0;i<12;i++)await new Promise(resolve=>setTimeout(
 let checks=0;function check(value,message){assert(value,message);checks++;}
 const base={view:'inquiry',revision:0,cartCount:4,lines:[],favorites:[],favoritesEnabled:true,guestCheckout:true,authenticated:true,preview:true,mergeAvailable:false,
  paths:{request:'/upit',cart:'/korpa',favorites:'/favoriti',account:'/nalog'},customer:{contact:{firstName:'Saved',lastName:'Profile',email:'saved@example.invalid',phone:'+381641234567'},addresses:[]},deliveryOptions:[],pickupOptions:[],paymentOptions:[]};
-async function fixture(){
- const dom=new JSDOM('<span data-wf-cart-count>0</span><div data-wf-commerce-url="/page.php?wf_action=commerce&amp;wf_path=%2Fupit"></div><section class="wf-shop"><div data-wf-shop-view="request"></div></section>',{url:'https://shop.example/upit?productId=A',runScripts:'outside-only',pretendToBeVisual:true});
+async function fixture(view='request'){
+ const dom=new JSDOM('<span data-wf-cart-count>0</span><div data-wf-commerce-url="/page.php?wf_action=commerce&amp;wf_path=%2Fupit"></div><section class="wf-shop"><div data-wf-shop-view="'+view+'"></div></section>',{url:'https://shop.example/upit?productId=A',runScripts:'outside-only',pretendToBeVisual:true});
  const w=dom.window,reads=[],posts=[],waiting=[];let clock=20000,auto=false,server=structuredClone(base);
  w.Date.now=()=>clock;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
  w.BroadcastChannel=class{constructor(){w.testChannel=this;}postMessage(){}};
@@ -19,7 +19,7 @@ async function fixture(){
   reads.push(String(url));const compact=new URL(url).searchParams.get('wf_commerce_view')==='inquiry';
   const readResponse=state=>response(compact?state:{...state,view:undefined});
   if(auto)return readResponse(server);
-  return new Promise(resolve=>waiting.push(state=>resolve(readResponse(state))));
+  return new Promise(resolve=>{const pending=state=>resolve(readResponse(state));pending.fail=()=>resolve({ok:false,status:503,json:async()=>({ok:false,message:'Unavailable'})});waiting.push(pending);});
  };
  w.eval(fs.readFileSync(path.join(__dirname,'../../common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'),'utf8')+';window.intlTelInput=intlTelInput;');
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));
@@ -62,5 +62,17 @@ async function fixture(){
   mixed.waiting.shift()(base);await tick();
   check(!!mixed.root.querySelector('.iti') && !mixed.root.querySelector('button[type=submit]').disabled,'Mixed compositions finish without a compact/full response loop.');
  }finally{mixed.dom.window.close();}
+
+ for(const view of ['cart','favorites','checkout']){
+  const pending=await fixture(view);try{
+   check(!!pending.root.querySelector('[role=status]') && pending.root.getAttribute('aria-busy')==='true','Initial '+view+' loading is visible and accessible.');
+   pending.waiting.shift().fail();await tick();
+   check(!!pending.root.querySelector('[role=alert]') && pending.root.getAttribute('aria-busy')==='false','Failed '+view+' read clears the pending state.');
+   pending.root.querySelector('button').click();await tick();
+   check(pending.reads.length===2 && !!pending.root.querySelector('[role=status]'),'Retry '+view+' starts one new read.');
+   pending.waiting.shift()(base);await tick();
+   check(!pending.root.querySelector('.wf-shop-loading') && pending.root.getAttribute('aria-busy')==='false','Successful '+view+' retry replaces the placeholder.');
+  }finally{pending.dom.window.close();}
+ }
  console.log('Commerce loading:',checks,'checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
