@@ -298,7 +298,7 @@
       const wrap=node('div','dt-field'+(f.tip==='file'?' dt-field-wide':'')+(f.tip==='checkbox'?' dt-field-wide dt-check':''));
       const id='dt-'+f.key;const label=node('label','',f.naziv.trim());label.htmlFor=id;
       if(f.obavezno==='T'){const a=node('span','dt-required','*');a.setAttribute('aria-hidden','true');label.append(a);}
-      const input=node(f.tip==='select'?'select':'input','dt-control');input.id=id;input.name=f.key;input.required=f.obavezno==='T';
+      const input=node(f.tip==='select'?'select':'input',f.tip==='checkbox'?'dt-checkbox':'dt-control');input.id=id;input.name=f.key;input.required=f.obavezno==='T';
       if(f.tip==='select'){
         input.append(new Option('Odaberite proizvođača',''));
         for(const option of f.options||[])input.append(new Option(option.label,option.value));
