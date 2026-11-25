@@ -30,7 +30,7 @@ $transport=function($method,$url,$body,$contentType)use(&$calls){
 $done=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),1650,$transport);
 if($done['errors']||$done['states']['index']!=='synchronized'||count($calls)!==4)throw new RuntimeException('Completion contract failed');
 foreach($calls as $call){if(strpos($call[1],'https://b2b.deltron.hr/')!==0)throw new RuntimeException('Wrong completion host');}
-parse_str(parse_url($calls[0][1],PHP_URL_QUERY),$mailQuery);if(($mailQuery['userid']??'')!=='-1'||($mailQuery['action']??'')!=='newkom')throw new RuntimeException('Legacy public recipient dispatch changed');
+parse_str(parse_url($calls[0][1],PHP_URL_QUERY),$mailQuery);if(($mailQuery['userid']??'')!=='-1'||($mailQuery['action']??'')!=='newpost')throw new RuntimeException('Legacy public recipient dispatch changed');
 $index=json_decode($calls[3][2],true);
 if($index!==array('acckey'=>'TESTONLY','instance'=>'deltron','nosql_aggstype'=>'Keyfield'))throw new RuntimeException('Wrong fixed index input');
 $optional=$adapter->complete(array('acckey'=>'TESTONLY','postid'=>123),-1,function($method,$url){
