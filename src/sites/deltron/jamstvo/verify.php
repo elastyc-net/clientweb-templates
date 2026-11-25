@@ -21,7 +21,7 @@ $phoneCheck=$adapter->validate($fields,array('field1331'=>'invalid'),array());if
 $calls=array();
 $transport=function($method,$url,$body,$contentType)use(&$calls){
  $calls[]=array($method,$url,$body,$contentType);
- if(strpos($url,'/mailgun/sendmail.aspx?')!==false)return array('status'=>200,'body'=>'OK');
+ if(strpos($url,'/sendmail.php?')!==false)return array('status'=>200,'body'=>'OK');
  if(strpos($url,'/mobile/getdeviceids.asp?')!==false)return array('status'=>200,'body'=>'Test title|test-device-token|Test message');
  if(strpos($url,'/mobile/sendnotification.php')!==false)return array('status'=>200,'body'=>'OK');
  if(strpos($url,'/elasticsearch-api/elasticsearch-insert.php')!==false)return array('status'=>200,'body'=>'{"result":"created"}');

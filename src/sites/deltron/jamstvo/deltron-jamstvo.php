@@ -203,9 +203,9 @@ final class DeltronJamstvo
         $context=array('acckey'=>$receipt['acckey'],'postid'=>(int)$receipt['postid'],'userid'=>(int)$userid);
         $states=array('email'=>'pending','push'=>'pending','index'=>'pending');
         try {
-            $params=array_merge($context,array('action'=>'newkom','primalac'=>'T','userid'=>-1,'strpath'=>$base.'/'));
-            $response=call_user_func($transport,'POST',$base.'/mailgun/sendmail.aspx?'.http_build_query($params,'','&',PHP_QUERY_RFC3986),'','text/html');
-            if ($response['status']!==200 || stripos(ltrim($response['body']),'Nije poslato')===0) { throw new RuntimeException('Legacy mail request failed.'); }
+            $params=array_merge($context,array('action'=>'newkom','primalac'=>'T','userid'=>-1,'strpath'=>$base.'/','changestatus'=>'F','pagenum'=>1,'skippush'=>1));
+            $response=call_user_func($transport,'POST',$base.'/sendmail.php?'.http_build_query($params,'','&',PHP_QUERY_RFC3986),'','text/html');
+            if ($response['status']!==200 || stripos($response['body'],'Nije poslato')!==false) { throw new RuntimeException('Legacy mail request failed.'); }
             // HTTP acceptance is not proof of arrival; the controlled mailbox trial remains required.
             $states['email']='requested';
         } catch (Throwable $error) { $errors[]='email'; }
