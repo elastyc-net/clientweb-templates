@@ -15,6 +15,9 @@ foreach(array('field1322','field1336','field1321','field1348') as $key){if(empty
 $id=str_repeat('a',48);$policy=array('testOnly'=>true,'requestHash'=>hash('sha256',$id),'expires'=>time()+600,'email'=>'test@example.invalid');
 if(!DeltronJamstvo::trialAllowed($policy,$id,'test@example.invalid')||DeltronJamstvo::trialAllowed($policy,str_repeat('b',48),'test@example.invalid')||DeltronJamstvo::trialAllowed($policy,$id,'other@example.invalid'))throw new RuntimeException('Trial scope failed');
 $policy['expires']=time()-1;if(DeltronJamstvo::trialAllowed($policy,$id))throw new RuntimeException('Expired trial accepted');
+$phoneCheck=$adapter->validate($fields,array('field1330'=>'test@example.invalid','field1331'=>'+385912345678','field1801'=>'T'),array());
+if(isset($phoneCheck['errors']['field1331'])||$phoneCheck['values']['field1331']!=='+385912345678')throw new RuntimeException('Shared phone normalization failed');
+$phoneCheck=$adapter->validate($fields,array('field1331'=>'invalid'),array());if(empty($phoneCheck['errors']['field1331']))throw new RuntimeException('Invalid phone accepted');
 $calls=array();
 $transport=function($method,$url,$body,$contentType)use(&$calls){
  $calls[]=array($method,$url,$body,$contentType);

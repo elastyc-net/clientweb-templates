@@ -103,13 +103,29 @@ final class DeltronJamstvo
             elseif ($type==='checkbox' && !in_array($value,array('T','F'),true)) { $errors[$key]='Provjerite odabir.'; }
             if ($key==='field1330' && !filter_var($value,FILTER_VALIDATE_EMAIL)) { $errors[$key]='Unesite ispravnu email adresu.'; }
             if ($key==='field1331' && $value!=='') {
-                require_once __DIR__.'/incKomponente/auth/FrontAuthRegistrationInput.php';
-                try { $value=\Elastyc\FrontAuth\FrontAuthRegistrationInput::phone($value,'HR'); }
+                try { $value=$this->phone($value); }
                 catch (InvalidArgumentException $error) { $errors[$key]='Unesite ispravan kontakt broj.'; }
             }
             $values[$key]=$value;
         }
         return array('values'=>$values,'errors'=>$errors);
+    }
+    private function phone($value)
+    {
+        // Reuse the installed common vendor; do not require a newer registration package.
+        if (!class_exists('libphonenumber\\PhoneNumberUtil')) {
+            foreach (array(dirname(__DIR__,5).'/common','W:/wwwroot/ElastycNet/common') as $common) {
+                $loader=$common.'/Elastyc/CaseForm/vendor/libphonenumber/autoload.php';
+                if (is_file($loader)) { require_once $loader; break; }
+            }
+        }
+        if (!class_exists('libphonenumber\\PhoneNumberUtil')) { throw new RuntimeException('Zajednicka validacija telefona nije dostupna.'); }
+        if (strlen($value)>100 || !preg_match('/^[+0-9\s().-]+$/D',$value)) { throw new InvalidArgumentException('Provjerite kontakt broj.'); }
+        try {
+            $util=\libphonenumber\PhoneNumberUtil::getInstance();$number=$util->parse($value,'HR');
+            if (!$util->isValidNumber($number)||$number->hasExtension()) { throw new InvalidArgumentException('Provjerite kontakt broj.'); }
+            return $util->format($number,\libphonenumber\PhoneNumberFormat::E164);
+        } catch (\libphonenumber\NumberParseException $error) { throw new InvalidArgumentException('Provjerite kontakt broj.'); }
     }
     /** Caller owns an outer transaction. Existing procedure, aftercase and custom rules stay intact. */
     public function create(array $fields, array $values, array $files, $userid, $sessionKey, array &$moved, $description = '')
