@@ -340,7 +340,7 @@
           callback:value=>protectionState(value,'Provjera je uspješna.',false),
           'expired-callback':()=>protectionState('','Obnavljamo sigurnosnu provjeru…',true),
           'timeout-callback':()=>protectionState('','Sigurnosna provjera je istekla. Pokušavamo ponovo…',true),
-          'error-callback':()=>{protectionState('','Sigurnosna provjera trenutno nije dostupna. Ponovite provjeru.',true);return true;}
+          'error-callback':code=>{if(protectionStatus)protectionStatus.dataset.protectionError=/^[0-9]{3,6}$/.test(String(code))?String(code):'unknown';protectionState('','Sigurnosna provjera trenutno nije dostupna. Ponovite provjeru.',true);return true;}
         });
       }catch{protectionState('','Sigurnosna provjera trenutno nije dostupna. Ponovite provjeru.',true);}
     }
