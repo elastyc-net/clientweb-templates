@@ -1,3 +1,12 @@
+Catalog 2.6.0 adds the reusable `product-selection` section: instance-owned SKU
+selection/order, active-promotion-only mode, bounded card count, hide-empty and
+a configurable catalogue CTA. The standard list adds the “Na akciji” checkbox
+and `?akcija=1` URL state. Names, images and prices remain live catalogue data;
+no tenant products or tags are baked into the release. Requires engine capability
+`catalog-selection-v1`. Build a new release with `node src/catalog/build-selection.mjs`,
+regenerate staging and export through the standard tools; tracked release bytes
+are immutable. Verify with `NODE_PATH=<jsdom-directory> node tools/test-product-selection.cjs`.
+
 Commerce 1.4.4 / catalog 2.5.4 retain the complete read contract for mixed cart/favorite/catalog compositions. Standalone lists keep their compact reads.
 
 Commerce 1.4.3 / catalog 2.5.3 add dedicated cart/favorite read contracts, bounded display loading, compact local placeholders and retry without discarding confirmed rows. Checkout authority and authentication are unchanged.
