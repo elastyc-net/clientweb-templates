@@ -19,6 +19,8 @@
 /* FrontAuth may load its stylesheet after the theme; keep this tenant host explicit. */
 html body{background:var(--dt-page);color:var(--dt-gray);font-family:var(--font-sans)}
 .dt-login h1{color:var(--dt-gray);font-weight:500}
-.dt-login [data-dt-login] input{min-height:48px;padding:.75rem;border:1px solid var(--dt-gray);border-radius:var(--dt-radius);background:var(--surface-card);color:var(--dt-gray);font:inherit;box-shadow:var(--dt-shadow-control)}
-.dt-login [data-dt-login] input:focus-visible{outline:3px solid var(--dt-blue);outline-offset:4px}
-.dt-login [data-dt-login] button{min-height:44px;font-family:var(--font-sans);font-weight:500}
+.dt-login .elastyc-front-auth .efa-field input{min-height:48px;padding:.75rem;border:1px solid var(--dt-gray);border-radius:var(--dt-radius);background:var(--surface-card);color:var(--dt-gray);font:inherit;box-shadow:var(--dt-shadow-control)}
+.dt-login .elastyc-front-auth .efa-field input:focus-visible{outline:3px solid var(--dt-blue);outline-offset:4px}
+.dt-login .elastyc-front-auth .efa-form button{min-height:44px;font-family:var(--font-sans);font-weight:500}
+
+.dt-login .elastyc-front-auth .efa-field label{color:var(--dt-gray);font-weight:500}
