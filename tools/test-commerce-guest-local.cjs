@@ -31,12 +31,12 @@ async function fixture(options={}){
    payload.state={...structuredClone(base),revision,authenticated:logged,mergeAvailable:logged&&mergeAvailable,view:view==='catalog'?'catalog':undefined,lines:accountLines,favorites:accountFavorites};
    if(!logged&&operation==='local-state')payload.localGuest=true;else payload.csrf='a'.repeat(64);
   }else throw new Error('Unexpected call: '+operation);
-  if(operation==='guest-preview'&&options.deferPreview)return new Promise(resolve=>waiting.push(()=>resolve({ok:true,status:200,json:async()=>structuredClone(payload)})));
+  if(operation==='guest-preview'&&options.deferPreview)return new Promise(resolve=>waiting.push(Object.assign(()=>resolve({ok:true,status:200,json:async()=>structuredClone(payload)}),{fail:()=>resolve({ok:false,status:503,json:async()=>({ok:false,message:'Preview unavailable'})})})));
   return {ok:true,status:200,json:async()=>structuredClone(payload)};
  };
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));await tick();
  const host=w.document.querySelector('.wf-instance');if(host)w.ElastycCommerce.mount(host,[structuredClone(product)]);await tick();
- return {w,dom,calls,host,release:()=>waiting.shift()(),logged:()=>{logged=true;},price:v=>{price=v;},saved:()=>w.localStorage.getItem('wf-guest-cart-v1:local-test:production')};
+ return {w,dom,calls,host,release:()=>waiting.shift()(),fail:()=>waiting.shift().fail(),logged:()=>{logged=true;},price:v=>{price=v;},saved:()=>w.localStorage.getItem('wf-guest-cart-v1:local-test:production')};
 }
 (async()=>{
  const f=await fixture();let saved;
@@ -56,6 +56,7 @@ async function fixture(options={}){
  const inactive=await fixture({saved,inactive:['A']});try{check(JSON.parse(inactive.saved()).lines.length===0&&JSON.parse(inactive.saved()).favorites.length===0,'Confirmed inactive IDs are removed from both local selections.');check(inactive.calls.length===0&&inactive.w.document.querySelector('[data-wf-cart-count]').textContent==='0'&&inactive.w.document.querySelector('[data-wf-favorite-count]').textContent==='0','Inactivity cleanup updates both badges without another server state request.');}finally{inactive.dom.window.close();}
  const cart=await fixture({saved,view:'cart'});try{
   check(cart.calls.length===1&&cart.calls[0].operation==='guest-preview','Opening the guest cart makes one grouped read-only repricing request.');
+  check(cart.calls[0].url.searchParams.get('wf_commerce_view')==='cart'&&cart.calls[0].body.favorites.length===0,'Guest cart requests its own contract without favorite product hydration.');
   check(cart.w.document.querySelector('[data-wf-shop-view]').textContent.includes('Current A'),'Cart details come from the server, not browser supplied labels.');
   cart.price(150);cart.w.document.querySelector('input').value='3';cart.w.document.querySelector('button').click();await tick();
   check(cart.calls.every(c=>c.operation==='guest-preview')&&cart.w.document.querySelector('[data-wf-shop-view]').textContent.includes('450,00'),'A quantity edit stays local and the server recalculates current totals.');
@@ -64,11 +65,22 @@ async function fixture(options={}){
  const loading=await fixture({saved,view:'cart',deferPreview:true});try{
   const root=loading.w.document.querySelector('[data-wf-shop-view]');
   check(!!root.querySelector('.wf-shop-loading')&&!root.textContent.includes('Cena na upit'),'Initial guest cart waits for real names/prices instead of displaying raw placeholders as final data.');
+  check(root.querySelectorAll('.wf-shop-loading__row').length===1,'A one-item local cart shows one placeholder instead of three unrelated rows.');
   loading.release();await tick();check(root.textContent.includes('Current A')&&!root.querySelector('.wf-shop-loading'),'Grouped preview replaces the pending cart with current data.');
   loading.price(150);root.querySelector('input').value='3';root.querySelector('button').click();await tick();
   check(root.textContent.includes('Current A')&&root.getAttribute('aria-busy')==='true'&&!root.textContent.includes('Cena na upit'),'A pending quantity edit preserves the last valid product display.');
   loading.release();await tick();check(root.textContent.includes('450,00')&&root.getAttribute('aria-busy')==='false','Repriced local quantity ends its pending state.');
+  root.querySelector('input').value='4';root.querySelector('button').click();await tick();loading.fail();await tick();
+  check(root.textContent.includes('Current A')&&!!root.querySelector('[role=alert]')&&root.getAttribute('aria-busy')==='false','A failed refresh preserves confirmed rows and clearly marks stale data.');
+  root.querySelector('[data-wf-shop-read-error] button').click();await tick();
+  check(!root.querySelector('[role=alert]')&&root.textContent.includes('Current A'),'Retry retains the existing cart while clearing its previous error.');
+  loading.release();await tick();check(root.textContent.includes('600,00')&&!root.querySelector('[data-wf-shop-read-error]'),'Successful retry replaces old totals and removes the failure message.');
  }finally{loading.dom.window.close();}
+ const justCart=JSON.parse(saved);justCart.favorites=[];
+ const emptyFavorites=await fixture({saved:JSON.stringify(justCart),view:'favorites'});try{
+  check(emptyFavorites.calls.length===0,'Empty favorites do not wait for a preview merely because the cart contains a product.');
+  check(!emptyFavorites.w.document.querySelector('.wf-shop-loading'),'An empty favorite list finishes its loading immediately.');
+ }finally{emptyFavorites.dom.window.close();}
  const migration=await fixture({legacyKey:'b'.repeat(64),legacy:{lines:[{lineId:'c'.repeat(32),productId:'A',variantId:'',quantity:'4.000'}],favorites:['A']}});let migrated;
  try{check(migration.calls.filter(c=>c.operation==='guest-export').length===1&&JSON.parse(migration.saved()).lines[0].quantity==='4.000','An existing owned server guest selection migrates once without deletion.');migrated=migration.saved();migration.logged();await migration.w.ElastycCommerce.authChanged(false);await tick();check(!migration.calls.some(c=>c.operation==='resume')&&migration.calls.filter(c=>c.operation==='import').length===1&&migration.calls.find(c=>c.operation==='import').body.legacyKey==='b'.repeat(64),'Login imports a migrated guest source once, without also resuming its retained server copy.');}finally{migration.dom.window.close();}
  const again=await fixture({saved:migrated,legacyKey:'b'.repeat(64)});try{check(again.calls.length===0&&JSON.parse(again.saved()).lines[0].quantity==='4.000','The same server session is not exported or added again after reload.');}finally{again.dom.window.close();}

@@ -9,21 +9,22 @@ const base={view:'inquiry',revision:0,cartCount:4,lines:[],favorites:[],favorite
  paths:{request:'/upit',cart:'/korpa',favorites:'/favoriti',account:'/nalog'},customer:{contact:{firstName:'Saved',lastName:'Profile',email:'saved@example.invalid',phone:'+381641234567'},addresses:[]},deliveryOptions:[],pickupOptions:[],paymentOptions:[]};
 async function fixture(view='request'){
  const dom=new JSDOM('<span data-wf-cart-count>0</span><div data-wf-commerce-url="/page.php?wf_action=commerce&amp;wf_path=%2Fupit"></div><section class="wf-shop"><div data-wf-shop-view="'+view+'"></div></section>',{url:'https://shop.example/upit?productId=A',runScripts:'outside-only',pretendToBeVisual:true});
- const w=dom.window,reads=[],posts=[],waiting=[];let clock=20000,auto=false,server=structuredClone(base);
+ const w=dom.window,reads=[],posts=[],waiting=[],deadlines=[];let clock=20000,auto=false,server=structuredClone(base);
+ const later=w.setTimeout.bind(w);w.setTimeout=(fn,ms,...args)=>{if(ms===20000)deadlines.push(fn);return later(fn,ms,...args);};
  w.Date.now=()=>clock;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
  w.BroadcastChannel=class{constructor(){w.testChannel=this;}postMessage(){}};
  const response=state=>({ok:true,status:200,json:async()=>({ok:true,csrf:'a'.repeat(64),state:structuredClone(state)})});
  w.fetch=async(url,options={})=>{
   const body=options.body?JSON.parse(options.body):null;
   if(body){posts.push(body);server.cartCount=9;const r=await response(server).json();if(body.action==='quote')r.quote={id:'b'.repeat(32),lines:[],preview:true};if(body.action==='submit')r.receipt={preview:true};return {ok:true,status:200,json:async()=>r};}
-  reads.push(String(url));const compact=new URL(url).searchParams.get('wf_commerce_view')==='inquiry';
-  const readResponse=state=>response(compact?state:{...state,view:undefined});
+  reads.push(String(url));const compact=new URL(url).searchParams.get('wf_commerce_view');
+  const readResponse=state=>response({...state,view:compact||undefined});
   if(auto)return readResponse(server);
   return new Promise(resolve=>{const pending=state=>resolve(readResponse(state));pending.fail=()=>resolve({ok:false,status:503,json:async()=>({ok:false,message:'Unavailable'})});waiting.push(pending);});
  };
  w.eval(fs.readFileSync(path.join(__dirname,'../../common/intl-tel-input/dist/js/intlTelInputWithUtils.min.js'),'utf8')+';window.intlTelInput=intlTelInput;');
  w.eval(script);w.document.dispatchEvent(new w.Event('DOMContentLoaded'));
- return {w,dom,reads,posts,waiting,root:w.document.querySelector('[data-wf-shop-view]'),advance:()=>{clock+=16000;},auto:()=>{auto=true;},server:state=>{server=state;}};
+ return {w,dom,reads,posts,waiting,root:w.document.querySelector('[data-wf-shop-view]'),expire:()=>deadlines.shift()(),advance:()=>{clock+=16000;},auto:()=>{auto=true;},server:state=>{server=state;}};
 }
 (async()=>{
  const f=await fixture();try{
@@ -65,6 +66,7 @@ async function fixture(view='request'){
 
  for(const view of ['cart','favorites','checkout']){
   const pending=await fixture(view);try{
+   check(new URL(pending.reads[0]).searchParams.get('wf_commerce_view')===(view==='checkout'?null:view),'Each list asks only for its own read contract; checkout retains the complete contract.');
    check(!!pending.root.querySelector('[role=status]') && pending.root.getAttribute('aria-busy')==='true','Initial '+view+' loading is visible and accessible.');
    pending.waiting.shift().fail();await tick();
    check(!!pending.root.querySelector('[role=alert]') && pending.root.getAttribute('aria-busy')==='false','Failed '+view+' read clears the pending state.');
@@ -74,5 +76,12 @@ async function fixture(view='request'){
    check(!pending.root.querySelector('.wf-shop-loading') && pending.root.getAttribute('aria-busy')==='false','Successful '+view+' retry replaces the placeholder.');
   }finally{pending.dom.window.close();}
  }
+ const timeout=await fixture('cart');try{
+  const late=timeout.waiting.shift();timeout.expire();await tick();
+  check(!!timeout.root.querySelector('[role=alert]')&&timeout.root.getAttribute('aria-busy')==='false','A hung display read ends loading and offers a retry.');
+  late(base);await tick();check(!!timeout.root.querySelector('[role=alert]'),'A response arriving after timeout cannot replace the error or a newer read.');
+  timeout.root.querySelector('button').click();await tick();timeout.waiting.shift()(base);await tick();
+  check(!timeout.root.querySelector('.wf-shop-loading')&&!timeout.root.querySelector('[role=alert]'),'Retry after a timeout can finish normally.');
+ }finally{timeout.dom.window.close();}
  console.log('Commerce loading:',checks,'checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

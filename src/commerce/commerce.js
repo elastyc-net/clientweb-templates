@@ -10,18 +10,19 @@
   var guestPreviewKey = "";
   function checkoutView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "checkout"; }); }
   function guestPageView() { return viewRoots.some(function (root) { return root.isConnected && ["cart", "favorites"].indexOf(root.dataset.wfShopView) >= 0; }); }
+  function listView() { var root=viewRoots.find(function (root) { return root.isConnected && ["cart","favorites"].indexOf(root.dataset.wfShopView)>=0; }); return root?root.dataset.wfShopView:""; }
   function ownsLegacySource() { return !!(guestCart && guestBootstrap && guestBootstrap.legacyKey && !guestCart.needsMigration(guestBootstrap.legacyKey)); }
   function guestBody(snapshot) { return {lines:snapshot.lines, favorites:snapshot.favorites}; }
   function guestFetch(operation, data) {
     var generation = authGeneration, url = new URL(endpoint, global.location.href), options = {credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}};
     url.searchParams.set("operation", operation);
-    if (catalogView()) url.searchParams.set("wf_commerce_view", "catalog");
+    if (readView() !== "full") url.searchParams.set("wf_commerce_view", readView());
     if (operation === "guest-preview") { options.method = "POST"; options.headers["Content-Type"] = "application/json"; options.body = JSON.stringify(data); }
     else Object.keys(data || {}).forEach(function (name) { url.searchParams.set(name, data[name]); });
-    return fetch(url.toString(), options).then(function (response) { return response.json().then(function (payload) {
+    return readJson(url.toString(), options, true).then(function (result) { var response=result.response,payload=result.payload;
       if (generation !== authGeneration || !localMode) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
       if (!response.ok || !payload.ok) throw new Error(payload.message || "Provera korpe nije uspela."); return payload;
-    }); });
+    });
   }
   function migrateGuest() {
     if (!localMode || !guestCart || !guestBootstrap || !guestCart.needsMigration(guestBootstrap.legacyKey)) return Promise.resolve();
@@ -46,7 +47,7 @@
         return;
       }
     }
-    state = guestCart.apply(guestBase); if (catalogView()) state.view = "catalog"; render();
+    state = guestCart.apply(guestBase); if (readView() !== "full") state.view = readView(); render();
   }
   function guestState() {
     if (guestBase && guestBase.inactiveProductIds) return guestCart.pruneInactive(guestBase.inactiveProductIds).then(function () { guestBase.inactiveProductIds = null; return guestState(); });
@@ -56,13 +57,13 @@
     var pending = migrateGuest().then(function () {
       if (generation !== authGeneration || !localMode) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
       guestChanged(); var snapshot = guestCart.snapshot();
-      if (!guestPageView() || (!snapshot.lines.length && !snapshot.favorites.length)) { lastStateAt = Date.now(); return {ok:true,localGuest:true,state:state}; }
       var favoritesView = viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "favorites"; });
+      if (!guestPageView() || !(favoritesView?snapshot.favorites.length:snapshot.lines.length)) { lastStateAt = Date.now(); return {ok:true,localGuest:true,state:state}; }
       return guestFetch("guest-preview", {lines:favoritesView ? [] : snapshot.lines, favorites:favoritesView ? snapshot.favorites : []}).then(function (payload) {
         if (snapshot.key !== guestCart.snapshot().key) return {ok:true,state:state};
         return guestCart.pruneInactive(payload.state.inactiveProductIds).then(function () {
         var local = guestCart.apply(guestBase);
-        state = Object.assign(local, payload.state, {revision:local.revision,cartCount:local.cartCount,favoriteCount:local.favoriteCount,favorites:favoritesView ? payload.state.favorites : local.favorites});
+        state = Object.assign(local, payload.state, {view:readView(),revision:local.revision,cartCount:local.cartCount,favoriteCount:local.favoriteCount,favorites:favoritesView ? payload.state.favorites : local.favorites});
         guestPreviewKey = guestCart.snapshot().key;
         lastStateAt = Date.now(); render(); return {ok:true,localGuest:true,state:state};
         });
@@ -106,7 +107,16 @@
 
   function inquiryView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "request"; }) && !viewRoots.some(function (root) { return root.isConnected && ["cart", "checkout", "favorites", "account"].indexOf(root.dataset.wfShopView) >= 0; }) && !document.querySelector('[data-commerce-enabled="true"]'); }
   function catalogView() { return !viewRoots.some(function (root) { return root.isConnected; }) && !!document.querySelector('[data-commerce-enabled="true"]'); }
-  function readView() { return inquiryView() ? "inquiry" : catalogView() ? "catalog" : "full"; }
+  function readView() { return inquiryView() ? "inquiry" : listView() || (catalogView() ? "catalog" : "full"); }
+  /** Bound display reads only. Mutations keep their existing idempotency/retry lifecycle. */
+  function readJson(url, options, bounded) {
+    var timer=0,controller=bounded && global.AbortController?new global.AbortController():null;
+    if(controller)options.signal=controller.signal;
+    var pending=fetch(url,options).then(function(response){return response.json().then(function(payload){return {response:response,payload:payload};});});
+    if(!bounded)return pending;
+    var deadline=new Promise(function(resolve,reject){timer=global.setTimeout(function(){var error=new Error("Učitavanje traje predugo. Pokušajte ponovo.");reject(error);if(controller)controller.abort();},20000);});
+    return Promise.race([pending,deadline]).finally(function(){global.clearTimeout(timer);});
+  }
   function themeContrast(host) {
     var raw = global.getComputedStyle(host).getPropertyValue("--wf-color-primary").trim();
     if (/^#[a-f0-9]{3}$/i.test(raw)) raw = "#" + raw.slice(1).split("").map(function (x) { return x + x; }).join("");
@@ -185,8 +195,7 @@
     var generation = authGeneration, sequence = ++requestSequence;
     var url = new URL(endpoint, global.location.href), options = { credentials: "same-origin", headers: { Accept: "application/json" }, cache: "no-store" };
     if (guestCart && !mutation && action === "state" && !inquiryView() && !checkoutView()) action = "local-state";
-    if (inquiryView()) url.searchParams.set("wf_commerce_view", "inquiry");
-    else if (catalogView()) url.searchParams.set("wf_commerce_view", "catalog");
+    if (readView() !== "full") url.searchParams.set("wf_commerce_view", readView());
     var purchase = new URLSearchParams(global.location.search).get("purchase");
     if (purchase) { if (!/^[a-f0-9]{32}$/.test(purchase)) return Promise.reject(new Error("Odobrenje kupovine nije validno.")); url.searchParams.set("purchase", purchase); }
     if (authChecked) options.headers["X-WF-Auth-Checked"] = "1";
@@ -195,8 +204,7 @@
       options.headers["X-WF-Commerce-CSRF"] = csrf;
       options.body = JSON.stringify(Object.assign({}, data, { action: action, expectedRevision: state ? state.revision : 0, idempotencyKey: data && data.idempotencyKey || key() }));
     } else { url.searchParams.set("operation", action); Object.keys(data || {}).forEach(function (name) { url.searchParams.set(name, data[name]); }); }
-    return fetch(url.toString(), options).then(function (response) {
-      return response.json().then(function (payload) {
+    return readJson(url.toString(), options, !mutation).then(function (result) { var response=result.response,payload=result.payload;
         if (generation !== authGeneration) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
         if (payload.refreshAuth && !authChecked) {
           return fetch("/incKomponente/auth/config.php", { credentials: "same-origin", cache: "no-store", headers: { Accept: "application/json" } }).then(function (authResponse) {
@@ -213,13 +221,12 @@
           guestMigration = guestCart.migrate(guestBootstrap.legacyKey,{lines:payload.state.lines,favorites:payload.state.favorites.map(function (f) { return f.productId; })});
           var seeding = guestMigration; var clearSeed = function () { if (guestMigration === seeding) guestMigration = null; }; seeding.then(clearSeed,clearSeed);
         }
-        if (payload.localGuest && guestCart) { localMode = true; guestBase = payload.state; payload.state = guestCart.apply(guestBase); if (catalogView()) payload.state.view = "catalog"; }
+        if (payload.localGuest && guestCart) { localMode = true; guestBase = payload.state; payload.state = guestCart.apply(guestBase); if (readView() !== "full") payload.state.view = readView(); }
         else if (payload.state && payload.state.authenticated) localMode = false;
         if (action === "submit" && payload.receipt && !payload.receipt.preview && guestCart && localMode && checkoutView() && checkoutLocalSnapshot) guestCart.consume(checkoutLocalSnapshot,true).catch(function (error) { notify(error.message,true); });
         if (payload.state && sequence >= appliedSequence) { appliedSequence = sequence; lastStateAt = Date.now(); state = payload.state; render(); }
         if (payload.stateUnavailable) { notify("Promena je sačuvana. Osvežavanje pregleda trenutno nije dostupno."); global.setTimeout(function () { request("state", {}, false).catch(function () {}); }, 1000); }
         return payload;
-      });
     });
   }
   function mutate(action, data, success) {
@@ -891,15 +898,17 @@
   }
   function renderBusy() { document.querySelectorAll("[data-wf-shop-view]").forEach(function (root) { root.setAttribute("aria-busy", busy || refreshingAuth || root.dataset.pending === "true" ? "true" : "false"); }); }
   function renderPending(root) {
+    var oldError=root.querySelector('[data-wf-shop-read-error]');if(oldError)oldError.remove();
     root.dataset.pending = "true"; root.setAttribute("aria-busy", "true");
     if (root.dataset.rendered === "true") {
-      if (!root.querySelector("[data-wf-shop-updating]")) { var updating=node("p","wf-shop-help","Obnavljanje proizvoda i cena…"); updating.dataset.wfShopUpdating="true"; updating.setAttribute("role","status"); root.prepend(updating); }
+      if (!root.querySelector("[data-wf-shop-updating]")) { var updating=node("p","wf-shop-help",root.dataset.wfShopView === "favorites"?"Osvežavanje omiljenih proizvoda…":"Obnavljanje proizvoda i cena…"); updating.dataset.wfShopUpdating="true"; updating.setAttribute("role","status"); root.prepend(updating); }
       return;
     }
     var box = node("div", "wf-shop-loading"); box.setAttribute("role", "status");
     box.appendChild(node("p", "wf-shop-help", root.dataset.wfShopView === "favorites" ? "Učitavanje omiljenih proizvoda…" : root.dataset.wfShopView === "cart" ? "Provera proizvoda i cena u korpi…" : "Priprema porudžbine…"));
     var skeleton = node("div", "wf-shop-loading__rows"); skeleton.setAttribute("aria-hidden", "true");
-    for (var i=0;i<3;i++) skeleton.appendChild(node("div", "wf-shop-loading__row"));
+    var count=3;if(localMode && guestCart && ["cart","favorites"].indexOf(root.dataset.wfShopView)>=0){var local=guestCart.snapshot();count=Math.min(3,root.dataset.wfShopView === "favorites"?local.favorites.length:local.lines.length);}
+    for (var i=0;i<count;i++) skeleton.appendChild(node("div", "wf-shop-loading__row"));
     box.appendChild(skeleton); root.replaceChildren(box);
   }
   function initialRead() {
@@ -913,9 +922,10 @@
       viewRoots.forEach(function (root) {
         if (root.dataset.pending !== "true") return;
         delete root.dataset.pending; root.setAttribute("aria-busy", "false");
-        root.dataset.rendered = "false";
-        var message=node("p","wf-shop-error","Učitavanje nije uspelo. Pokušajte ponovo."); message.setAttribute("role","alert");
-        root.replaceChildren(message,button("Pokušaj ponovo",initialRead,"wf-shop-btn"));
+        var updating=root.querySelector('[data-wf-shop-updating]');if(updating)updating.remove();
+        var message=node("p","wf-shop-error",root.dataset.rendered === "true"?"Osvežavanje nije uspelo. Prikazani su prethodno potvrđeni podaci.":"Učitavanje nije uspelo. Pokušajte ponovo."); message.setAttribute("role","alert");
+        var failure=node("div");failure.dataset.wfShopReadError="true";failure.appendChild(message);failure.appendChild(button("Pokušaj ponovo",initialRead,"wf-shop-btn"));
+        if(root.dataset.rendered === "true")root.prepend(failure);else root.replaceChildren(failure);
       });
       if (!error.silent) notify(error.message, true);
   }

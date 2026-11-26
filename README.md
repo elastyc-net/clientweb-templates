@@ -1,3 +1,5 @@
+Commerce 1.4.3 / catalog 2.5.3 add dedicated cart/favorite read contracts, bounded display loading, compact local placeholders and retry without discarding confirmed rows. Checkout authority and authentication are unchanged.
+
 Commerce 1.4.2 / catalog 2.5.2 add explicit saved-address selection and a New
 address action, stable loading/retry states for cart/favorites/checkout, responsive
 checkout spacing and a Turnstile theme matching the site surface. Guest lists
