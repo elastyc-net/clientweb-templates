@@ -4,7 +4,7 @@
   "pageKey": "deltron-produljeno-jamstvo",
   "layoutKey": "deltron-layout",
   "route": "/produljeno-jamstvo",
-  "locale": "sr",
+  "locale": "hr",
   "targets": [
     "web",
     "mobile"

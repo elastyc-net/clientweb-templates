@@ -1,0 +1,59 @@
+{
+  "themeVersion": 2,
+  "brand": {
+    "name": "Deltron",
+    "logoUrl": "/docs/deltron-brand/1.0.0-a4a02912/deltron-logo-horizontal.svg",
+    "logoAlt": "Deltron",
+    "faviconUrl": "",
+    "logoLightUrl": "/docs/deltron-brand/1.0.0-a4a02912/deltron-logo-horizontal.svg",
+    "logoDarkUrl": "/docs/deltron-brand/1.0.0-a4a02912/deltron-logo-horizontal-white.svg"
+  },
+  "colors": {
+    "primary": "#0055b8",
+    "secondary": "#636569",
+    "accent": "#0055b8",
+    "background": "#ffffff",
+    "surface": "#f9f9f9",
+    "text": "#636569",
+    "muted": "#636569",
+    "border": "#dfe0e1",
+    "danger": "#b3261e",
+    "success": "#2e7d46"
+  },
+  "typography": {
+    "bodyFamily": "Ubuntu, Arial, sans-serif",
+    "headingFamily": "Ubuntu, Arial, sans-serif",
+    "baseSizePx": 16,
+    "headingWeight": 500,
+    "bodyWeight": 400,
+    "menuWeight": 500,
+    "buttonWeight": 500,
+    "bodyGoogleFamily": "Ubuntu",
+    "headingGoogleFamily": "Ubuntu"
+  },
+  "layout": {
+    "containerMaxWidthPx": 1152,
+    "radiusPx": 8,
+    "spacingUnitPx": 4
+  },
+  "surfaces": {
+    "header": {
+      "background": "#ffffff",
+      "text": "#636569",
+      "muted": "#636569",
+      "border": "#dfe0e1",
+      "link": "#0055b8",
+      "hover": "#f2f7fb",
+      "focus": "#0055b8"
+    },
+    "footer": {
+      "background": "#ffffff",
+      "text": "#636569",
+      "muted": "#636569",
+      "border": "#dfe0e1",
+      "link": "#0055b8",
+      "hover": "#f2f7fb",
+      "focus": "#0055b8"
+    }
+  }
+}

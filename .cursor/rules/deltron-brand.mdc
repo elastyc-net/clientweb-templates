@@ -1,0 +1,7 @@
+---
+description: Deltron brand source and tenant-only Webfront styling
+globs: src/sites/deltron/**
+alwaysApply: false
+---
+
+Read `src/sites/deltron/AGENTS.md` and `brand/README.md` first. The normalized brand source is `brand/profile.json`; use `brand/theme.json` for the standard engine, generated `brand/brand.css` for tokens, and local recipe CSS for extras. Regenerate rather than editing generated definitions/tokens. Keep changes scoped to Deltron; preserve legacy home and existing form/auth/protection behavior. Full brand guidance must be included explicitly in MCP handoffs until the engine has a dedicated brand-context capability.

@@ -1,4 +1,17 @@
 (() => {
+  const themeMedia=window.matchMedia('(prefers-color-scheme:dark)');
+  let themeChoice='system';
+  try {const saved=localStorage.getItem('deltron:theme');if(['light','dark','system'].includes(saved))themeChoice=saved;} catch {}
+  function resolvedTheme(){return themeChoice==='system'?(themeMedia.matches?'dark':'light'):themeChoice;}
+  function applyTheme(){
+    if(themeChoice==='system')document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.dataset.theme=themeChoice;
+    document.dispatchEvent(new Event('deltron:themechange'));
+  }
+  const themeSelect=document.querySelector('[data-dt-theme]');
+  if(themeSelect){themeSelect.value=themeChoice;themeSelect.addEventListener('change',()=>{themeChoice=themeSelect.value;try{localStorage.setItem('deltron:theme',themeChoice);}catch{}applyTheme();});}
+  themeMedia.addEventListener('change',()=>{if(themeChoice==='system')applyTheme();});
+  applyTheme();
   const sandbox = window.parent !== window || !!document.querySelector('base[target="_blank"]');
   const query = new URLSearchParams(location.search);
   const candidate = query.get('channel') === 'candidate';
@@ -11,7 +24,7 @@
     if (release && /^r-[0-9]{14}-[a-f0-9]{8}-[a-f0-9]{12}$/.test(release)) params.set('release',release);
     return '/page.php?' + params;
   }
-  document.querySelectorAll('[data-dt-route]').forEach(a => a.href = route(a.dataset.dtRoute));
+  document.querySelectorAll('[data-dt-route]').forEach(a => {a.href = route(a.dataset.dtRoute);if(a.closest('nav')&&a.dataset.dtRoute===(query.get('wf_path')||location.pathname))a.setAttribute('aria-current','page');});
   const header = document.querySelector('[data-dt-header]');
   let checking = 0;
   function paint(user) {
@@ -334,7 +347,7 @@
       if(!form.isConnected||widgetId!==null)return;
       try{
         widgetId=window.turnstile.render(challenge,{
-          sitekey:protection.siteKey,action:'case-form',cData:'deltron-jamstvo',theme:'light',
+          sitekey:protection.siteKey,action:'case-form',cData:'deltron-jamstvo',theme:resolvedTheme(),
           appearance:'always',size:window.matchMedia('(max-width:420px)').matches?'compact':'normal',
           retry:'auto','retry-interval':8000,'refresh-expired':'auto','refresh-timeout':'auto',
           callback:value=>protectionState(value,'Provjera je uspješna.',false),
@@ -368,7 +381,15 @@
     }
     form.append(actions);
     const status=node('p','dt-status');status.setAttribute('role','status');form.append(status);host.append(form);
-    if(needsProtection)loadChallenge();
+    if(needsProtection){
+      document.addEventListener('deltron:themechange',()=>{
+        if(!form.isConnected||submitted||busy)return;
+        protectionState('','Obnavljamo sigurnosnu provjeru…',false);
+        if(widgetId!==null&&window.turnstile){try{window.turnstile.remove(widgetId);}catch{}widgetId=null;}
+        loadChallenge();
+      });
+      loadChallenge();
+    }
     const phoneInput=inputs.get('field1331').input;
     if(!sandbox){
     stylesheet('/common/intl-tel-input/dist/css/intlTelInput.min.css?v=29.1.2');
