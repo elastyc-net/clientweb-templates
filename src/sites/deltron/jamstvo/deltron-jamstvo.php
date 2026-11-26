@@ -5,6 +5,12 @@ final class DeltronJamstvo
     const PROCESS = 'Prijava uređaja za jamstvo';
     const MAX_FILE = 8388608;
     private $con;
+    /** Canonical tenant root, including the existing pool-isolated auth request path. */
+    public static function webRoot()
+    {
+        return basename(__DIR__)==='auth' && basename(dirname(__DIR__))==='incKomponente'
+            ? dirname(__DIR__,2) : __DIR__;
+    }
     public function __construct($con) { $this->con = $con; }
     private function query($sql, array $params = array())
     {
@@ -58,7 +64,7 @@ final class DeltronJamstvo
     public function identity()
     {
         if (!empty($_COOKIE['elastyc_front_access']) || !empty($_COOKIE['elastyc_front_refresh'])) {
-            $helper=__DIR__.'/incKomponente/auth/FrontAuthSession.php';
+            $helper=self::webRoot().'/incKomponente/auth/FrontAuthSession.php';
             if (!is_file($helper)) { throw new RuntimeException('Jamstvo session helper unavailable.'); }
             // The installed public helper verifies the isolated auth service's session.
             require_once $helper;
@@ -73,9 +79,9 @@ final class DeltronJamstvo
     }
     private function protection()
     {
-        require_once __DIR__.'/webfront/bootstrap.php';
+        require_once self::webRoot().'/webfront/bootstrap.php';
         return \Elastyc\Webfront\Adapter\CaseForm\CaseFormProtection::forTenant(
-            dirname(__DIR__,2).'/webfront-data/'.basename(__DIR__), __DIR__);
+            dirname(self::webRoot(),2).'/webfront-data/'.basename(self::webRoot()), self::webRoot());
     }
     public function protectionConfig($userid, $guard = null)
     {
@@ -161,7 +167,7 @@ final class DeltronJamstvo
             if ($field['tip']!=='file' || empty($files[$key]) || $files[$key]['error']===UPLOAD_ERR_NO_FILE) { continue; }
             $file=$files[$key]; $ext=strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));
             $filename='dynuploaded-jamstvo-'.bin2hex(random_bytes(20)).'.'.$ext;
-            $path=__DIR__.'/docs/'.$filename;
+            $path=self::webRoot().'/docs/'.$filename;
             if (!move_uploaded_file($file['tmp_name'],$path)) { throw new RuntimeException('Jamstvo file storage failed.'); }
             $moved[]=$path; $values[$key]=$filename;
             $row=$this->rows('SELECT ISNULL(MAX(fileid),0)+1 AS nextid FROM dbo._docs WITH (TABLOCKX,HOLDLOCK)')[0];
@@ -198,7 +204,7 @@ final class DeltronJamstvo
 
     public function policy()
     {
-        $path=__DIR__.'/incConn/deltron-jamstvo-live.php';
+        $path=self::webRoot().'/incConn/deltron-jamstvo-live.php';
         clearstatcache(true,$path);
         if (!is_file($path)) { return false; }
         if (function_exists('opcache_invalidate')) { opcache_invalidate($path,true); }
@@ -282,10 +288,10 @@ try {
     $method=$_SERVER['REQUEST_METHOD']??'';
     if (!in_array($method,array('GET','POST'),true)) { header('Allow: GET, POST');djReply(array('ok'=>false),405); }
     if ($method==='POST' && ($_SERVER['HTTP_ORIGIN']??'')!=='https://b2b.deltron.hr') { djReply(array('ok'=>false),403); }
-    ini_set('session.use_strict_mode','1');session_name('DELTRON_JAMSTVO');
+    ini_set('session.use_strict_mode','1');session_name('DELTRON_JAMSTVO_V2');
     session_set_cookie_params(array('lifetime'=>0,'path'=>'/','secure'=>true,'httponly'=>true,'samesite'=>'Lax'));
     if (!session_start()) { throw new RuntimeException('Jamstvo session unavailable.'); }
-    require __DIR__.'/incConn/CreateConnection2.php';
+    require DeltronJamstvo::webRoot().'/incConn/CreateConnection2.php';
     $adapter=new DeltronJamstvo($con);$fields=$adapter->fields();$schema=DeltronJamstvo::schemaHash($fields);
     if ($method==='GET') {
         if (empty($_SESSION['csrf'])) { $_SESSION['csrf']=bin2hex(random_bytes(32)); }

@@ -7,6 +7,7 @@ $manifest=json_decode(file_get_contents(__DIR__.'/draft-manifest.json'),true);
 $validator=new \Elastyc\Webfront\Workspace\WorkspaceDefinitionValidator();
 foreach($manifest['items'] as $item){$definition=json_decode(file_get_contents(__DIR__.'/'.$item['file']),true);$validator->validate($item['itemType'],$item['itemKey'],$definition);}
 require __DIR__.'/deltron-jamstvo.php';
+if(DeltronJamstvo::webRoot()!==__DIR__)throw new RuntimeException('Source root mapping changed');
 $fields=json_decode(file_get_contents(__DIR__.'/preview-fields.json'),true);$adapter=new DeltronJamstvo(null);
 $test=$adapter->validate($fields,array('field1330'=>'broken','field1801'=>'F'),array());
 foreach(array('field1324','field1330','field1801') as $key){if(empty($test['errors'][$key]))throw new RuntimeException('Missing validation: '.$key);}
