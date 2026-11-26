@@ -288,7 +288,7 @@ try {
     $method=$_SERVER['REQUEST_METHOD']??'';
     if (!in_array($method,array('GET','POST'),true)) { header('Allow: GET, POST');djReply(array('ok'=>false),405); }
     if ($method==='POST' && ($_SERVER['HTTP_ORIGIN']??'')!=='https://b2b.deltron.hr') { djReply(array('ok'=>false),403); }
-    ini_set('session.use_strict_mode','1');session_name('DELTRON_JAMSTVO');
+    ini_set('session.use_strict_mode','1');session_name('DELTRON_JAMSTVO_V2');
     session_set_cookie_params(array('lifetime'=>0,'path'=>'/','secure'=>true,'httponly'=>true,'samesite'=>'Lax'));
     if (!session_start()) { throw new RuntimeException('Jamstvo session unavailable.'); }
     require DeltronJamstvo::webRoot().'/incConn/CreateConnection2.php';
