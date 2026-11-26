@@ -1,0 +1,69 @@
+{
+  "formatVersion": 1,
+  "packageKey": "product-catalog",
+  "version": "2.6.0",
+  "label": "Katalog proizvoda",
+  "description": "Standardni katalog sa filterom aktivnih akcija i izborom proizvoda po sekciji.",
+  "distribution": "optional",
+  "minimumContractVersion": 1,
+  "dependencies": [
+    {
+      "packageKey": "starter-site",
+      "minimumVersion": "1.0.0"
+    },
+    {
+      "packageKey": "webfront-commerce",
+      "minimumVersion": "1.4.4"
+    }
+  ],
+  "items": [
+    {
+      "itemType": "component",
+      "itemKey": "product-list",
+      "path": "components/product-list.json",
+      "sha256": "2e5121cbdc6b576199b628d3b19fa0fd69134fefb8b1838dca12892ae366c559"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-detail",
+      "path": "components/product-detail.json",
+      "sha256": "8d21671e484d4c31e162dab8585ddd408e0e8b3be340eddc30452d3f3edc9498"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-products",
+      "path": "providers/catalog-products.json",
+      "sha256": "0dd58baa540c511a92cdf4faa9fe4ff8fd777edaf05b814b1385f876af9793c7"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-product",
+      "path": "providers/catalog-product.json",
+      "sha256": "9085507aff10c36d33bb08c8848c2fdea2fd8979e08bd5c81d2070c476f5133a"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-catalog",
+      "path": "page-templates/product-catalog.json",
+      "sha256": "5d71b2fa4060af63f88d81352b05563718a5aff615d2c00304ca7bab913fd4d2"
+    },
+    {
+      "itemType": "page-template",
+      "itemKey": "product-detail",
+      "path": "page-templates/product-detail.json",
+      "sha256": "cdb62d885d069a03e2583f5108b7868db81df98ddf77b2f537c47415d508ec49"
+    },
+    {
+      "itemType": "provider",
+      "itemKey": "catalog-offers",
+      "path": "providers/catalog-offers.json",
+      "sha256": "7a876fc032b57fb8d120b701492c8b86119efe7f1380b42e9b548edef5467512"
+    },
+    {
+      "itemType": "component",
+      "itemKey": "product-selection",
+      "path": "components/product-selection.json",
+      "sha256": "bf15998c9f0a4ee1033860fc5a8266e8f1ca2b3738962a278b6db21182f553fa"
+    }
+  ]
+}
