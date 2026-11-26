@@ -3,13 +3,18 @@
   let themeChoice='system';
   try {const saved=localStorage.getItem('deltron:theme');if(['light','dark','system'].includes(saved))themeChoice=saved;} catch {}
   function resolvedTheme(){return themeChoice==='system'?(themeMedia.matches?'dark':'light'):themeChoice;}
+  const themeButtons=document.querySelectorAll('[data-dt-theme-choice]');
   function applyTheme(){
     if(themeChoice==='system')document.documentElement.removeAttribute('data-theme');
     else document.documentElement.dataset.theme=themeChoice;
+    themeButtons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.dtThemeChoice===themeChoice)));
     document.dispatchEvent(new Event('deltron:themechange'));
   }
-  const themeSelect=document.querySelector('[data-dt-theme]');
-  if(themeSelect){themeSelect.value=themeChoice;themeSelect.addEventListener('change',()=>{themeChoice=themeSelect.value;try{localStorage.setItem('deltron:theme',themeChoice);}catch{}applyTheme();});}
+  themeButtons.forEach(button=>button.addEventListener('click',()=>{
+    const next=button.dataset.dtThemeChoice;
+    if(!['system','light','dark'].includes(next)||next===themeChoice)return;
+    themeChoice=next;try{localStorage.setItem('deltron:theme',themeChoice);}catch{}applyTheme();
+  }));
   themeMedia.addEventListener('change',()=>{if(themeChoice==='system')applyTheme();});
   applyTheme();
   const sandbox = window.parent !== window || !!document.querySelector('base[target="_blank"]');
