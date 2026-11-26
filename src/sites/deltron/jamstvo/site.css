@@ -2,4 +2,6 @@
 
 .dt-field .dt-help:empty,.dt-field-error:empty{display:none}
 
-.dt-protection{display:grid;justify-items:start;gap:8px;margin:0 0 24px;max-width:100%}.dt-protection-widget{max-width:100%}.dt-protection-retry{padding:6px 0;border:0;background:transparent;color:var(--dt-blue);font-size:13px;text-decoration:underline}.dt-protection-retry:focus-visible{outline:3px solid #399ad2;outline-offset:3px}
+.dt-protection{display:grid;justify-items:start;gap:8px;margin:0 0 24px;max-width:100%}.dt-protection-widget{width:300px;min-height:65px;max-width:100%}.dt-protection-retry{padding:6px 0;border:0;background:transparent;color:var(--dt-blue);font-size:13px;text-decoration:underline}.dt-protection-retry:focus-visible{outline:3px solid #399ad2;outline-offset:3px}
+
+@media(max-width:420px){.dt-protection-widget{width:150px;min-height:140px}}
