@@ -1,3 +1,8 @@
+Catalog 2.6.1 displays grid selections as a native horizontal scroll rail below
+600px: one complete card and a preview of the next, with scroll snapping and no
+automatic motion. Desktop/tablet grids and ordinary catalogue results retain
+their layout. Build with `node src/catalog/build-selection-mobile.mjs`.
+
 Catalog 2.6.0 adds the reusable `product-selection` section: instance-owned SKU
 selection/order, active-promotion-only mode, bounded card count, hide-empty and
 a configurable catalogue CTA. The standard list adds the “Na akciji” checkbox

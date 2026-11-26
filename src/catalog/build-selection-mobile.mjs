@@ -1,0 +1,25 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
+const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
+const write=(p,v)=>{fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),JSON.stringify(v,null,2)+'\n');};
+const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
+const base='packages/product-catalog/2.6.0',target='packages/product-catalog/2.6.1';
+if(spawnSync('git',['ls-files','--error-unmatch',target+'/manifest.json'],{cwd:root,stdio:'ignore'}).status===0)throw Error('Immutable release already tracked');
+const previous=read(base+'/manifest.json'),catalog=read('packages/catalog.json');
+const source=catalog.packages.find(p=>p.packageKey==='product-catalog'&&p.version==='2.6.0');
+if(!source||source.sha256!==hash(base+'/manifest.json'))throw Error('Source manifest differs');
+const css=fs.readFileSync(path.join(root,'src/catalog/selection.css'),'utf8');
+const items=previous.items.map(item=>{
+ if(item.sha256!==hash(base+'/'+item.path))throw Error('Source item differs');
+ const d=read(base+'/'+item.path);
+ if(item.itemType==='component'&&['product-list','product-selection'].includes(item.itemKey))d.styles.find(s=>s.name==='selection.css').content=css;
+ write(target+'/'+item.path,d);return {...item,sha256:hash(target+'/'+item.path)};
+});
+write(target+'/manifest.json',{...previous,version:'2.6.1',description:'Izdvojeni proizvodi sa mobilnim prevlačenjem, poravnanjem kartica i vidljivim delom sledećeg proizvoda.',items});
+catalog.packages.push({packageKey:'product-catalog',version:'2.6.1',manifest:'product-catalog/2.6.1/manifest.json',sha256:hash(target+'/manifest.json')});
+write('packages/catalog.json',catalog);
+console.log('Built immutable product-catalog@2.6.1 mobile selection rail.');

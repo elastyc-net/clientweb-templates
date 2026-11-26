@@ -708,6 +708,12 @@
       "version": "2.6.0",
       "manifest": "product-catalog/2.6.0/manifest.json",
       "sha256": "54330c08e35567818e33f074385cb98b74253b0f483247ba4e995022e4a2c07a"
+    },
+    {
+      "packageKey": "product-catalog",
+      "version": "2.6.1",
+      "manifest": "product-catalog/2.6.1/manifest.json",
+      "sha256": "a8679d50ef623684f7c44f285b694c606629a6e1fc597ca01b81ba999bf584dd"
     }
   ]
 }
