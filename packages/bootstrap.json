@@ -15,7 +15,7 @@
     },
     {
       "packageKey": "product-catalog",
-      "version": "2.5.3"
+      "version": "2.5.4"
     },
     {
       "packageKey": "repository-components",
@@ -27,7 +27,7 @@
     },
     {
       "packageKey": "webfront-commerce",
-      "version": "1.4.3"
+      "version": "1.4.4"
     }
   ]
 }

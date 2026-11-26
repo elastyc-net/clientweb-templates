@@ -83,5 +83,13 @@ async function fixture(view='request'){
   timeout.root.querySelector('button').click();await tick();timeout.waiting.shift()(base);await tick();
   check(!timeout.root.querySelector('.wf-shop-loading')&&!timeout.root.querySelector('[role=alert]'),'Retry after a timeout can finish normally.');
  }finally{timeout.dom.window.close();}
+ for(const extra of ['favorites','catalog']){
+  const combined=await fixture('cart');try{
+   const added=combined.w.document.createElement('div');if(extra==='catalog')added.dataset.commerceEnabled='true';else added.dataset.wfShopView=extra;combined.w.document.body.appendChild(added);combined.w.ElastycCommerce.scan();
+   combined.waiting.shift()(base);await tick();
+   check(combined.reads.length===2&&!new URL(combined.reads[1]).searchParams.has('wf_commerce_view'),'Adding '+extra+' while cart loads falls back to the complete composition contract.');
+   combined.waiting.shift()(base);await tick();check(!combined.root.querySelector('.wf-shop-loading'),'Combined '+extra+' view finishes without a compact/full response loop.');
+  }finally{combined.dom.window.close();}
+ }
  console.log('Commerce loading:',checks,'checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

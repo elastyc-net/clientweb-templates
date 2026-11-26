@@ -6,7 +6,7 @@ run(['--export-starter',path.join(destination,'webfront/Package/Library')]);
 const existing=JSON.parse(fs.readFileSync(path.join(optional,'catalog.json'),'utf8'));
 const stage=fs.mkdtempSync(path.join(os.tmpdir(),'wf-standard-export-'));
 try{
- for(const token of ['webfront-commerce@1.4.3','product-catalog@2.5.3','reference-chrome@1.1.1']){
+ for(const token of ['webfront-commerce@1.4.4','product-catalog@2.5.4','reference-chrome@1.1.1']){
   const folder=path.join(stage,token);run(['--export-package',token,folder]);
   const entry=JSON.parse(fs.readFileSync(path.join(folder,'catalog.json'),'utf8')).packages[0];
   const manifest=JSON.parse(fs.readFileSync(path.join(folder,entry.manifest),'utf8'));

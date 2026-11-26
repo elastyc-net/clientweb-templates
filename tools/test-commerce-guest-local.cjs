@@ -13,7 +13,8 @@ async function fixture(options={}){
  if(options.inactive)bootstrap.state.inactiveProductIds=options.inactive;
  const encoded=Buffer.from(JSON.stringify(bootstrap)).toString('base64url');
  const html='<span data-wf-cart-count>0</span><span data-wf-favorite-count>0</span><div data-wf-commerce-url="/api?channel=production" data-wf-commerce-bootstrap="'+encoded+'"></div>'+(view==='catalog'?'<div class="wf-instance"><section class="wf-catalog" data-commerce-enabled="true" data-list-cart-enabled="true"><article data-wf-item-id="A"></article></section></div>':'<section><div data-wf-shop-view="'+view+'"></div></section>');
- const dom=new JSDOM(html,{url:'https://shop.example/'+view,runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,calls=[],waiting=[];
+ const extra=options.extraView?'<section><div data-wf-shop-view="'+options.extraView+'"></div></section>':'';
+ const dom=new JSDOM(html+extra,{url:'https://shop.example/'+view,runScripts:'outside-only',pretendToBeVisual:true}),w=dom.window,calls=[],waiting=[];
  w.TextEncoder=TextEncoder;w.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
  w.BroadcastChannel=class{postMessage(){}};
  let logged=false,price=100,revision=0,accountLines=[],accountFavorites=[],mergeAvailable=!!options.legacyKey;
@@ -81,6 +82,10 @@ async function fixture(options={}){
   check(emptyFavorites.calls.length===0,'Empty favorites do not wait for a preview merely because the cart contains a product.');
   check(!emptyFavorites.w.document.querySelector('.wf-shop-loading'),'An empty favorite list finishes its loading immediately.');
  }finally{emptyFavorites.dom.window.close();}
+ const combined=await fixture({saved,view:'cart',extraView:'favorites'});try{
+  check(combined.calls.length===1&&combined.calls[0].body.lines.length===1&&combined.calls[0].body.favorites.length===1&&!combined.calls[0].url.searchParams.has('wf_commerce_view'),'A combined guest composition hydrates both lists in one complete preview.');
+  check(combined.w.document.querySelector('[data-wf-shop-view="cart"]').textContent.includes('Current A')&&combined.w.document.querySelector('[data-wf-shop-view="favorites"]').textContent.includes('Current favorite'),'Combined guest lists render both confirmed product sets.');
+ }finally{combined.dom.window.close();}
  const migration=await fixture({legacyKey:'b'.repeat(64),legacy:{lines:[{lineId:'c'.repeat(32),productId:'A',variantId:'',quantity:'4.000'}],favorites:['A']}});let migrated;
  try{check(migration.calls.filter(c=>c.operation==='guest-export').length===1&&JSON.parse(migration.saved()).lines[0].quantity==='4.000','An existing owned server guest selection migrates once without deletion.');migrated=migration.saved();migration.logged();await migration.w.ElastycCommerce.authChanged(false);await tick();check(!migration.calls.some(c=>c.operation==='resume')&&migration.calls.filter(c=>c.operation==='import').length===1&&migration.calls.find(c=>c.operation==='import').body.legacyKey==='b'.repeat(64),'Login imports a migrated guest source once, without also resuming its retained server copy.');}finally{migration.dom.window.close();}
  const again=await fixture({saved:migrated,legacyKey:'b'.repeat(64)});try{check(again.calls.length===0&&JSON.parse(again.saved()).lines[0].quantity==='4.000','The same server session is not exported or added again after reload.');}finally{again.dom.window.close();}

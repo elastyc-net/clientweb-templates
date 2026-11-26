@@ -10,7 +10,12 @@
   var guestPreviewKey = "";
   function checkoutView() { return viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "checkout"; }); }
   function guestPageView() { return viewRoots.some(function (root) { return root.isConnected && ["cart", "favorites"].indexOf(root.dataset.wfShopView) >= 0; }); }
-  function listView() { var root=viewRoots.find(function (root) { return root.isConnected && ["cart","favorites"].indexOf(root.dataset.wfShopView)>=0; }); return root?root.dataset.wfShopView:""; }
+  function listView() {
+    var roots=viewRoots.filter(function(root){return root.isConnected;});
+    if(!roots.length || document.querySelector('[data-commerce-enabled="true"]'))return "";
+    var view=roots[0].dataset.wfShopView;
+    return ["cart","favorites"].indexOf(view)>=0 && roots.every(function(root){return root.dataset.wfShopView===view;})?view:"";
+  }
   function ownsLegacySource() { return !!(guestCart && guestBootstrap && guestBootstrap.legacyKey && !guestCart.needsMigration(guestBootstrap.legacyKey)); }
   function guestBody(snapshot) { return {lines:snapshot.lines, favorites:snapshot.favorites}; }
   function guestFetch(operation, data) {
@@ -41,8 +46,8 @@
     paintGuestCounts();
     if (checkoutView() || inquiryView()) return;
     if (guestPageView()) {
-      var pendingSelection = guestCart.snapshot(), favoritePage = viewRoots.some(function (root) { return root.dataset.wfShopView === "favorites"; });
-      if (guestPreviewKey !== pendingSelection.key && (favoritePage ? pendingSelection.favorites.length : pendingSelection.lines.length)) {
+      var pendingSelection = guestCart.snapshot(), needsRows=viewRoots.some(function(root){return root.isConnected && (root.dataset.wfShopView==='cart' && pendingSelection.lines.length || root.dataset.wfShopView==='favorites' && pendingSelection.favorites.length);});
+      if (guestPreviewKey !== pendingSelection.key && needsRows) {
         viewRoots.forEach(function (root) { if (["cart","favorites"].indexOf(root.dataset.wfShopView)>=0) renderPending(root); });
         return;
       }
@@ -58,8 +63,9 @@
       if (generation !== authGeneration || !localMode) { var stale = new Error("Prijava je promenjena."); stale.silent = true; throw stale; }
       guestChanged(); var snapshot = guestCart.snapshot();
       var favoritesView = viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "favorites"; });
-      if (!guestPageView() || !(favoritesView?snapshot.favorites.length:snapshot.lines.length)) { lastStateAt = Date.now(); return {ok:true,localGuest:true,state:state}; }
-      return guestFetch("guest-preview", {lines:favoritesView ? [] : snapshot.lines, favorites:favoritesView ? snapshot.favorites : []}).then(function (payload) {
+      var cartView = viewRoots.some(function (root) { return root.isConnected && root.dataset.wfShopView === "cart"; });
+      if (!guestPageView() || !(favoritesView && snapshot.favorites.length || cartView && snapshot.lines.length)) { lastStateAt = Date.now(); return {ok:true,localGuest:true,state:state}; }
+      return guestFetch("guest-preview", {lines:cartView ? snapshot.lines : [], favorites:favoritesView ? snapshot.favorites : []}).then(function (payload) {
         if (snapshot.key !== guestCart.snapshot().key) return {ok:true,state:state};
         return guestCart.pruneInactive(payload.state.inactiveProductIds).then(function () {
         var local = guestCart.apply(guestBase);

@@ -1,3 +1,5 @@
+Commerce 1.4.4 / catalog 2.5.4 retain the complete read contract for mixed cart/favorite/catalog compositions. Standalone lists keep their compact reads.
+
 Commerce 1.4.3 / catalog 2.5.3 add dedicated cart/favorite read contracts, bounded display loading, compact local placeholders and retry without discarding confirmed rows. Checkout authority and authentication are unchanged.
 
 Commerce 1.4.2 / catalog 2.5.2 add explicit saved-address selection and a New
