@@ -1,0 +1,46 @@
+const fs=require('node:fs'),assert=require('node:assert/strict'),{JSDOM}=require('jsdom');
+const source=fs.readFileSync(__dirname+'/finder.js','utf8');
+const dom=new JSDOM('<section><div class="mpf-switch"><button data-purpose="home" aria-pressed="true">Za dom</button><button data-purpose="commercial" aria-pressed="false">Za posao</button></div><select data-rooms></select><select data-colors></select><p data-summary></p><a data-go></a></section>',{url:'https://megapod.rs/megapod',runScripts:'outside-only'});
+const w=dom.window,root=w.document.querySelector('section'),pending=[];
+w.fetch=url=>new Promise((resolve,reject)=>pending.push({url,resolve,reject}));
+new w.Function('root',source)(root);
+const rooms=root.querySelector('[data-rooms]'),colors=root.querySelector('[data-colors]');
+const options=node=>Array.from(node.options).map(o=>o.value).filter(Boolean);
+const input=request=>JSON.parse(Buffer.from(new URL(request.url,'https://megapod.rs').searchParams.get('wf_input'),'base64url'));
+const settle=()=>new Promise(r=>setImmediate(r));
+function payload(roomValues,colorValues=['Bež','Plava']){return {ok:true,data:{total:245,filters:{ordered:[{name:'Tip prostorije',values:roomValues.map(([value,count])=>({value,count}))},{name:'Boja',values:colorValues.map(value=>({value,count:1}))}]}}};}
+async function respond(request,data){request.resolve({ok:true,json:async()=>data});await settle();}
+(async()=>{
+ assert.equal(rooms.disabled,true);
+ await respond(pending.shift(),payload([['Stambeni prostor',196],['Dečija soba',3],['Terasa',31],['Kancelarija',37],['Hotel',43],['Kuhinja',0]]));
+ assert.deepEqual(options(rooms),['Stambeni prostor','Dečija soba','Terasa']);
+ rooms.value='Dečija soba';rooms.dispatchEvent(new w.Event('change'));
+ const oldHome=pending.shift();
+ root.querySelector('[data-purpose="commercial"]').click();
+ assert.equal(rooms.value,'');assert.deepEqual(options(rooms),[]);assert.equal(rooms.disabled,true);
+ const commercial=pending.shift();
+ await respond(commercial,payload([['Stambeni prostor',139],['Kancelarija',191],['Hotel',146],['Garaza',7],['Kuhinja',1],['Trpezarija',1],['Hodnik',1]]));
+ assert.deepEqual(options(rooms),['Kancelarija','Hotel','Garaza']);
+ await respond(oldHome,payload([['Dečija soba',3]]));
+ assert.deepEqual(options(rooms),['Kancelarija','Hotel','Garaza'],'old response cannot restore home rooms');
+ rooms.value='Kancelarija';rooms.dispatchEvent(new w.Event('change'));
+ const roomRequest=pending.shift(),roomInput=input(roomRequest);
+ assert.deepEqual(roomInput.attributes.find(a=>a.name==='Tip prostorije').values,['Kancelarija']);
+ assert.ok(roomInput.attributes.find(a=>a.name==='Namena').values.includes('Komercijalna upotreba'));
+ await respond(roomRequest,payload([['Kancelarija',191]]));
+ colors.value='Plava';colors.dispatchEvent(new w.Event('change'));
+ const colorRequest=pending.shift();
+ assert.deepEqual(input(colorRequest).attributes.find(a=>a.name==='Boja').values,['Plava']);
+ await respond(colorRequest,payload([['Kancelarija',10]],['Plava']));
+ const link=new URL(root.querySelector('[data-go]').href);
+ assert.ok(link.searchParams.getAll('da').includes('Tip prostorije:Kancelarija'));
+ assert.ok(link.searchParams.getAll('da').includes('Boja:Plava'));
+ root.querySelector('[data-purpose="home"]').click();
+ const backHome=pending.shift();
+ assert.equal(colors.value,'');assert.equal(input(backHome).attributes.length,1);
+ await respond(backHome,{ok:false});
+ assert.equal(rooms.disabled,false);assert.equal(colors.disabled,false);
+ assert.equal(new URL(root.querySelector('[data-go]').href).pathname,'/katalog');
+ dom.window.close();
+ console.log('PASS purpose room curation, nonzero counts, immediate reset, stale-response protection, room/color query intersection and failure fallback');
+})().catch(e=>{console.error(e);process.exitCode=1;});
